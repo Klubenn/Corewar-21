@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../libft/libft.h
+string.h
+-
+stdlib.h
+-
+unistd.h
+-
+sys/types.h
+-
+sys/uio.h
+-
+
+/Users/gtristan/CLionProjects/corewar/includes/asm.h
+fcntl.h
+-
+stdio.h
+-
+limits.h
+-
+libft.h
+/Users/gtristan/CLionProjects/corewar/includes/libft.h
+op.h
+/Users/gtristan/CLionProjects/corewar/includes/op.h
+
+/Users/gtristan/CLionProjects/corewar/includes/op.h
+
+/Users/gtristan/CLionProjects/corewar/src/checks.c
+stdio.h
+-
+../libft/libft.h
+-
+../includes/op.h
+/Users/gtristan/CLionProjects/corewar/includes/op.h
+../includes/asm.h
+/Users/gtristan/CLionProjects/corewar/includes/asm.h
+
