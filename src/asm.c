@@ -73,10 +73,20 @@ void	error_management(int err, t_struct *data)
 	exit(1);
 }
 
+char *remove_comment_from_string(char *str)
+{
+	char *tmp;
+
+	if (!(tmp = ft_strchr(str, COMMENT_CHAR)))
+		return (ft_strdup(str));
+	return (ft_strndup(str, tmp - str));
+}
+
 int	check_other_strings(char *str, t_struct *data)
 {
 	t_op *op;
 	int if_label;
+	char *str2;
 
 	if ((if_label = check_label(data, str)) < 0)
 		return (MALLOC_FAIL);
@@ -84,10 +94,9 @@ int	check_other_strings(char *str, t_struct *data)
 	if (!(op = check_op(str)))
 		return (SYNTAX_ERROR);
 	str = trim_start(str + skip_word(str));
-	if ((check_param(str, op)) < 0)
-		return (SYNTAX_ERROR);
-	return (create_instruction(op, str, data));
-/**/	return 0;//remove
+	if (!(str2 = remove_comment_from_string(str)))
+		return (MALLOC_FAIL);
+	return ((check_param(data, str2, op)) < 0);
 }
 
 void	free_strings(char *str1, char *str2, char *str3, char *str4)
@@ -297,6 +306,7 @@ int		main(int ac, char **av)
 			error_management(FILE_NAME, NULL);
 		else
 		{
+			data->file_name = new_file;
 			data = is_valid_file(av[i]);
 			instructions_position(data);
 			check_labels(data);
