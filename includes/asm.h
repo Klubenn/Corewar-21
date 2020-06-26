@@ -59,7 +59,7 @@ struct 				s_instruction
 	int 			position;
 	int				function;// from 0 to 16
     int			    num_of_args;
-	t_args			*args_of_func[4];
+	t_args			**args_of_func;
 	t_instruction	*next;
 };
 
@@ -86,7 +86,7 @@ void	error_management(int err, t_struct *data);
 int		check_other_strings(char *str, t_struct *data);
 int		check_label(t_struct *data, char *str);
 int		create_instruction(t_op *op, char *str, t_struct *data);
-t_args	*create_args(char *str);
+t_args	**create_args(char *str);
 char	get_type(char *param);
 char	*trim_start(char *str);
 t_op	*check_op(char *str);

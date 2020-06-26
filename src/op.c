@@ -67,17 +67,17 @@ int create_instruction(t_op *op, char *str, t_struct *data)
 
 t_args **create_args(char *str)
 {
-	t_args *result;
+	t_args **result;
 	char **each_arg;
 	int i;
 
-	result = (t_args *)ft_memalloc(sizeof(t_args) * 4);
+	result = (t_args **)ft_memalloc(sizeof(t_args) * 4);
 	each_arg = ft_strsplit(str, SEPARATOR_CHAR);
 	i = 0;
 	while (each_arg[i])
 	{
 		result[i] = (t_args *)ft_memalloc(sizeof(t_args));
-		result[i].type = get_type(each_arg[i]);
+		result[i]->type = get_type(each_arg[i]);
 		result[i]->str = each_arg[i];
 		i++;
 	}
