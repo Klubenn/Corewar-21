@@ -30,12 +30,12 @@ enum err_message
 
 typedef	struct		s_op
 {
+    char			*name;
 	int 			func_num;
 	int 			arg_num;
 	unsigned char	arg[3];
 	int 			arg_type_code;
 	int 			t_dir_size;
-	char			*name;
 	char			n;
 	char			carry;
 }					t_op;
@@ -56,10 +56,11 @@ typedef struct		s_args
 
 struct 				s_instruction
 {
-	int 					position;
-	t_op					function;// from 0 to 16
-	t_args					args_of_func[4];
-	struct s_instruction	*next;
+	int 			position;
+	int				function;// from 0 to 16
+    int			    num_of_args;
+	t_args			**args_of_func;
+	t_instruction	*next;
 };
 
 typedef struct		s_struct
@@ -70,12 +71,11 @@ typedef struct		s_struct
 	int 			code_length;
 	t_instruction	*instruction;
 	t_label			*label;
-	int 			label_presence;
+	int 			label_present;
 }					t_struct;
 
 typedef void (*t_f)(int fd, t_struct *data, t_instruction *instruction, t_args argument);
 
-t_struct *temp_data(char *name, char *comment); //temporary function. should be removed after 1st part is ready
 void	print_file(char *new_file);
 void	bin_exec_champ(int fd, t_struct *data);
 void	write_backwards(int fd, void *source, int size);
@@ -83,8 +83,16 @@ void	instructions_position(t_struct *data);
 void	check_labels(t_struct *data);
 void    to_bytecode(char *new_file, t_struct *data);
 void	error_management(int err, t_struct *data);
-int		check_other_strings(int fd, char *str, t_struct *data);
+int		check_other_strings(char *str, t_struct *data);
 int		check_label(t_struct *data, char *str);
-
+int     create_instruction(t_op *op, char **params, t_struct *data);
+t_args	**create_args(char *str);
+int     check_type(char **params, t_op *op);
+char	*trim_start(char *str);
+t_op	*check_op(char *str);
+int 	skip_spaces(char* str);
+int 	skip_word(char* str);
+int 	check_param(t_struct *data, char *str, t_op *op);
+char    get_type(char *param);
 
 #endif //COREWAR_ASM_H

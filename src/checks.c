@@ -24,39 +24,6 @@ int skip_word(char* str)
     return (i);
 }
 
-
-int check_param(char *str, t_op *op)// str already starts with word!
-{
-	char **params;
-	char *param;
-	int i;
-	char type;
-
-	params = ft_strsplit(str, SEPARATOR_CHAR);
-	if (!check_params_num(params, op->arg_num))
-		error_managment();
-	i = 0;
-	while (i < op->arg_num)
-	{
-		param = &params[i][skip_spaces(params[i])];
-		if (!check_type(param, i, op))
-			error_managment();
-		i++;
-	}
-}
-
-int check_type(char **arr, int i, t_op *op)
-{
-	char type;
-
-	type = get_type(arr[i]);
-	if (type != op->arg[i])
-		return (0);
-	else
-		return (1);
-}
-
-
 int check_params_num(char **params, int needed_num)
 {
 	int i;
@@ -64,5 +31,84 @@ int check_params_num(char **params, int needed_num)
 	i = 0;
 	while (params[i])
 		i++;
-	return (i == needed_num) ? 1 : 0;
+	return ((i == needed_num) ? 1 : 0);
 }
+
+
+void free_arr(char **arr)
+{
+    char **tmp;
+
+    tmp = *arr;
+    while (tmp != NULL)
+    {
+        free(tmp);
+        tmp++;
+    }
+    free(arr);
+}
+
+
+int check_param(t_struct *data, char *str, t_op *op)// str2 already starts with word! not contains comments
+{
+	char **params;
+	int i;
+	char type;
+
+	if (!(params = ft_strsplit(str, SEPARATOR_CHAR)))
+	    return (MALLOC_FAIL);
+	if (!(check_params_num(params, op->arg_num) && check_type(params, op)) {
+        free_arr(params);
+        free(str);
+        return (SYNTAX_ERROR);
+    }
+	else{
+        create_instruction(op, params, data);//todo to free str (but not params)
+        return (0);
+	}
+}
+
+
+int check_type(char **params, t_op *op)
+{
+    char type;
+    char *param;
+    int i;
+
+    i = 0;
+    while (i < op->arg_num) {
+        param = params[i] + skip_spaces(params[i]);
+        type = get_type(param);
+        if (!type != op->arg[i])
+            return (0);
+        i++;
+    }
+    return (1);
+}
+
+char get_type(char *param)
+{
+    char *trim_param;
+
+    trim_param = param[skip_spaces(param)];
+    if (ft_isdigit(trim_param[0]))
+        return (T_IND);
+    if (trim_param[0] == 'r' || trim_param[0] == '-')
+        return (T_REG);
+
+    if (trim_param[0] == '%')
+    {
+        if (ft_isdigit(trim_param[1]) || trim_param[1] == '-')
+            return (T_DIR);
+
+        if (trim_param[1] == ':')
+            return (T_DIR | T_LAB);
+    }
+
+    if (trim_param[0] == ':')
+        return (T_IND | T_LAB);
+}
+
+
+
+

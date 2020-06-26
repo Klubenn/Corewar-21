@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../libft/libft.h
+string.h
+-
+stdlib.h
+-
+unistd.h
+-
+sys/types.h
+-
+sys/uio.h
+-
+
+/Users/etuffleb/21/Corewar-21/includes/asm.h
+fcntl.h
+-
+stdio.h
+-
+limits.h
+-
+libft.h
+/Users/etuffleb/21/Corewar-21/includes/libft.h
+op.h
+/Users/etuffleb/21/Corewar-21/includes/op.h
+
+/Users/etuffleb/21/Corewar-21/includes/op.h
+
+/Users/etuffleb/21/Corewar-21/src/to_bytecode.c
+../includes/asm.h
+/Users/etuffleb/21/Corewar-21/includes/asm.h
+

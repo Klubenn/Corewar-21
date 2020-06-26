@@ -23,7 +23,7 @@ int		check_label(t_struct *data, char *str)
 
 	if ((len = find_label(str)))
 	{
-		data->label_presence = 1;
+		data->label_present = 1;
 		if (!data->label)
 		{
 			if (!(data->label = (t_label *)ft_memalloc(sizeof(t_label))))
