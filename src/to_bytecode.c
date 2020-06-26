@@ -6,7 +6,10 @@ void	write_backwards(int fd, void *source, int size)
 
 	c = (char *)source;
 	while (--size >= 0)
-		write(fd, c, 1);
+	{
+		write(fd, c + size, 1);
+	}
+
 }
 
 void	bin_magic(int fd)
@@ -53,18 +56,18 @@ void	bin_comment(int fd, t_struct *data)
 }
 
 
-void    to_bytecode(char *new_file, t_struct *data)
+void    to_bytecode(t_struct *data)
 {
 	int fd;
 
-	fd = open(new_file, O_WRONLY | O_APPEND | O_TRUNC | O_CREAT, 0644);
+	fd = open(data->file_name, O_WRONLY | O_APPEND | O_TRUNC | O_CREAT, 0644);
 	bin_magic(fd);
 	bin_champ_name(fd, data);
 	bin_null(fd);
 	bin_exec_code_size(fd, data);
 	bin_comment(fd, data);
 	bin_null(fd);
-//	bin_exec_champ(fd, data);
+	bin_exec_champ(fd, data);
 	close(fd);
 }
 
@@ -107,11 +110,11 @@ int		argument_size(t_instruction *instruction)
 	while (num-- > 0)
 	{
 		size = 0;
-		size += instruction->args_of_func[num].type == T_DIR ? op_data.t_dir_size : 0;
-		size += instruction->args_of_func[num].type == T_IND ? 2 : 0;
-		size += instruction->args_of_func[num].type == T_REG ? 1 : 0;
+		size += instruction->args_of_func[num]->type == T_DIR ? op_data.t_dir_size : 0;
+		size += instruction->args_of_func[num]->type == T_IND ? 2 : 0;
+		size += instruction->args_of_func[num]->type == T_REG ? 1 : 0;
 		size_total += size;
-		instruction->args_of_func[num].size = size;
+		instruction->args_of_func[num]->size = size;
 	}
 	size_total += op_data.arg_type_code + 1;
 	return (size_total);

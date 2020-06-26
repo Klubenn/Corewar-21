@@ -54,8 +54,6 @@ int		corewar_atoi(char *arg, void *numptr, int size)
 	result = 0;
 	if (!arg || !*arg)
 		return (1);
-	while (*arg == ' ')//may be not needed, check if whitespaces are trimmed
-		arg++;
 	if (*arg == '-')
 	{
 		sign = -1;
@@ -130,7 +128,7 @@ void	f_ind(int fd,t_struct *data, t_instruction *instruction, t_args *argument)
 void arguments_code(int fd, t_struct *data, t_instruction *instruction)
 {
 	int i;
-	t_f func[4] = {NULL, &f_reg, &f_dir, &f_ind};
+	t_f func[4] = {NULL, f_reg, f_dir, f_ind};
 
 	i = 0;
 	while (i++ <= instruction->num_of_args)
