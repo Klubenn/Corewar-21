@@ -4,8 +4,6 @@
 #include "../includes/op.h"
 #include "../includes/asm.h"
 
-void push_back(t_instruction **first_instruction, t_instruction *pInstruction1);
-
 int skip_spaces(char* str)
 {
     int i;
@@ -47,7 +45,7 @@ int check_type(char **params, t_op *op)
     while (i < op->arg_num) {
         param = params[i] + skip_spaces(params[i]);
         type = get_type(param);
-        if (!type != op->arg[i])
+        if (!(type & op->arg[i]))
             return (0);
         i++;
     }
@@ -58,7 +56,7 @@ char get_type(char *param)
 {
     char *trim_param;
 
-    trim_param = param[skip_spaces(param)];
+    trim_param = param + skip_spaces(param);
     if (ft_isdigit(trim_param[0]))
         return (T_IND);
     if (trim_param[0] == 'r' || trim_param[0] == '-')
@@ -75,12 +73,13 @@ char get_type(char *param)
 
     if (trim_param[0] == ':')
         return (T_IND | T_LAB);
+    return (0);//TODO проверить, может ли быть ошибка, если да, то какой ретюрн
 }
 
 
 void free_arr(char **arr)
 {
-    char **tmp;
+    char *tmp;
 
     tmp = *arr;
     while (tmp != NULL)
@@ -91,12 +90,9 @@ void free_arr(char **arr)
     free(arr);
 }
 
-
 int check_param(t_struct *data, char *str, t_op *op)// str2 already starts with word! not contains comments
 {
 	char **params;
-	int i;
-	char type;
 
 	if (!(params = ft_strsplit(str, SEPARATOR_CHAR)))
 	    return (MALLOC_FAIL);
@@ -113,9 +109,25 @@ int check_param(t_struct *data, char *str, t_op *op)// str2 already starts with 
 	}
 }
 
+void push_back(t_struct *data, t_instruction *instruction)
+{
+	t_instruction *instr;
+
+	instr = data->instruction;
+	if (!instr)
+		data->instruction = instruction;
+	else
+	{
+		while (instr->next)
+			instr = instr->next;
+		instr->next = instruction;
+	}
+}
+
 int create_instruction(t_op *op, char **params, t_struct *data)
 {
     t_instruction *instruction;
+    t_label *label;
 
     if (!(instruction = (t_instruction *)ft_memalloc(sizeof(t_instruction)))
         || !(instruction->args_of_func = (t_args	**)ft_memalloc(sizeof(t_args *) * 4)))
@@ -126,33 +138,31 @@ int create_instruction(t_op *op, char **params, t_struct *data)
 
     if (data->label_present == 1)
     {
-        data->label->instruction = instruction;
+    	label = data->label;
+    	while (label)
+		{
+			if (!label->instruction)
+				label->instruction = instruction;
+			label = label->next;
+		}
         data->label_present = 0;
     }
-    push_back(&(data->instruction), instruction);
+    push_back(data, instruction);
     return (0);
 }
 
-void push_back(t_instruction **first_instruction, t_instruction *instruction)
-{
-    while (*first_instruction != NULL)
-        (*first_instruction)++;
-    *first_instruction = instruction;
-}
 
-t_args **create_args(t_args **args_of_func, char **params)
+void create_args(t_args **args_of_func, char **params)
 {
     int i;
 
     i = 0;
     while (params[i])
     {
-        args_of_func[i] = (t_args *)ft_memalloc(sizeof(t_args));
+        args_of_func[i] = (t_args *)ft_memalloc(sizeof(t_args));//TODO защитить маллок
         args_of_func[i]->type = get_type(params[i]);
         args_of_func[i]->str = params[i];
         i++;
     }
 }
-
-
 

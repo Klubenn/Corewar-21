@@ -73,10 +73,20 @@ void	error_management(int err, t_struct *data)
 	exit(1);
 }
 
+char *remove_comment_from_string(char *str)
+{
+	char *tmp;
+
+	if (!(tmp = ft_strchr(str, COMMENT_CHAR)))
+		return (ft_strdup(str));
+	return (ft_strndup(str, tmp - str));
+}
+
 int	check_other_strings(char *str, t_struct *data)
 {
 	t_op *op;
 	int if_label;
+	char *str2;
 
 	if ((if_label = check_label(data, str)) < 0)
 		return (MALLOC_FAIL);
@@ -84,9 +94,9 @@ int	check_other_strings(char *str, t_struct *data)
 	if (!(op = check_op(str)))
 		return (SYNTAX_ERROR);
 	str = trim_start(str + skip_word(str));
-    return check_param(data, str, op));
-
-/**/	return 0;//remove
+	if (!(str2 = remove_comment_from_string(str)))
+		return (MALLOC_FAIL);
+	return (check_param(data, str2, op));
 }
 
 void	free_strings(char *str1, char *str2, char *str3, char *str4)
@@ -227,7 +237,7 @@ void		process_string(char *str, t_struct *data, int fd)
 	}
 }
 
-t_struct	*is_valid_file(char *file_name)
+t_struct	*is_valid_file(char *file_name, char *new_file)
 {
 	int			fd;
 	int 		flag;
@@ -239,6 +249,7 @@ t_struct	*is_valid_file(char *file_name)
 		error_management(NO_FILE, NULL);
 	if (!(data = (t_struct *)ft_memalloc(sizeof(t_struct))))
 		error_management(MALLOC_FAIL, NULL);
+	data->file_name = new_file;
 	while (get_next_line(fd, &str) > 0)
 	{
 		if (!data->name || !data->comment)
@@ -292,14 +303,14 @@ int		main(int ac, char **av)
 		error_management(USAGE, NULL);
 	while (i < ac)
 	{
-		if (!(new_file = change_extension(av[i])))
+		if (!(new_file = change_extension(av[i])))//записать название файла в структуру
 			error_management(FILE_NAME, NULL);
 		else
 		{
-			data = is_valid_file(av[i]);
+			data = is_valid_file(av[i], new_file);
 			instructions_position(data);
 			check_labels(data);
-			to_bytecode(new_file, data);
+			to_bytecode(data);
 			printf("file %s was successfully created\n", new_file);//TODO change to ft_printf
 			free_data(data);
 		}
