@@ -86,7 +86,7 @@ void	error_management(int err, t_struct *data);
 int		check_other_strings(char *str, t_struct *data);
 int		check_label(t_struct *data, char *str);
 int     create_instruction(t_op *op, char **params, t_struct *data);
-t_args	**create_args(char *str);
+t_args  **create_args(t_args **args_of_func, char **params);
 int     check_type(char **params, t_op *op);
 char	*trim_start(char *str);
 t_op	*check_op(char *str);
