@@ -11,7 +11,8 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include <libft.h>
+#include <unistd.h>
+#include "../libft/libft.h"
 #include "../includes/op.h"
 #include "../includes/asm.h"
 
@@ -36,6 +37,28 @@ void	print_error_message(enum err_message num)
 	ft_putstr_fd(ch[num], 2);
 }
 
+char 		*trim_start(char *str)
+{
+	if (str)
+	{
+		while(*str == ' ' || *str == '\t')
+			str++;
+	}
+	return (str);
+}
+
+int		check_ending(char *str)
+{
+	if (str)
+	{
+		while (*str == ' ' || *str == '\t')
+			str++;
+		if (!*str || *str == COMMENT_CHAR)
+			return (0);
+	}
+	return (1);
+}
+
 void	free_data(t_struct *data)
 {
 	free(data);//TODO write more later
@@ -50,24 +73,21 @@ void	error_management(int err, t_struct *data)
 	exit(1);
 }
 
-int	check_other_strings(int fd, char *str, t_struct *data)
+int	check_other_strings(char *str, t_struct *data)
 {
 	t_op *op;
-	int instr_pointer;
-	int parametr_pointer;
 	int if_label;
 
-	if ((if_label = check_label(data, str)) < 0)//pointer after label?
+	if ((if_label = check_label(data, str)) < 0)
 		return (MALLOC_FAIL);
-	//TODO не нужна отдельная функция для перескока, просто пишешь (str + if_label) и строка сдвинется
-	//TODO можно вызвать str = trim_start(str + if_label) чтобы обрезать пробелы после лейбла
-	instr_pointer = skipper(if_label, str);//skips spaces or skips label and spaces
-	if (!op = check_op(&str[instr_pointer]))
-		error_management();
-	parametr_pointer = skipper(1, &str[instr_pointer]);//skips instruction and spaces
-	if (!check_param(&str[parametr_pointer], op))
-		error_management();
-	create_instruction(str, instr_pointer, parametr_pointer, data);
+	str = trim_start(str + if_label);
+	if (!(op = check_op(str)))
+		return (SYNTAX_ERROR);
+	str = trim_start(str + skip_word(str));
+	if ((check_param(str, op)) < 0)
+		return (SYNTAX_ERROR);
+	return (create_instruction(op, str, data));
+/**/	return 0;//remove
 }
 
 void	free_strings(char *str1, char *str2, char *str3, char *str4)
@@ -76,18 +96,6 @@ void	free_strings(char *str1, char *str2, char *str3, char *str4)
 	free(str2);
 	free(str3);
 	free(str4);
-}
-
-int		check_ending(char *str)//TODO эту ф-цию можно использовать и дальше для проверки инструкций
-{
-	if (str)
-	{
-		while (*str == ' ' || *str == '\t')
-			str++;
-		if (!*str || *str == COMMENT_CHAR)
-			return (0);
-	}
-	return (1);
 }
 
 int 	finish_reading(char **string, char *tmp2, char *small, char *big)
@@ -200,16 +208,6 @@ void	process_name_and_comment(char *str, t_struct *data, int fd)
 		error_management(err, data);
 }
 
-char 		*trim_start(char *str)
-{
-	if (str)
-	{
-		while(*str == ' ' || *str == '\t')
-			str++;
-	}
-	return (str);
-}
-
 void		process_string(char *str, t_struct *data, int fd)
 {
 	int		error;
@@ -221,7 +219,7 @@ void		process_string(char *str, t_struct *data, int fd)
 	if (*str_trim == '.')
 		error = DOT_START;
 	else
-		error = check_other_strings(fd, str_trim, data);
+		error = check_other_strings(str_trim, data);
 	if (error)
 	{
 		free(str);
@@ -248,8 +246,6 @@ t_struct	*is_valid_file(char *file_name)
 			process_name_and_comment(str, data, fd);
 		else
 			process_string(str, data, fd);
-//		if (data->name && data->comment)
-//			printf("%s | %s\n", data->name, data->comment);
 		flag = check_ending(str);
 		free(str);
 	}
