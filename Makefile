@@ -12,7 +12,7 @@ INCL_H = asm.h op.h
 INCL = $(addprefix $(INCL_DIR),$(INCL_H))
 
 SRC_DIR = ./src/
-SRC_C = asm.c champ_exec_code.c to_bytecode.c
+SRC_C = asm.c to_bytecode.c checks.c labels.c op.c
 SRC = $(addprefix $(SRC_DIR),$(SRC_C))
 
 FLAGS = -Wall -Wextra -Werror

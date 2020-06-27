@@ -6,7 +6,7 @@ void	write_backwards(int fd, void *source, int size)
 
 	c = (char *)source;
 	while (--size >= 0)
-		write(fd, c, 1);
+		write(fd, c + size, 1);
 }
 
 void	bin_magic(int fd)
@@ -53,46 +53,22 @@ void	bin_comment(int fd, t_struct *data)
 }
 
 
-void    to_bytecode(char *new_file, t_struct *data)
+void    to_bytecode(t_struct *data)
 {
 	int fd;
 
-	fd = open(new_file, O_WRONLY | O_APPEND | O_TRUNC | O_CREAT, 0644);
+	fd = open(data->file_name, O_WRONLY | O_APPEND | O_TRUNC | O_CREAT, 0644);
 	bin_magic(fd);
 	bin_champ_name(fd, data);
 	bin_null(fd);
 	bin_exec_code_size(fd, data);
 	bin_comment(fd, data);
 	bin_null(fd);
-//	bin_exec_champ(fd, data);
+	bin_exec_champ(fd, data);
 	close(fd);
 }
 
 
-t_op	op_calc(int num) //TODO наверное, лучше это просто сделать глобальным массивом, а не ф-цией
-{
-	static t_op    op_tab[17] =
-			{
-					{NULL,0, 0, {0}, 0, 4},
-					{"live", 1, 1, {T_DIR}, 0, 4},
-					{"ld", 2, 2, {T_DIR | T_IND, T_REG}, 1, 4},
-					{"st", 3, 2, {T_REG, T_IND | T_REG}, 1, 4},
-					{"add", 4, 3, {T_REG, T_REG, T_REG}, 1, 4},
-					{"sub", 5, 3, {T_REG, T_REG, T_REG}, 1, 4},
-					{"and", 6, 3, {T_REG | T_DIR | T_IND, T_REG | T_IND | T_DIR, T_REG}, 1, 4},
-					{"or", 7, 3, {T_REG | T_IND | T_DIR, T_REG | T_IND | T_DIR, T_REG}, 1, 4},
-					{"xor", 8, 3, {T_REG | T_IND | T_DIR, T_REG | T_IND | T_DIR, T_REG}, 1, 4},
-					{"zjmp", 9, 1, {T_DIR}, 0, 2},
-					{"ldi", 10, 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 1, 2},
-					{"sti", 11, 3, {T_REG, T_REG | T_DIR | T_IND, T_DIR | T_REG}, 1, 2},
-					{"fork", 12, 1, {T_DIR}, 0, 2},
-					{"lld", 13, 2, {T_DIR | T_IND, T_REG}, 1, 4},
-					{"lldi", 14, 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 1, 2},
-					{"lfork", 15, 1, {T_DIR}, 0, 2},
-					{"aff", 16, 1, {T_REG}, 1, 4}
-			};
-	return (op_tab[num]);
-}
 
 int		argument_size(t_instruction *instruction)
 {
@@ -102,16 +78,16 @@ int		argument_size(t_instruction *instruction)
 	int 	size_total;
 
 	size_total = 0;
-	op_data = op_calc(instruction->function);
+	op_data = op_tab[instruction->function];
 	num = op_data.arg_num;
 	while (num-- > 0)
 	{
 		size = 0;
-		size += instruction->args_of_func[num].type == T_DIR ? op_data.t_dir_size : 0;
-		size += instruction->args_of_func[num].type == T_IND ? 2 : 0;
-		size += instruction->args_of_func[num].type == T_REG ? 1 : 0;
+		size += instruction->args_of_func[num]->type == T_DIR ? op_data.t_dir_size : 0;
+		size += instruction->args_of_func[num]->type == T_IND ? 2 : 0;
+		size += instruction->args_of_func[num]->type == T_REG ? 1 : 0;
 		size_total += size;
-		instruction->args_of_func[num].size = size;
+		instruction->args_of_func[num]->size = size;
 	}
 	size_total += op_data.arg_type_code + 1;
 	return (size_total);
@@ -147,7 +123,7 @@ void	check_labels(t_struct *data)
 		while (label_2)
 		{
 			if (ft_strcmp(name, label_2->label_name) == 0)
-				exit (1);//invoke error function
+				error_management(DUPL_LABEL, data);
 			label_2 = label_2->next;
 		}
 		label_1 = label_1->next;

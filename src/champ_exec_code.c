@@ -7,11 +7,11 @@ void	argument_type(int fd, t_instruction *instruction)
 	int				i;
 
 	arg_type = 0;
-	i = 1;
-	while (i <= instruction->num_of_args)
+	i = 0;
+	while (i < instruction->num_of_args)
 	{
 		arg_num[i] = instruction->args_of_func[i]->type;
-		arg_num[i] = arg_num[i] << ((4 - i) * 2);
+		arg_num[i] = arg_num[i] << ((4 - (i+1)) * 2);
 		arg_type = arg_type | arg_num[i];
 		i++;
 	}
@@ -28,7 +28,7 @@ void	operation_code(int fd, t_instruction *instruction)
 		argument_type(fd, instruction);
 }
 
-int 	find_label(t_struct *data, char *label_from_instruc)
+int 	bin_find_label(t_struct *data, char *label_from_instruc)
 {
 	t_label	*label;
 
@@ -54,8 +54,6 @@ int		corewar_atoi(char *arg, void *numptr, int size)
 	result = 0;
 	if (!arg || !*arg)
 		return (1);
-	while (*arg == ' ')//may be not needed, check if whitespaces are trimmed
-		arg++;
 	if (*arg == '-')
 	{
 		sign = -1;
@@ -66,7 +64,8 @@ int		corewar_atoi(char *arg, void *numptr, int size)
 	while(*arg >= '0' && *arg <= '9' && digits <= 10)
 	{
 		result = result * 10 + (*arg - '0');
-		digits = result == 0 ? 0 : digits + 1;
+		digits = result == 0 ? 1 : digits + 1;
+		arg++;
 	}
 	result *= sign;
 	if (*arg || digits > 10 || (size == 2 && (result > SHRT_MAX || result < SHRT_MIN))
@@ -87,8 +86,8 @@ void	f_reg(int fd, t_struct *data, t_instruction *instruction, t_args *argument)
 	reg_num = (unsigned char)ft_atoi((argument->str) + 1);
 	if (reg_num > 0  && reg_num <= 16)
 		write(fd, &reg_num, 1);
-	else
-		exit (1);//invoke error function
+	else if (instruction)
+		error_management(WRONG_REG, data);
 }
 
 void	f_dir(int fd, t_struct *data, t_instruction *instruction, t_args *argument)
@@ -96,16 +95,16 @@ void	f_dir(int fd, t_struct *data, t_instruction *instruction, t_args *argument)
 	int		dir_num;
 
 	dir_num = (int)(-1 * instruction->position);
-	if (argument->str[0] == ':')
+	if (argument->str[1] == ':')
 	{
-		dir_num += find_label(data, argument->str + 1);
-		write_backwards(fd, &dir_num, argument->size);//check if it should be written backwards or not
+		dir_num += bin_find_label(data, argument->str + 2);
+		write_backwards(fd, &dir_num, argument->size);
 	}
 	else
 	{
-		if (corewar_atoi(argument->str, &dir_num, argument->size))//rewrite atoi to check
-			exit(1);//invoke error function
-		write_backwards(fd, &dir_num, sizeof(short));//check if it should be written backwards or not
+		if (corewar_atoi(argument->str + 1, &dir_num, argument->size))
+			error_management(WRONG_NUM, data);
+		write_backwards(fd, &dir_num, argument->size);
 	}
 }
 
@@ -116,14 +115,14 @@ void	f_ind(int fd,t_struct *data, t_instruction *instruction, t_args *argument)
 	ind_num = (short)(-1 * instruction->position);
 	if (argument->str[0] == ':')
 	{
-		ind_num += (short)find_label(data, argument->str + 1);
-		write_backwards(fd, &ind_num, sizeof(short));//check if it should be written backwards or not
+		ind_num += (short)bin_find_label(data, argument->str + 1);
+		write_backwards(fd, &ind_num, sizeof(short));
 	}
 	else
 	{
-		if (corewar_atoi(argument->str, &ind_num, IND_SIZE))//rewrite atoi to check
-			exit(1);//invoke error function
-		write_backwards(fd, &ind_num, sizeof(short));//check if it should be written backwards or not
+		if (corewar_atoi(argument->str, &ind_num, IND_SIZE))
+			error_management(WRONG_NUM, data);
+		write_backwards(fd, &ind_num, sizeof(short));
 	}
 }
 
@@ -133,8 +132,11 @@ void arguments_code(int fd, t_struct *data, t_instruction *instruction)
 	t_f func[4] = {NULL, &f_reg, &f_dir, &f_ind};
 
 	i = 0;
-	while (i++ <= instruction->num_of_args)
+	while (i < instruction->num_of_args)
+	{
 		func[instruction->args_of_func[i]->type](fd, data, instruction, instruction->args_of_func[i]);
+		i++;
+	}
 }
 
 void	bin_exec_champ(int fd, t_struct *data)

@@ -71,4 +71,36 @@ typedef struct		header_s
   char				comment[COMMENT_LENGTH + 1];
 }					header_t;
 
+
+typedef	struct		s_op
+{
+	char			*name;
+	int 			func_num;
+	int 			arg_num;
+	unsigned char	arg[3];
+	int 			arg_type_code;
+	int 			t_dir_size;
+}					t_op;
+
+t_op    op_tab[17] =
+		{
+				{NULL,0, 0, {0}, 0, 4},
+				{"live", 1, 1, {T_DIR}, 0, 4},
+				{"ld", 2, 2, {T_DIR | T_IND, T_REG}, 1, 4},
+				{"st", 3, 2, {T_REG, T_IND | T_REG}, 1, 4},
+				{"add", 4, 3, {T_REG, T_REG, T_REG}, 1, 4},
+				{"sub", 5, 3, {T_REG, T_REG, T_REG}, 1, 4},
+				{"and", 6, 3, {T_REG | T_DIR | T_IND, T_REG | T_IND | T_DIR, T_REG}, 1, 4},
+				{"or", 7, 3, {T_REG | T_IND | T_DIR, T_REG | T_IND | T_DIR, T_REG}, 1, 4},
+				{"xor", 8, 3, {T_REG | T_IND | T_DIR, T_REG | T_IND | T_DIR, T_REG}, 1, 4},
+				{"zjmp", 9, 1, {T_DIR}, 0, 2},
+				{"ldi", 10, 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 1, 2},
+				{"sti", 11, 3, {T_REG, T_REG | T_DIR | T_IND, T_DIR | T_REG}, 1, 2},
+				{"fork", 12, 1, {T_DIR}, 0, 2},
+				{"lld", 13, 2, {T_DIR | T_IND, T_REG}, 1, 4},
+				{"lldi", 14, 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 1, 2},
+				{"lfork", 15, 1, {T_DIR}, 0, 2},
+				{"aff", 16, 1, {T_REG}, 1, 4}
+		};
+
 #endif
