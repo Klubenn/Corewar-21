@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 19:13:16 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/09 14:36:36 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/09 21:46:46 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,9 @@ typedef struct s_game_process		/*Хранит*/
 typedef struct s_player_process
 {
 	u_int64_t	PC;
-	u_int8_t		registers[REG_NUMBER*REG_SIZE];
+	u_int8_t		operation_code;
+	// uint8_t		operation_args_type;
+	u_int8_t	registers[REG_NUMBER*REG_SIZE];
 	u_int64_t	cycles_to_wait;
 	u_int64_t	live_counter;
 	struct s_player_process *next;
@@ -58,11 +60,21 @@ typedef struct			s_player_list
 	struct s_player_list		*prev;
 }						t_player_list;
 
+// void (*operation[16])(t_game_process *game_process, t_player_process *player_process,
+// 	t_player_list *player_list, t_vm_field_memory *vm_field_memory) =
+// {
+// 	op1
+// };
+
 void 	virtual_machine_creator(t_game_process *game_process,
 	t_player_list *player_list,  t_op *op_tab);
 void 	parse_arguments(char **argv, t_game_process *game_process,
 	t_player_list **player_list);
 void 	memory_allocator_helper(char *str, char **buff);
 size_t	ft_count_words(char const *s, char c);
+void	op1(t_game_process *game_process, t_player_process *player_process,
+	t_player_list *player_list, t_vm_field_memory *vm_field_memory);
+void players_operations_executing(t_game_process *game_process, t_player_process *player_process,
+	t_player_list *player_list, t_vm_field_memory *vm_field_memory);
 
 #endif

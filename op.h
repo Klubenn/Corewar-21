@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 14:05:51 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/06 18:13:55 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/09 21:12:01 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,12 +109,13 @@ typedef struct s_op
 {
 	char 			*name;
 	int 			args_number;
-	int			 	arg_types[3];
+	unsigned char	arg_types[3];
 	unsigned char 	bytecode_operation;
 	int				cycles_before_complete;
 	char 			*explanation;
 	int 			change_carry;
 	int 			have_a_code_type_code;
+	u_int8_t		dir_size;
 }		t_op;
 
 #endif

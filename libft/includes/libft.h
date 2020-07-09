@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/05 13:39:16 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/07/05 13:39:17 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2020/07/09 20:08:06 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <string.h>
 # include <inttypes.h>
 # include <stdlib.h>
+# include <stdbool.h>
 
 # define FT_MIN(A, B) (((A) < (B)) ? (A) : (B))
 # define FT_MAX(A, B) (((A) > (B)) ? (A) : (B))
@@ -35,11 +36,11 @@
 # define FT_CHAR_MAX	((char)(FT_UCHAR_MAX >> 1))
 # define FT_CHAR_MIN	((char)(~FT_CHAR_MAX))
 
-typedef enum
-{
-	false,
-	true
-}	t_bool;
+// typedef enum
+// {
+// 	false,
+// 	true
+// }	t_bool;
 
 typedef struct		s_list
 {
@@ -195,15 +196,15 @@ int					ft_arrindex(int x, int y, int width);
 
 int					ft_isdigit_base(char c, int base);
 
-t_bool				ft_isprefix(const char *str, int base);
+bool				ft_isprefix(const char *str, int base);
 
-t_bool				ft_isnum(char *str, int base);
+bool				ft_isnum(char *str, int base);
 
 size_t				ft_signedlen(intmax_t number, unsigned int base);
 
 size_t				ft_unsignedlen(uintmax_t number, unsigned int base);
 
-t_bool				ft_isint(const char *str, t_bool strict);
+bool				ft_isint(const char *str, bool strict);
 
 void				ft_strsplit_free(char ***strsplit);
 
