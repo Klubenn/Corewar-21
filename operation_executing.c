@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 21:14:34 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/10 16:05:55 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/10 17:35:14 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void (*operation[16])(t_game_process *game_process, t_player_process *player_pro
 	op1
 };
 
-bool	move_pc_not_valid(t_op *op_tab, t_player_process *player_process, u_int8_t *args)
+bool	move_pc_not_valid(t_op *op_tab, t_player_process *player_process)
 {
 	u_int8_t	op_code;
 	int counter;
@@ -41,21 +41,21 @@ bool	move_pc_not_valid(t_op *op_tab, t_player_process *player_process, u_int8_t 
 	op_code = player_process->operation_code;
 	while (counter < 3)
 	{
-		if (args[counter] == T_REG)
+		if (player_process->args[counter] == T_REG)
 		{
 			if (player_process->PC + REG_SIZE > MEM_SIZE - 1)
 				player_process->PC = player_process->PC + REG_SIZE - MEM_SIZE;
 			else
 				player_process->PC += REG_SIZE;
 		}
-		else if (args[counter] == T_IND)
+		else if (player_process->args[counter] == T_IND)
 		{
 			if (player_process->PC + IND_SIZE > MEM_SIZE - 1)
 				player_process->PC = player_process->PC + IND_SIZE - MEM_SIZE;
 			else
 				player_process->PC += IND_SIZE;
 		}
-		else if (args[counter] == T_DIR)
+		else if (player_process->args[counter] == T_DIR)
 		{
 			if (player_process->PC + op_tab[op_code].dir_size > MEM_SIZE - 1)
 				player_process->PC = player_process->PC + op_tab[op_code].dir_size - MEM_SIZE;
@@ -77,7 +77,7 @@ bool	validation_before_operation_complete(t_game_process *game_process, t_player
 	t_vm_field_memory *vm_field_memory)
 {
 	u_int8_t	args_type_code;
-	u_int8_t	args[3];
+	// u_int8_t	args[3];
 	u_int8_t	counter;
 	// u_int8_t	counter_1;
 	u_int8_t	comparator;
@@ -106,26 +106,26 @@ bool	validation_before_operation_complete(t_game_process *game_process, t_player
 		args_type_code = (vm_field_memory->field)[0];
 	else
 		args_type_code = (vm_field_memory->field)[player_process->PC + 1];
-	args[0] = (args_type_code & 192) >> 6;
-	args[1] = (args_type_code & 48) >> 4;
-	args[2] = (args_type_code & 12) >> 2;
+	player_process->args[0] = (args_type_code & 192) >> 6;
+	player_process->args[1] = (args_type_code & 48) >> 4;
+	player_process->args[2] = (args_type_code & 12) >> 2;
 	// if (game_process->op_tab[vm_field_memory->field[player_process->PC]].arg_types[0])
 	while (counter < 3)
 	{
 		comparator = (game_process->op_tab)[(vm_field_memory->field)[player_process->PC]].arg_types[counter];
-		if (args[counter] == T_REG && (comparator == T_DIR || comparator == (T_DIR | T_IND) ||
+		if (player_process->args[counter] == T_REG && (comparator == T_DIR || comparator == (T_DIR | T_IND) ||
 			comparator == T_IND || comparator == 0))
-			return (move_pc_not_valid(game_process->op_tab, player_process, args));
-		else if (args[counter] == T_DIR && (comparator == T_REG || comparator == T_IND ||
+			return (move_pc_not_valid(game_process->op_tab, player_process));
+		else if (player_process->args[counter] == T_DIR && (comparator == T_REG || comparator == T_IND ||
 			comparator == (T_REG | T_IND) || comparator == 0))
-			return (move_pc_not_valid(game_process->op_tab, player_process, args));
-		else if (args[counter] == T_IND && (comparator == T_REG || comparator == T_DIR ||
+			return (move_pc_not_valid(game_process->op_tab, player_process));
+		else if (player_process->args[counter] == T_IND && (comparator == T_REG || comparator == T_DIR ||
 			comparator == (T_REG | T_DIR) || comparator == 0))
-			return (move_pc_not_valid(game_process->op_tab, player_process, args));
-		else if (args[counter] == 0 && (comparator == T_REG || comparator == T_DIR ||
+			return (move_pc_not_valid(game_process->op_tab, player_process));
+		else if (player_process->args[counter] == 0 && (comparator == T_REG || comparator == T_DIR ||
 			comparator == T_IND || comparator == (T_REG | T_DIR) || comparator == (T_DIR | T_IND) ||
 				comparator == (T_REG | T_DIR | T_IND)))
-			return (move_pc_not_valid(game_process->op_tab, player_process, args));
+			return (move_pc_not_valid(game_process->op_tab, player_process));
 		else
 			counter++;
 	}

@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 19:13:16 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/10 12:53:27 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/10 17:33:10 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,9 @@ typedef struct s_player_process
 	u_int8_t	registers[REG_NUMBER*REG_SIZE];
 	u_int64_t	cycles_to_wait;
 	u_int64_t	live_counter;
+	u_int64_t	last_live_cycle_number;
+	bool		carry;
+	u_int8_t	args[3];
 	struct s_player_process *next;
 	struct s_player_process *prev;
 	
