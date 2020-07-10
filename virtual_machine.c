@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 18:06:36 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/09 22:14:13 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/10 19:41:22 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,6 @@ void play_corewar(t_game_process *game_process, t_player_list *player_list, int 
 			players_operations_executing(game_process, player_process, player_list,
 				vm_field_memory);
 			cycles_counter_between_checks += 1;
-			// printf("%d\n", cycles_counter_between_checks);
 		}
 		game_process->cycle_number += 1;
 	}
