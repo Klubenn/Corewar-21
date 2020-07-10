@@ -1,0 +1,27 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "C/C++: gcc build active file",
+			"command": "/usr/bin/gcc",
+			"args": [
+				"-g",
+				"${workspaceFolder}/test.c",
+				"${workspaceFolder}/libft/libft.a",
+				"${workspaceFolder}/virtual_machine.c",
+				"${workspaceFolder}/operation_executing.c",
+				"${workspaceFolder}/op.c",
+				"-o",
+				"${workspaceFolder}/test"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build"
+		},
+	]
+}

@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 19:13:16 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/09 21:46:46 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/10 12:53:27 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define COREWAR_H
 # include <unistd.h>
 # include "op.h"
+# include <stdbool.h>
 
 typedef struct s_vm_field_memory
 {
@@ -37,6 +38,7 @@ typedef struct s_game_process		/*Хранит*/
 	u_int64_t	number_of_live_since_last_check;
 	u_int64_t	checks_counter;
 	t_op		*op_tab;
+	bool 		aff;
 }				t_game_process;
 
 typedef struct s_player_process

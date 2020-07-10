@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 21:14:34 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/09 22:22:52 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/10 16:05:55 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ bool	move_pc_not_valid(t_op *op_tab, t_player_process *player_process, u_int8_t 
 	int counter;
 
 	counter = 0;
-	op_code = player_process->PC;
+	op_code = player_process->operation_code;
 	while (counter < 3)
 	{
 		if (args[counter] == T_REG)
@@ -79,30 +79,45 @@ bool	validation_before_operation_complete(t_game_process *game_process, t_player
 	u_int8_t	args_type_code;
 	u_int8_t	args[3];
 	u_int8_t	counter;
+	// u_int8_t	counter_1;
 	u_int8_t	comparator;
 
 	counter = 0;
-	
-	if ((vm_field_memory->field)[player_process->PC] > 16 || (vm_field_memory->field)[player_process->PC] < 1)
-	{
-		player_process->PC += 1;
-		return (false);
-	}
+	// counter_1 = 0;
+	// if ((vm_field_memory->field)[player_process->PC] > 16 ||
+	// 		(vm_field_memory->field)[player_process->PC] < 1)
+	// {
+	// 	player_process->PC += 1;
+	// 	return (false);
+	// }
+	// player_process->operation_code = vm_field_memory->field[player_process->PC];
+	if (game_process->op_tab[vm_field_memory->field[player_process->PC]].have_a_code_type_code == 0)
+		return (true);
+	// while (counter < 3)
+	// {
+	// 	if (game_process->op_tab[vm_field_memory->field[player_process->PC]].arg_types[counter] != 0)
+	// 		counter_1++;
+	// 	counter++;
+	// }
+	// if (counter_1 == 1)
+	// 	return (true);
+	// counter = 0;
 	if (player_process->PC == MEM_SIZE - 1)
 		args_type_code = (vm_field_memory->field)[0];
 	else
-		args_type_code = (vm_field_memory->field)[player_process->PC];
-	args[0] = (args_type_code & 12) >> 2;
+		args_type_code = (vm_field_memory->field)[player_process->PC + 1];
+	args[0] = (args_type_code & 192) >> 6;
 	args[1] = (args_type_code & 48) >> 4;
-	args[2] = (args_type_code & 192) >> 6;
+	args[2] = (args_type_code & 12) >> 2;
+	// if (game_process->op_tab[vm_field_memory->field[player_process->PC]].arg_types[0])
 	while (counter < 3)
 	{
 		comparator = (game_process->op_tab)[(vm_field_memory->field)[player_process->PC]].arg_types[counter];
 		if (args[counter] == T_REG && (comparator == T_DIR || comparator == (T_DIR | T_IND) ||
-			comparator == T_IND || comparator == 0)) 
+			comparator == T_IND || comparator == 0))
 			return (move_pc_not_valid(game_process->op_tab, player_process, args));
 		else if (args[counter] == T_DIR && (comparator == T_REG || comparator == T_IND ||
-			comparator == (T_REG | T_IND) || comparator == 0)) 
+			comparator == (T_REG | T_IND) || comparator == 0))
 			return (move_pc_not_valid(game_process->op_tab, player_process, args));
 		else if (args[counter] == T_IND && (comparator == T_REG || comparator == T_DIR ||
 			comparator == (T_REG | T_DIR) || comparator == 0))
@@ -136,7 +151,12 @@ void players_operations_executing(t_game_process *game_process, t_player_process
 				{
 					printf("%llu\n", player_process->PC);
 					if (validation_before_operation_complete(game_process, player_process, vm_field_memory))
-						player_process->PC += 1;
+					{
+						if (player_process->PC == MEM_SIZE - 1)
+							player_process->PC = 0;
+						else
+							player_process->PC += 1;
+					}
 						// operation[counter](game_process,
 						// 	player_process, player_list,
 						// 		vm_field_memory);
@@ -145,9 +165,8 @@ void players_operations_executing(t_game_process *game_process, t_player_process
 					if ((1 <= vm_field_memory->field[player_process->PC]) &&
 						(vm_field_memory->field[player_process->PC] <= 16))
 						player_process->cycles_to_wait =
-							(game_process->op_tab)[vm_field_memory->
-								field[player_process->
-									operation_code]].cycles_before_complete;
+							(game_process->op_tab)[player_process->
+									operation_code].cycles_before_complete;
 					// if (player_process->PC == MEM_SIZE - 1)
 					// 	player_process->operation_args_type = vm_field_memory->field[0];
 					// else
@@ -161,15 +180,18 @@ void players_operations_executing(t_game_process *game_process, t_player_process
 		}
 		else
 		{
-			player_process->PC += 1;
+			if (player_process->PC == MEM_SIZE - 1)
+				player_process->PC = 0;
+			else
+				player_process->PC += 1;
+			// printf("%llu\n", player_process->PC);
 			player_process->operation_code = vm_field_memory->
 						field[player_process->PC];
 			if ((1 <= vm_field_memory->field[player_process->PC]) &&
 				(vm_field_memory->field[player_process->PC] <= 16))
 				player_process->cycles_to_wait =
-					(game_process->op_tab)[vm_field_memory->
-						field[player_process->
-							operation_code]].cycles_before_complete;
+					(game_process->op_tab)[player_process->
+							operation_code].cycles_before_complete;
 		}
 		// else
 		// {
