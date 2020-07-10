@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 21:14:34 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/10 17:35:14 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/10 19:12:59 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,21 +41,21 @@ bool	move_pc_not_valid(t_op *op_tab, t_player_process *player_process)
 	op_code = player_process->operation_code;
 	while (counter < 3)
 	{
-		if (player_process->args[counter] == T_REG)
+		if (player_process->args[counter] == REG_CODE)
 		{
-			if (player_process->PC + REG_SIZE > MEM_SIZE - 1)
-				player_process->PC = player_process->PC + REG_SIZE - MEM_SIZE;
+			if (player_process->PC + 1 > MEM_SIZE - 1)
+				player_process->PC = player_process->PC + 1 - MEM_SIZE;
 			else
-				player_process->PC += REG_SIZE;
+				player_process->PC += 1;
 		}
-		else if (player_process->args[counter] == T_IND)
+		else if (player_process->args[counter] == IND_CODE)
 		{
 			if (player_process->PC + IND_SIZE > MEM_SIZE - 1)
 				player_process->PC = player_process->PC + IND_SIZE - MEM_SIZE;
 			else
 				player_process->PC += IND_SIZE;
 		}
-		else if (player_process->args[counter] == T_DIR)
+		else if (player_process->args[counter] == DIR_CODE)
 		{
 			if (player_process->PC + op_tab[op_code].dir_size > MEM_SIZE - 1)
 				player_process->PC = player_process->PC + op_tab[op_code].dir_size - MEM_SIZE;
@@ -112,14 +112,14 @@ bool	validation_before_operation_complete(t_game_process *game_process, t_player
 	// if (game_process->op_tab[vm_field_memory->field[player_process->PC]].arg_types[0])
 	while (counter < 3)
 	{
-		comparator = (game_process->op_tab)[(vm_field_memory->field)[player_process->PC]].arg_types[counter];
-		if (player_process->args[counter] == T_REG && (comparator == T_DIR || comparator == (T_DIR | T_IND) ||
+		comparator = (game_process->op_tab)[player_process->operation_code].arg_types[counter];
+		if (player_process->args[counter] == REG_CODE && (comparator == T_DIR || comparator == (T_DIR | T_IND) ||
 			comparator == T_IND || comparator == 0))
 			return (move_pc_not_valid(game_process->op_tab, player_process));
-		else if (player_process->args[counter] == T_DIR && (comparator == T_REG || comparator == T_IND ||
+		else if (player_process->args[counter] == DIR_CODE && (comparator == T_REG || comparator == T_IND ||
 			comparator == (T_REG | T_IND) || comparator == 0))
 			return (move_pc_not_valid(game_process->op_tab, player_process));
-		else if (player_process->args[counter] == T_IND && (comparator == T_REG || comparator == T_DIR ||
+		else if (player_process->args[counter] == IND_CODE && (comparator == T_REG || comparator == T_DIR ||
 			comparator == (T_REG | T_DIR) || comparator == 0))
 			return (move_pc_not_valid(game_process->op_tab, player_process));
 		else if (player_process->args[counter] == 0 && (comparator == T_REG || comparator == T_DIR ||
@@ -129,6 +129,7 @@ bool	validation_before_operation_complete(t_game_process *game_process, t_player
 		else
 			counter++;
 	}
+	move_pc_not_valid(game_process->op_tab, player_process);
 	return (true);
 }
 
@@ -149,13 +150,13 @@ void players_operations_executing(t_game_process *game_process, t_player_process
 			// {
 				if (player_process->cycles_to_wait == 0)
 				{
-					printf("%llu\n", player_process->PC);
+					// printf("%llx\n", player_process->PC);
 					if (validation_before_operation_complete(game_process, player_process, vm_field_memory))
 					{
-						if (player_process->PC == MEM_SIZE - 1)
-							player_process->PC = 0;
-						else
-							player_process->PC += 1;
+						// if (player_process->PC == MEM_SIZE - 1)
+						// 	player_process->PC = 0;
+						// else
+						// 	player_process->PC += 1;
 					}
 						// operation[counter](game_process,
 						// 	player_process, player_list,
@@ -180,6 +181,7 @@ void players_operations_executing(t_game_process *game_process, t_player_process
 		}
 		else
 		{
+			printf("%llx - not valid\n", player_process->PC);
 			if (player_process->PC == MEM_SIZE - 1)
 				player_process->PC = 0;
 			else
