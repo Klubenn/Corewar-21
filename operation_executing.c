@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 21:14:34 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/11 15:02:50 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/11 16:09:16 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void (*operation[16])(t_game_process *game_process, t_player_process *player_pro
 	op1
 };
 
-bool	move_pc_not_valid(t_op *op_tab, t_player_process *player_process)
+bool	move_pc(t_op *op_tab, t_player_process *player_process)
 {
 	u_int8_t	op_code;
 	int counter;
@@ -89,7 +89,7 @@ bool	validation_before_operation_complete(t_game_process *game_process, t_player
 	counter = 0;
 	if (game_process->op_tab[player_process->operation_code].have_a_code_type_code == 0)
 		return (true);
-		// return (move_pc_not_valid(game_process->op_tab, player_process));
+		// return (move_pc(game_process->op_tab, player_process));
 	// 	if (game_process->op_tab[player_process->operation_code].arg_types[0] == T_REG)
 	// 	{
 	// 		player_process->PC = (player_process->PC + 1) % MEM_SIZE;
@@ -116,17 +116,17 @@ bool	validation_before_operation_complete(t_game_process *game_process, t_player
 	{
 		comparator = (game_process->op_tab)[player_process->operation_code].arg_types[counter];
 		if (player_process->args[counter] == REG_CODE && !(comparator & T_REG))
-			return (move_pc_not_valid(game_process->op_tab, player_process));
+			return (move_pc(game_process->op_tab, player_process));
 		else if (player_process->args[counter] == DIR_CODE && !(comparator & T_DIR))
-			return (move_pc_not_valid(game_process->op_tab, player_process));
+			return (move_pc(game_process->op_tab, player_process));
 		else if (player_process->args[counter] == IND_CODE && !(comparator & T_IND))
-			return (move_pc_not_valid(game_process->op_tab, player_process));
+			return (move_pc(game_process->op_tab, player_process));
 		else if (player_process->args[counter] == 0 && (comparator))
-			return (move_pc_not_valid(game_process->op_tab, player_process));
+			return (move_pc(game_process->op_tab, player_process));
 		else
 			counter++;
 	}
-	// move_pc_not_valid(game_process->op_tab, player_process);
+	// move_pc(game_process->op_tab, player_process);
 	return (true);
 }
 
@@ -145,8 +145,8 @@ void players_operations_executing(t_game_process *game_process, t_player_process
 				if (validation_before_operation_complete(game_process,
 					player_process, vm_field_memory))
 				{
-					move_pc_not_valid(game_process->op_tab, player_process);
-					// move_pc_not_valid(game_process->op_tab, player_process);
+					move_pc(game_process->op_tab, player_process);
+					// move_pc(game_process->op_tab, player_process);
 				}
 				player_process->operation_code = vm_field_memory->
 					field[player_process->PC];
