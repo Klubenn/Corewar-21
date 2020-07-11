@@ -52,7 +52,8 @@ void	op15(t_game_process *game_process, t_player_process *player_process,
 	player_process->PC += 3;
 }
 
-u_int32_t	put_value_to_arg(t_vm_field_memory *vm_field_memory, u_int64_t tmpPC, int size, u_int8_t type)
+u_int32_t	put_value_to_arg(t_vm_field_memory *vm_field_memory,
+				u_int64_t tmpPC, int size, u_int8_t type)
 {
 	u_int32_t number;
 	u_int32_t tmp;
@@ -69,7 +70,62 @@ u_int32_t	put_value_to_arg(t_vm_field_memory *vm_field_memory, u_int64_t tmpPC, 
 		i++;
 	}
 	if (type == T_IND)
-		return (put_value_to_arg(vm_field_memory, number, size, T_DIR));
+		return (put_value_to_arg(vm_field_memory, number, DIR_SIZE, T_DIR));
+	return (number);
+}
+
+void	put_value_to_field(u_int32_t value, t_vm_field_memory *vm_field_memory, u_int64_t PC)
+{
+	int i;
+
+	i = 0;
+	while (i < 4)
+	{
+		vm_field_memory->field[(PC + i) % MEM_SIZE] = (u_int8_t)(value << (i * 8));
+		i++;
+	}
+}
+
+void put_value_to_register(u_int8_t *regist)
+{
+	int i;
+	u_int32_t number;
+
+	i = 0;
+	number = put_value_to_arg()
+	while (i < 4)
+	{
+//		*regist =
+		i++;
+	}
+}
+
+u_int32_t	process_args(int i, u_int64_t *tmpPC,
+				t_player_process *player_process, t_vm_field_memory *vm_field_memory)
+{
+	u_int8_t	reg;
+	u_int32_t	number;
+	u_int8_t	size;
+
+	size = vm_field_memory->op_tab[player_process->operation_code].dir_size;
+	if (player_process->args[i] == T_IND)
+		size = IND_SIZE;
+	if (player_process->args[i] == T_REG)
+	{
+		reg = (u_int8_t)vm_field_memory->field[(*tmpPC) % MEM_SIZE];
+		if (reg < 1 || reg > REG_NUMBER)
+		{
+			*tmpPC = -1;
+			return (0);
+		}
+		number = (u_int32_t)(player_process->registers[reg * REG_SIZE - REG_SIZE]);
+		*tmpPC += 1;
+	}
+	else
+	{
+		number = put_value_to_arg(vm_field_memory, *tmpPC, size, player_process->args[i]);
+		*tmpPC += size;
+	}
 	return (number);
 }
 
@@ -78,9 +134,8 @@ void	op11(t_game_process *game_process, t_player_process *player_process,
 {
 	u_int8_t	regnum;
 	u_int32_t	arg_value[3];
-	int i;
-	u_int32_t tmp;
-	u_int64_t tmpPC;
+	u_int64_t	tmpPC;
+	int			i;
 
 	tmpPC = (player_process->PC + 2) % MEM_SIZE;
 	regnum = vm_field_memory->field[tmpPC];
@@ -88,25 +143,40 @@ void	op11(t_game_process *game_process, t_player_process *player_process,
 	i = 1;
 	while (i < 3)
 	{
-		if (player_process->args[i] == T_REG)
-		{
-			tmp = (u_int8_t)vm_field_memory->field[(tmpPC) % MEM_SIZE];
-			if (tmp < 1 || tmp > REG_NUMBER)
-				move_pc_not_valid(game_process->op_tab, player_process);
-			arg_value[i] = (u_int32_t)(player_process->registers[tmp - REG_SIZE]);
-			tmpPC += 1;
-		}
-		else
-		{
-			arg_value[i] = put_value_to_arg(vm_field_memory, tmpPC, 2, player_process->args[i]);
-			tmpPC += 2;
-		}
+		arg_value[i] = process_args(i, &tmpPC, player_process, vm_field_memory);
+		if (tmpPC < 0)
+			break;
 		i++;
 	}
-	if (regnum > 0 && regnum <= REG_NUMBER)
-		vm_field_memory->field[arg_value[1] + arg_value[2] % IDX_MOD] =
-				(int)(player_process->registers[regnum - REG_SIZE]);
+	if (regnum > 0 && regnum <= REG_NUMBER && tmpPC >= 0)
+		put_value_to_field((int)(player_process->registers[regnum * REG_SIZE - REG_SIZE]),
+				vm_field_memory, (player_process->PC + (arg_value[1] + arg_value[2]) %
+				IDX_MOD) % MEM_SIZE);
 	move_pc_not_valid(game_process->op_tab, player_process);
+}
+
+void	op10(t_game_process *game_process, t_player_process *player_process,
+			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
+{
+	u_int8_t	regnum;
+	u_int32_t	arg_value[3];
+	u_int64_t	tmpPC;
+	int			i;
+
+	tmpPC = (player_process->PC + 2) % MEM_SIZE;
+	i = 0;
+	while (i < 2)
+	{
+		arg_value[i] = process_args(i, &tmpPC, player_process, vm_field_memory);
+		if (tmpPC < 0)
+			break;
+		i++;
+	}
+	regnum = vm_field_memory->field[tmpPC];
+	if (regnum > 0 && regnum <= REG_NUMBER && tmpPC >= 0)
+		put_value_to_register(player_process->registers[regnum * REG_SIZE - REG_SIZE]);
+//		 = (int32_t)(vm_field_memory->field[(player_process->PC + (arg_value[0] + arg_value[1]) %
+																														IDX_MOD) % MEM_SIZE])
 }
 
 void (*operation[16])(t_game_process *game_process, t_player_process *player_process,
