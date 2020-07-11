@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 21:14:34 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/10 20:48:47 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/11 15:02:50 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,23 @@ bool	move_pc_not_valid(t_op *op_tab, t_player_process *player_process)
 
 	counter = 0;
 	op_code = player_process->operation_code;
+	if (op_tab[op_code].have_a_code_type_code == 0)
+	{
+		if (op_tab[op_code].arg_types[0] == T_REG)
+		{
+			player_process->PC = (player_process->PC + 1) % MEM_SIZE;
+		}
+		else if (op_tab[op_code].arg_types[0] == T_IND)
+		{
+			player_process->PC = (player_process->PC + IND_SIZE) % MEM_SIZE;
+		}
+		else if (op_tab[op_code].arg_types[0] == T_DIR)
+		{
+			player_process->PC = (player_process->PC + op_tab[op_code].dir_size) % MEM_SIZE;
+		}
+		player_process->PC = (player_process->PC + 1) % MEM_SIZE;
+		return(false);
+	}
 	while (counter < 3)
 	{
 		if (player_process->args[counter] == REG_CODE)
@@ -71,22 +88,23 @@ bool	validation_before_operation_complete(t_game_process *game_process, t_player
 
 	counter = 0;
 	if (game_process->op_tab[player_process->operation_code].have_a_code_type_code == 0)
-	{
-		if (game_process->op_tab[player_process->operation_code].arg_types[0] == T_REG)
-		{
-			player_process->PC = (player_process->PC + 1) % MEM_SIZE;
-		}
-		else if (game_process->op_tab[player_process->operation_code].arg_types[0] == T_IND)
-		{
-			player_process->PC = (player_process->PC + IND_SIZE) % MEM_SIZE;
-		}
-		else if (game_process->op_tab[player_process->operation_code].arg_types[0] == T_DIR)
-		{
-			player_process->PC = (player_process->PC + game_process->op_tab[player_process->operation_code].dir_size) % MEM_SIZE;
-		}
-		player_process->PC = (player_process->PC + 1) % MEM_SIZE;
-		return(true);
-	}
+		return (true);
+		// return (move_pc_not_valid(game_process->op_tab, player_process));
+	// 	if (game_process->op_tab[player_process->operation_code].arg_types[0] == T_REG)
+	// 	{
+	// 		player_process->PC = (player_process->PC + 1) % MEM_SIZE;
+	// 	}
+	// 	else if (game_process->op_tab[player_process->operation_code].arg_types[0] == T_IND)
+	// 	{
+	// 		player_process->PC = (player_process->PC + IND_SIZE) % MEM_SIZE;
+	// 	}
+	// 	else if (game_process->op_tab[player_process->operation_code].arg_types[0] == T_DIR)
+	// 	{
+	// 		player_process->PC = (player_process->PC + game_process->op_tab[player_process->operation_code].dir_size) % MEM_SIZE;
+	// 	}
+	// 	player_process->PC = (player_process->PC + 1) % MEM_SIZE;
+	// 	return(true);
+	// }
 	// if (player_process->PC == MEM_SIZE - 1)
 	// 	args_type_code = (vm_field_memory->field)[0];
 	// else
@@ -108,7 +126,7 @@ bool	validation_before_operation_complete(t_game_process *game_process, t_player
 		else
 			counter++;
 	}
-	move_pc_not_valid(game_process->op_tab, player_process);
+	// move_pc_not_valid(game_process->op_tab, player_process);
 	return (true);
 }
 
@@ -127,6 +145,7 @@ void players_operations_executing(t_game_process *game_process, t_player_process
 				if (validation_before_operation_complete(game_process,
 					player_process, vm_field_memory))
 				{
+					move_pc_not_valid(game_process->op_tab, player_process);
 					// move_pc_not_valid(game_process->op_tab, player_process);
 				}
 				player_process->operation_code = vm_field_memory->
