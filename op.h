@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/28 14:05:51 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/11 16:07:54 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/11 17:35:10 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 
 # define REG_NUMBER				16
 
-# define CYCLE_TO_DIE			1536
+# define CYCLE_TO_DIE			200
 # define CYCLE_DELTA			50
 # define NBR_LIVE				21
 # define MAX_CHECKS				10

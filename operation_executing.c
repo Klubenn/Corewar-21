@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 21:14:34 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/11 16:09:16 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/11 16:33:18 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,17 @@
 #include <fcntl.h>
 #include "op.h"
 
-void	op1(t_game_process *game_process, t_player_process *player_process,
-	t_player_list *player_list, t_vm_field_memory *vm_field_memory)
-{
+// void	op1(t_game_process *game_process, t_player_process *player_process,
+// 	t_player_list *player_list, t_vm_field_memory *vm_field_memory)
+// {
 	
-}
+// }
 
-void (*operation[16])(t_game_process *game_process, t_player_process *player_process,
-	t_player_list *player_list, t_vm_field_memory *vm_field_memory) =
-{
-	op1
-};
+// void (*operation[16])(t_game_process *game_process, t_player_process *player_process,
+// 	t_player_list *player_list, t_vm_field_memory *vm_field_memory) =
+// {
+// 	op1
+// };
 
 bool	move_pc(t_op *op_tab, t_player_process *player_process)
 {
@@ -145,7 +145,9 @@ void players_operations_executing(t_game_process *game_process, t_player_process
 				if (validation_before_operation_complete(game_process,
 					player_process, vm_field_memory))
 				{
-					move_pc(game_process->op_tab, player_process);
+					operation_completer(game_process, player_process,
+						player_list, vm_field_memory);
+					// move_pc(game_process->op_tab, player_process);
 					// move_pc(game_process->op_tab, player_process);
 				}
 				player_process->operation_code = vm_field_memory->

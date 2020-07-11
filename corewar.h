@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 19:13:16 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/10 17:33:10 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/11 16:33:28 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,28 @@ typedef struct			s_player_list
 // 	op1
 // };
 
+// void (*operation[16])(t_game_process *game_process, t_player_process *player_process,
+// 					  t_player_list *player_list, t_vm_field_memory *vm_field_memory) =
+// {
+// 		// op01(game_process, player_process, player_list, vm_field_memory),
+// 		// op02(game_process, player_process, player_list, vm_field_memory),
+// 		// op03(game_process, player_process, player_list, vm_field_memory),
+// 		// op04(game_process, player_process, player_list, vm_field_memory),
+// 		// op05(game_process, player_process, player_list, vm_field_memory),
+// 		// op06(game_process, player_process, player_list, vm_field_memory),
+// 		// op07(game_process, player_process, player_list, vm_field_memory),
+// 		// op08(game_process, player_process, player_list, vm_field_memory),
+// 		// op09(game_process, player_process, player_list, vm_field_memory),
+// 		// op10(game_process, player_process, player_list, vm_field_memory),
+// 		op11/*(game_process, player_process, player_list, vm_field_memory)*/,
+// 		op12/*(game_process, player_process, player_list, vm_field_memory)*/,
+// 		// op13(game_process, player_process, player_list, vm_field_memory),
+// 		// op14(game_process, player_process, player_list, vm_field_memory),
+// 		op15/*(game_process, player_process, player_list, vm_field_memory)*/,
+// 		op16/*(game_process, player_process, player_list, vm_field_memory)*/
+
+// };
+
 void 	virtual_machine_creator(t_game_process *game_process,
 	t_player_list *player_list,  t_op *op_tab);
 void 	parse_arguments(char **argv, t_game_process *game_process,
@@ -80,6 +102,8 @@ size_t	ft_count_words(char const *s, char c);
 void	op1(t_game_process *game_process, t_player_process *player_process,
 	t_player_list *player_list, t_vm_field_memory *vm_field_memory);
 void players_operations_executing(t_game_process *game_process, t_player_process *player_process,
+	t_player_list *player_list, t_vm_field_memory *vm_field_memory);
+void operation_completer(t_game_process *game_process, t_player_process *player_process,
 	t_player_list *player_list, t_vm_field_memory *vm_field_memory);
 
 #endif

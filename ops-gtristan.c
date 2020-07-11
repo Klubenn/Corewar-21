@@ -17,7 +17,7 @@ void 	op16(t_game_process *game_process, t_player_process *player_process,
 	regnum = vm_field_memory->field[(player_process->PC + 2) % MEM_SIZE];
 	if (regnum > 0 && regnum <= REG_NUMBER && game_process->aff)
 		ft_putchar(player_process->registers[regnum * REG_SIZE - REG_SIZE]);
-	move_pc_not_valid(game_process->op_tab, player_process);
+	move_pc(game_process->op_tab, player_process);
 }
 
 void	op12(t_game_process *game_process, t_player_process *player_process,
@@ -81,24 +81,24 @@ void	put_value_to_field(u_int32_t value, t_vm_field_memory *vm_field_memory, u_i
 	i = 0;
 	while (i < 4)
 	{
-		vm_field_memory->field[(PC + i) % MEM_SIZE] = (u_int8_t)(value << (i * 8));
+		vm_field_memory->field[(PC + i) % MEM_SIZE] = (u_int8_t)(value >> (i * 8));
 		i++;
 	}
 }
 
-void put_value_to_register(u_int8_t *regist)
-{
-	int i;
-	u_int32_t number;
+// void put_value_to_register(u_int8_t *regist)
+// {
+// 	int i;
+// 	u_int32_t number;
 
-	i = 0;
-	number = put_value_to_arg()
-	while (i < 4)
-	{
-//		*regist =
-		i++;
-	}
-}
+// 	i = 0;
+// 	number = put_value_to_arg();
+// 	while (i < 4)
+// 	{
+// //		*regist =
+// 		i++;
+// 	}
+// }
 
 u_int32_t	process_args(int i, u_int64_t *tmpPC,
 				t_player_process *player_process, t_vm_field_memory *vm_field_memory)
@@ -149,55 +149,63 @@ void	op11(t_game_process *game_process, t_player_process *player_process,
 		i++;
 	}
 	if (regnum > 0 && regnum <= REG_NUMBER && tmpPC >= 0)
-		put_value_to_field((int)(player_process->registers[regnum * REG_SIZE - REG_SIZE]),
+		put_value_to_field((*(int *)(&(player_process->registers[regnum * REG_SIZE - REG_SIZE]))),
 				vm_field_memory, (player_process->PC + (arg_value[1] + arg_value[2]) %
 				IDX_MOD) % MEM_SIZE);
-	move_pc_not_valid(game_process->op_tab, player_process);
+	move_pc(game_process->op_tab, player_process);
 }
 
-void	op10(t_game_process *game_process, t_player_process *player_process,
-			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
-{
-	u_int8_t	regnum;
-	u_int32_t	arg_value[3];
-	u_int64_t	tmpPC;
-	int			i;
+// void	op10(t_game_process *game_process, t_player_process *player_process,
+// 			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
+// {
+// 	u_int8_t	regnum;
+// 	u_int32_t	arg_value[3];
+// 	u_int64_t	tmpPC;
+// 	int			i;
 
-	tmpPC = (player_process->PC + 2) % MEM_SIZE;
-	i = 0;
-	while (i < 2)
-	{
-		arg_value[i] = process_args(i, &tmpPC, player_process, vm_field_memory);
-		if (tmpPC < 0)
-			break;
-		i++;
-	}
-	regnum = vm_field_memory->field[tmpPC];
-	if (regnum > 0 && regnum <= REG_NUMBER && tmpPC >= 0)
-		put_value_to_register(player_process->registers[regnum * REG_SIZE - REG_SIZE]);
-//		 = (int32_t)(vm_field_memory->field[(player_process->PC + (arg_value[0] + arg_value[1]) %
-																														IDX_MOD) % MEM_SIZE])
-}
+// 	tmpPC = (player_process->PC + 2) % MEM_SIZE;
+// 	i = 0;
+// 	while (i < 2)
+// 	{
+// 		arg_value[i] = process_args(i, &tmpPC, player_process, vm_field_memory);
+// 		if (tmpPC < 0)
+// 			break;
+// 		i++;
+// 	}
+// 	regnum = vm_field_memory->field[tmpPC];
+// 	if (regnum > 0 && regnum <= REG_NUMBER && tmpPC >= 0)
+// 		put_value_to_register(player_process->registers[regnum * REG_SIZE - REG_SIZE]);
+// //		 = (int32_t)(vm_field_memory->field[(player_process->PC + (arg_value[0] + arg_value[1]) %
+// 																														// IDX_MOD) % MEM_SIZE])
+// }
 
 void (*operation[16])(t_game_process *game_process, t_player_process *player_process,
 					  t_player_list *player_list, t_vm_field_memory *vm_field_memory) =
-		{
-				op01(game_process, player_process, player_list, vm_field_memory),
-				op02(game_process, player_process, player_list, vm_field_memory),
-				op03(game_process, player_process, player_list, vm_field_memory),
-				op04(game_process, player_process, player_list, vm_field_memory),
-				op05(game_process, player_process, player_list, vm_field_memory),
-				op06(game_process, player_process, player_list, vm_field_memory),
-				op07(game_process, player_process, player_list, vm_field_memory),
-				op08(game_process, player_process, player_list, vm_field_memory),
-				op09(game_process, player_process, player_list, vm_field_memory),
-				op10(game_process, player_process, player_list, vm_field_memory),
-				op11(game_process, player_process, player_list, vm_field_memory),
-				op12(game_process, player_process, player_list, vm_field_memory),
-				op13(game_process, player_process, player_list, vm_field_memory),
-				op14(game_process, player_process, player_list, vm_field_memory),
-				op15(game_process, player_process, player_list, vm_field_memory),
-				op16(game_process, player_process, player_list, vm_field_memory),
+{
+		// op01(game_process, player_process, player_list, vm_field_memory),
+		// op02(game_process, player_process, player_list, vm_field_memory),
+		// op03(game_process, player_process, player_list, vm_field_memory),
+		// op04(game_process, player_process, player_list, vm_field_memory),
+		// op05(game_process, player_process, player_list, vm_field_memory),
+		// op06(game_process, player_process, player_list, vm_field_memory),
+		// op07(game_process, player_process, player_list, vm_field_memory),
+		// op08(game_process, player_process, player_list, vm_field_memory),
+		// op09(game_process, player_process, player_list, vm_field_memory),
+		// op10(game_process, player_process, player_list, vm_field_memory),
+		op11/*(game_process, player_process, player_list, vm_field_memory)*/,
+		op12/*(game_process, player_process, player_list, vm_field_memory)*/,
+		// op13(game_process, player_process, player_list, vm_field_memory),
+		// op14(game_process, player_process, player_list, vm_field_memory),
+		op15/*(game_process, player_process, player_list, vm_field_memory)*/,
+		op16/*(game_process, player_process, player_list, vm_field_memory)*/
 
-		};
+};
 
+void operation_completer(t_game_process *game_process, t_player_process *player_process,
+	t_player_list *player_list, t_vm_field_memory *vm_field_memory)
+{
+	player_process->registers[0] = -1;
+	player_process->registers[1] = 1;
+	operation[0](game_process, player_process,
+						player_list, vm_field_memory);
+}

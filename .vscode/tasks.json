@@ -11,6 +11,7 @@
 				"${workspaceFolder}/libft/libft.a",
 				"${workspaceFolder}/virtual_machine.c",
 				"${workspaceFolder}/operation_executing.c",
+				"${workspaceFolder}/ops-gtristan.c",
 				"${workspaceFolder}/op.c",
 				"-o",
 				"${workspaceFolder}/test"
