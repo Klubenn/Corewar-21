@@ -53,7 +53,7 @@ void	op15(t_game_process *game_process, t_player_process *player_process,
 }
 
 u_int32_t	put_value_to_arg(t_vm_field_memory *vm_field_memory,
-				u_int64_t tmpPC, int size, u_int8_t type)
+				u_int64_t tmpPC, int size, u_int8_t type)//todo take_value_from_field
 {
 	u_int32_t number;
 	u_int32_t tmp;
@@ -63,8 +63,9 @@ u_int32_t	put_value_to_arg(t_vm_field_memory *vm_field_memory,
 	i = 0;
 	while(i < size)
 	{
+		tmp = 0;
 		tmp = (u_int8_t)(vm_field_memory->field[tmpPC % MEM_SIZE]);
-		tmp = tmp >> (i * 8);
+		tmp = tmp << (i * 8);
 		number = number | tmp;
 		tmpPC++;
 		i++;
@@ -81,7 +82,7 @@ void	put_value_to_field(u_int32_t value, t_vm_field_memory *vm_field_memory, u_i
 	i = 0;
 	while (i < 4)
 	{
-		vm_field_memory->field[(PC + i) % MEM_SIZE] = (u_int8_t)(value >> (i * 8));
+		vm_field_memory->field[(PC + i) % MEM_SIZE] = (u_int8_t)(value << (i * 8));
 		i++;
 	}
 }
