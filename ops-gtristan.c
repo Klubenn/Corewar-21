@@ -31,6 +31,7 @@ void	op12(t_game_process *game_process, t_player_process *player_process,
 	new->prev = (t_player_process *)malloc(sizeof(t_player_process));
 	ft_memcpy(new->prev, player_process, sizeof(t_player_process));
 	new->prev->PC = *((short *)&(vm_field_memory->field[player_process->PC + 1])) % IDX_MOD;
+	new->prev->operation_code = vm_field_memory->field[new->prev->PC];
 	new->prev->next = new;
 	new->prev->prev = NULL;
 	player_process->PC += 3;
@@ -47,6 +48,7 @@ void	op15(t_game_process *game_process, t_player_process *player_process,
 	new->prev = (t_player_process *)malloc(sizeof(t_player_process));
 	ft_memcpy(new->prev, player_process, sizeof(t_player_process));
 	new->prev->PC = (new->prev->PC + *((short *)(&(vm_field_memory->field[player_process->PC + 1])))) % MEM_SIZE;
+	new->prev->operation_code = vm_field_memory->field[new->prev->PC];
 	new->prev->next = new;
 	new->prev->prev = NULL;
 	player_process->PC += 3;
@@ -81,7 +83,7 @@ void	put_value_to_field(u_int32_t value, t_vm_field_memory *vm_field_memory, u_i
 	i = 0;
 	while (i < 4)
 	{
-		vm_field_memory->field[(PC + i) % MEM_SIZE] = (u_int8_t)(value >> (i * 8));
+		vm_field_memory->field[(PC + i) % MEM_SIZE] = (u_int8_t)(value >> (i * 8)); 
 		i++;
 	}
 }

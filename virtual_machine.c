@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 18:06:36 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/10 19:41:22 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/11 21:42:11 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,42 +156,6 @@ void winner_definer(t_player_list *player_list)
 	printf("Player %d (%s) won\n", winner_number, winner_name);
 }
 
-void play_corewar(t_game_process *game_process, t_player_list *player_list, int divider,
-	t_vm_field_memory *vm_field_memory)
-{
-	uint64_t			checks_counter;
-	t_player_process	*player_process;
-	int	cycles_counter_between_checks;
-
-	cycles_counter_between_checks = 0;
-	checks_counter = 0;
-	game_process->cycle_to_die = CYCLE_TO_DIE;
-	player_process = create_processes(player_list, divider, vm_field_memory);
-	while(game_process->cycle_to_die > 0 && player_process != NULL)
-	{
-		if (cycles_counter_between_checks == game_process->cycle_to_die)
-		{
-			check_alives(game_process, &player_process);
-			game_process->checks_counter += 1;
-			cycles_counter_between_checks = 0;
-			if (game_process->checks_counter == MAX_CHECKS)
-			{
-				game_process->cycle_to_die -= CYCLE_DELTA;
-				game_process->checks_counter = 0;
-			}
-		}
-		else
-		{
-			players_operations_executing(game_process, player_process, player_list,
-				vm_field_memory);
-			cycles_counter_between_checks += 1;
-		}
-		game_process->cycle_number += 1;
-	}
-	printf("\n\n%llu %llu\n", game_process->cycle_number, game_process->checks_counter);
-	winner_definer(player_list);
-}
-
 void print_memory(unsigned char *field)
 {
 	int counter;
@@ -199,7 +163,7 @@ void print_memory(unsigned char *field)
 	counter = 0;
 	while (counter < MEM_SIZE)
 	{
-		if (counter % 64 == 0)
+		if (counter % 32 == 0)
 		{
 			if (counter != 0)
 			{
@@ -216,6 +180,49 @@ void print_memory(unsigned char *field)
 		counter++;
 	}
 	printf("\n");
+}
+
+void play_corewar(t_game_process *game_process, t_player_list *player_list, int divider,
+	t_vm_field_memory *vm_field_memory)
+{
+	uint64_t			checks_counter;
+	t_player_process	*player_process;
+	int	cycles_counter_between_checks;
+
+	cycles_counter_between_checks = 0;
+	checks_counter = 0;
+	game_process->cycle_to_die = CYCLE_TO_DIE;
+	game_process->cycle_number = 0;
+	player_process = create_processes(player_list, divider, vm_field_memory);
+	while(game_process->cycle_to_die > 0 && player_process != NULL
+			&& (game_process->dump_cycle == 0 || game_process->dump_cycle > game_process->cycle_number))
+	{
+		if (cycles_counter_between_checks == game_process->cycle_to_die)
+		{
+			check_alives(game_process, &player_process);
+			game_process->checks_counter += 1;
+			cycles_counter_between_checks = 0;
+			if (game_process->checks_counter == MAX_CHECKS)
+			{
+				game_process->cycle_to_die -= CYCLE_DELTA;
+				game_process->checks_counter = 0;
+			}
+		}
+		else
+		{
+			player_process = players_operations_executing(game_process,
+				player_process, player_list, vm_field_memory);
+			cycles_counter_between_checks += 1;
+		}
+		game_process->cycle_number += 1;
+	}
+	if (game_process->dump_cycle == game_process->cycle_number)
+		print_memory(vm_field_memory->field);
+	else
+	{
+		printf("\n\n%llu %llu\n", game_process->cycle_number, game_process->checks_counter);
+		winner_definer(player_list);	
+	}
 }
 
 void memory_allocator_for_vm(t_player_list *player_list, int divider, unsigned char *field)
@@ -261,6 +268,6 @@ void virtual_machine_creator(t_game_process *game_process,
 		memory_allocator_for_vm(player_list_buff, divider, vm_field_memory->field);
 		player_list_buff = player_list_buff->next;
 	}
-	print_memory(vm_field_memory->field);
+	// print_memory(vm_field_memory->field);
 	play_corewar(game_process, player_list, divider, vm_field_memory);
 }

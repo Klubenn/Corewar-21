@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 19:13:16 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/11 16:33:28 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/11 21:27:07 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_game_process		/*Хранит*/
 	u_int64_t	checks_counter;
 	t_op		*op_tab;
 	bool 		aff;
+	bool		flag_a;
 }				t_game_process;
 
 typedef struct s_player_process
@@ -101,7 +102,7 @@ void 	memory_allocator_helper(char *str, char **buff);
 size_t	ft_count_words(char const *s, char c);
 void	op1(t_game_process *game_process, t_player_process *player_process,
 	t_player_list *player_list, t_vm_field_memory *vm_field_memory);
-void players_operations_executing(t_game_process *game_process, t_player_process *player_process,
+t_player_process *players_operations_executing(t_game_process *game_process, t_player_process *player_process,
 	t_player_list *player_list, t_vm_field_memory *vm_field_memory);
 void operation_completer(t_game_process *game_process, t_player_process *player_process,
 	t_player_list *player_list, t_vm_field_memory *vm_field_memory);

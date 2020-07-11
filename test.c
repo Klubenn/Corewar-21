@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 15:53:54 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/09 17:07:58 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/11 21:30:12 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -400,6 +400,8 @@ void parse_arguments(char **argv, t_game_process *game_process, t_player_list **
 	count_dump = 0;
 	player_list_1 = NULL;
 	player_list_2 = NULL;
+	game_process->flag_a  = false;
+	game_process->dump_cycle  = 0;
 	while (*argv != 0)
 	{
 		if (ft_strcmp(*argv, "-dump") == 0)
@@ -434,6 +436,8 @@ void parse_arguments(char **argv, t_game_process *game_process, t_player_list **
 				exit(1);
 			}
 		}
+		else if (ft_strcmp(*argv, "-a") == 0)
+			game_process->flag_a = true;
 		else
 			put_in_stack_of_players(0, *argv, &player_list_1);
 		argv++;
