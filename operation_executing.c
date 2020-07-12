@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 21:14:34 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/12 18:36:45 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/12 19:57:45 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,8 @@ t_player_process *players_operations_executing(t_game_process *game_process, t_p
 	{
 		if (player_process->operation_code <= 16 && player_process->operation_code >= 1)
 		{
+			if (player_process->cycles_to_wait > 0)
+				player_process->cycles_to_wait -= 1;
 			if (player_process->cycles_to_wait == 0)
 			{
 				if (validation_before_operation_complete(game_process,
@@ -190,8 +192,8 @@ t_player_process *players_operations_executing(t_game_process *game_process, t_p
 						(game_process->op_tab)[player_process->
 								operation_code].cycles_before_complete;
 			}
-			else
-				player_process->cycles_to_wait -= 1;
+			// else
+			// 	player_process->cycles_to_wait -= 1;
 		}
 		else
 		{

@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 15:53:54 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/12 17:55:09 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/12 20:38:12 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ int check_nulls_and_code_size(int count, char *str, t_player *player, char **arg
 	{
 		// player->code_size = (*((unsigned int *)(code_size_point)));
 		player->player_header.prog_size = (*((unsigned int *)(code_size_point)));
+		free(code_size_point);
 		// free(code_size_point);
 		return (0);
 	}

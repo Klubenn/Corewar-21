@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 18:06:36 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/12 15:29:13 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/12 20:28:40 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,7 @@ void print_memory(unsigned char *field)
 		counter++;
 	}
 	printf("\n");
+	exit(0);
 }
 
 void play_corewar(t_game_process *game_process, t_player_list *player_list, int divider,
@@ -195,7 +196,7 @@ void play_corewar(t_game_process *game_process, t_player_list *player_list, int 
 	game_process->cycle_number = 0;
 	player_process = create_processes(player_list, divider, vm_field_memory);
 	while(game_process->cycle_to_die > 0 && player_process != NULL
-			&& (game_process->dump_cycle == 0 || game_process->dump_cycle > game_process->cycle_number))
+			&& (game_process->dump_cycle == 0 || (game_process->dump_cycle > game_process->cycle_number)))
 	{
 		if (cycles_counter_between_checks == game_process->cycle_to_die)
 		{
@@ -208,21 +209,32 @@ void play_corewar(t_game_process *game_process, t_player_list *player_list, int 
 				game_process->checks_counter = 0;
 			}
 		}
-		else
-		{
-			player_process = players_operations_executing(game_process,
-				player_process, player_list, vm_field_memory);
-			cycles_counter_between_checks += 1;
-		}
+		// else
+		// {
+		player_process = players_operations_executing(game_process,
+			player_process, player_list, vm_field_memory);
+		cycles_counter_between_checks += 1;
+		// }
 		game_process->cycle_number += 1;
+		if (cycles_counter_between_checks == game_process->cycle_to_die)
+		{
+			check_alives(game_process, &player_process);
+			game_process->checks_counter += 1;
+			cycles_counter_between_checks = 0;
+			if (game_process->checks_counter == MAX_CHECKS)
+			{
+				game_process->cycle_to_die -= CYCLE_DELTA;
+				game_process->checks_counter = 0;
+			}
+		}
 	}
 	if (game_process->dump_cycle == game_process->cycle_number)
-		print_memory(vm_field_memory->field);
-	else
-	{
-		printf("\n\n%llu %llu\n", game_process->cycle_number, game_process->checks_counter);
-		winner_definer(player_list);
-	}
+			print_memory(vm_field_memory->field);
+	// else
+	// {
+	printf("\n\n%llu %llu\n", game_process->cycle_number, game_process->checks_counter);
+	winner_definer(player_list);
+	// }
 	memory_deleter(player_list, vm_field_memory, game_process);
 }
 

@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/12 15:29:30 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/12 15:56:07 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/12 20:37:55 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void memory_deleter(t_player_list *player_list, t_vm_field_memory *vm_field_memo
 	while (player_list)
 	{
 		free(player_list->player->code);
+		// free(player_list->player->player_header.prog_size);
 		free(player_list->player);
 		player_list_buff = player_list;
 		player_list = player_list->next;

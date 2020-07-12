@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 19:43:05 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/11 21:39:59 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/12 20:41:55 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ char **memory_allocator(char **argv)
 		memory_allocator_helper(argv[i], buff);
 		i++;
 	}
+	// free(buff);
 	// i = 0;
 	// while (buff[i] != 0)
 	// {
