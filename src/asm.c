@@ -93,6 +93,8 @@ int	check_other_strings(char *str, t_struct *data)
 
 	if ((if_label = check_label(data, str)) < 0)
 		return (MALLOC_FAIL);
+	if (!check_ending(str + if_label))
+		return (0);
 	str = trim_start(str + if_label);
 	if (!(op = check_op(str)))
 		return (SYNTAX_ERROR);
@@ -314,6 +316,11 @@ int		main(int ac, char **av)
 			instructions_position(data);
 			check_labels(data);
 			to_bytecode(data);
+
+			ft_putstr("file ");
+			ft_putstr(new_file);
+			ft_putendl(" was successfully created");//как альтернатива
+
 			printf("file %s was successfully created\n", new_file);//TODO change to ft_printf
 			free_data(data);
 		}

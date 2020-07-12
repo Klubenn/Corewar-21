@@ -68,11 +68,11 @@ char get_type(char *param)
             return (T_DIR);
 
         if (trim_param[1] == ':')
-            return (T_DIR);//todo remove T_LAB
+            return (T_DIR | T_LAB);//todo remove T_LAB
     }
 
     if (trim_param[0] == ':')
-        return (T_IND);//todo remove T_LAB
+        return (T_IND | T_LAB);//todo remove T_LAB
     return (0);//TODO проверить, может ли быть ошибка, если да, то какой ретюрн
 }
 
@@ -133,9 +133,11 @@ int create_instruction(t_op *op, char **params, t_struct *data)
         || !(instruction->args_of_func = (t_args	**)ft_memalloc(sizeof(t_args *) * 4)))
         return (MALLOC_FAIL);
 
-    instruction->function = op->func_num;
+    instruction->op = op;
     instruction->num_of_args = op->arg_num;//todo add to the new version
-    create_args(instruction->args_of_func, params);
+
+	if (!(create_args(instruction->args_of_func, params)))
+		return (SYNTAX_ERROR);// or syntaxis
 
     if (data->label_present == 1)
     {
@@ -153,17 +155,26 @@ int create_instruction(t_op *op, char **params, t_struct *data)
 }
 
 
-void create_args(t_args **args_of_func, char **params)
+
+int create_args(t_args **args_of_func, char **params)
 {
     int i;
+	unsigned char type;
+	char *cutted_string;
 
     i = 0;
     while (params[i])
     {
-        args_of_func[i] = (t_args *)ft_memalloc(sizeof(t_args));//TODO защитить маллок
-        args_of_func[i]->type = get_type(params[i]);
-        args_of_func[i]->str = params[i];
+		if (!(args_of_func[i] = (t_args *)ft_memalloc(sizeof(t_args))) ||
+			!(type = get_type(params[i])))
+			return (0);
+
+		args_of_func[i]->type = type;
+
+		if ((check_ending(params[i] + skip_word(params[i]))))
+			return (0);
+		args_of_func[i]->str = params[i];
         i++;
     }
+	return (1);
 }
-

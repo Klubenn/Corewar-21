@@ -32,6 +32,17 @@ enum err_message
 };
 
 
+typedef	struct		s_op
+{
+	char			*name;
+	int 			func_num;
+	int 			arg_num;
+	unsigned char	arg[3];
+	int 			arg_type_code;
+	int 			t_dir_size;
+}					t_op;
+
+
 struct				s_label
 {
 	char			*label_name;
@@ -41,7 +52,7 @@ struct				s_label
 
 typedef struct		s_args
 {
-	unsigned char	type;//from 0 to 3 : NULL, T_REG, T_DIR or T_IND
+	unsigned char	type;// NULL, T_REG, T_DIR or T_IND
 	int 			size;
 	char			*str;
 }					t_args;
@@ -49,7 +60,8 @@ typedef struct		s_args
 struct 				s_instruction
 {
 	int 			position;
-	int				function;// from 0 to 16
+	char			function;
+	t_op 			*op;
     int			    num_of_args;
 	t_args			**args_of_func;
 	t_instruction	*next;
@@ -78,7 +90,7 @@ void	error_management(int err, t_struct *data);
 int		check_other_strings(char *str, t_struct *data);
 int		check_label(t_struct *data, char *str);
 int     create_instruction(t_op *op, char **params, t_struct *data);
-void	create_args(t_args **args_of_func, char **params);
+int		create_args(t_args **args_of_func, char **params);
 int     check_type(char **params, t_op *op);
 char	*trim_start(char *str);
 t_op	*check_op(char *str);
@@ -86,5 +98,6 @@ int 	skip_spaces(char* str);
 int 	skip_word(char* str);
 int 	check_param(t_struct *data, char *str, t_op *op);
 char    get_type(char *param);
+int		check_ending(char *str);
 
 #endif //COREWAR_ASM_H

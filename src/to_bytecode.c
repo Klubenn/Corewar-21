@@ -72,24 +72,24 @@ void    to_bytecode(t_struct *data)
 
 int		argument_size(t_instruction *instruction)
 {
-	t_op	op_data;
+	t_op	*op_data;
 	int 	num;
 	int 	size;
 	int 	size_total;
 
 	size_total = 0;
-	op_data = op_tab[instruction->function];
-	num = op_data.arg_num;
+	op_data = instruction->op;
+	num = op_data->arg_num;
 	while (num-- > 0)
 	{
 		size = 0;
-		size += instruction->args_of_func[num]->type == T_DIR ? op_data.t_dir_size : 0;
+		size += instruction->args_of_func[num]->type == T_DIR ? op_data->t_dir_size : 0;
 		size += instruction->args_of_func[num]->type == T_IND ? 2 : 0;
 		size += instruction->args_of_func[num]->type == T_REG ? 1 : 0;
 		size_total += size;
 		instruction->args_of_func[num]->size = size;
 	}
-	size_total += op_data.arg_type_code + 1;
+	size_total += op_data->arg_type_code + 1;
 	return (size_total);
 }
 
