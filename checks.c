@@ -34,6 +34,14 @@ int check_params_num(char **params, int needed_num)
 	return ((i == needed_num) ? 1 : 0);
 }
 
+char *check_only_param(char *param, char type)
+{
+    char *clean_param;
+
+
+    if (!(clean_param = (char *)ft_memalloc(sizeof(char) * )))
+        return (NULL);
+}
 
 int check_type(char **params, t_op *op)
 {
@@ -42,7 +50,8 @@ int check_type(char **params, t_op *op)
     int i;
 
     i = 0;
-    while (i < op->arg_num) {
+    while (i < op->arg_num)
+    {
         param = params[i] + skip_spaces(params[i]);
         type = get_type(param);
         if (!(type & op->arg[i]))
@@ -68,11 +77,11 @@ char get_type(char *param)
             return (T_DIR);
 
         if (trim_param[1] == ':')
-            return (T_DIR);//todo remove T_LAB
+            return (T_DIR | T_LAB);//todo remove T_LAB
     }
 
     if (trim_param[0] == ':')
-        return (T_IND);//todo remove T_LAB
+        return (T_IND | T_LAB);//todo remove T_LAB
     return (0);//TODO проверить, может ли быть ошибка, если да, то какой ретюрн
 }
 
@@ -93,10 +102,11 @@ void free_arr(char **arr)
 int check_param(t_struct *data, char *str, t_op *op)// str2 already starts with word! not contains comments
 {
 	char **params;
+    char **clean_params;
 
 	if (!(params = ft_strsplit(str, SEPARATOR_CHAR)))
 	    return (MALLOC_FAIL);
-	if (!(check_params_num(params, op->arg_num) && check_type(params, op)) )
+	if (!(check_params_num(params, op->arg_num) && check_type(params, op)))
 	{
         free_arr(params);
         free(str);
@@ -105,7 +115,7 @@ int check_param(t_struct *data, char *str, t_op *op)// str2 already starts with 
 	else
 	{
         free(str);
-        return (create_instruction(op, params, data));
+        return (create_instruction(op, clean_params, data));
 	}
 }
 
@@ -133,11 +143,11 @@ int create_instruction(t_op *op, char **params, t_struct *data)
         || !(instruction->args_of_func = (t_args	**)ft_memalloc(sizeof(t_args *) * 4)))
         return (MALLOC_FAIL);
 
-    instruction->function = op;
+    instruction->op = op;
     instruction->num_of_args = op->arg_num;//todo add to the new version
 
 	if (!(create_args(instruction->args_of_func, params)))
-		return (MALLOC_FAIL);// or syntaxis
+		return (SYNTAX_ERROR);
 
     if (data->label_present == 1)
     {
@@ -160,7 +170,6 @@ int create_args(t_args **args_of_func, char **params)
 {
     int i;
 	unsigned char type;
-	char *cutted_string;
 
     i = 0;
     while (params[i])
@@ -171,11 +180,9 @@ int create_args(t_args **args_of_func, char **params)
 
 		args_of_func[i]->type = type;
 
-		if (!(check_ending(params[i] + skip_word(params[i]))))
+		if ((check_ending(params[i] + skip_word(params[i]))))
 			return (0);
-
-		while (*(params[i]) != ' ' || *(params[i]) != '\0')
-			*(args_of_func[i]->str) = *(params[i]);
+		args_of_func[i]->str = params[i];
         i++;
     }
 	return (1);
