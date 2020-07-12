@@ -177,9 +177,11 @@ void	op10(t_game_process *game_process, t_player_process *player_process,
 	}
 	regnum = vm_field_memory->field[player_process->arg_position];
 	if (regnum > 0 && regnum <= REG_NUMBER && player_process->arg_position >= 0)
+	{
+		player_process->arg_position = player_process->PC + (arg_value[0] + arg_value[1]) % IDX_MOD;
 		put_value_to_register(&player_process->registers[regnum * REG_SIZE - REG_SIZE],
-				take_value_from_field(vm_field_memory, (player_process->PC +
-				(arg_value[0] + arg_value[1]) % IDX_MOD) % MEM_SIZE, REG_SIZE, T_DIR));
+				take_value_from_field(vm_field_memory, player_process, REG_SIZE, T_DIR));
+	}
 	move_pc(game_process->op_tab, player_process);
 }
 
