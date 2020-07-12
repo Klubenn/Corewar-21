@@ -85,23 +85,43 @@ char *remove_comment_from_string(char *str)
 	return (ft_strndup(str, tmp - str));
 }
 
+char *cut_string(char *str)
+{
+	int i;
+	char *new;
+
+	i = 0;
+	while (*str == ' ' || *str == '\t')
+		str++;
+	while (str[i] && str[i] != COMMENT_CHAR)
+		i++;
+	if (!(new = ft_strndup(str, i)))
+		return (NULL);
+	return (new);
+}
+
 int	check_other_strings(char *str, t_struct *data)
 {
 	t_op *op;
 	int if_label;
-	char *str2;
+	char *cut_str;
+	int result;
 
 	if ((if_label = check_label(data, str)) < 0)
 		return (MALLOC_FAIL);
 	if (!check_ending(str + if_label))
 		return (0);
-	str = trim_start(str + if_label);
-	if (!(op = check_op(str)))
-		return (SYNTAX_ERROR);
-	str = trim_start(str + skip_word(str));
-	if (!(str2 = remove_comment_from_string(str)))
+	if (!(cut_str = cut_string(str + if_label)))
 		return (MALLOC_FAIL);
-	return (check_param(data, str2, op));
+	if (!(op = check_op(cut_str)))
+	{
+		free(cut_str);
+		return (SYNTAX_ERROR);
+	}
+	str = trim_start(cut_str + ft_strlen(op->name));
+	result = check_param(data, str, op);
+	free(cut_str);
+	return (result);
 }
 
 void	free_strings(char *str1, char *str2, char *str3, char *str4)
@@ -321,7 +341,6 @@ int		main(int ac, char **av)
 			ft_putstr(new_file);
 			ft_putendl(" was successfully created");//как альтернатива
 
-			printf("file %s was successfully created\n", new_file);//TODO change to ft_printf
 			free_data(data);
 		}
 		i++;

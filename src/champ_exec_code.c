@@ -61,8 +61,6 @@ int		corewar_atoi(char *arg, void *numptr, int size)
 		sign = -1;
 		arg++;
 	}
-	else if (*arg == '+')
-		arg++;
 	while(*arg >= '0' && *arg <= '9' && digits <= 10)
 	{
 		result = result * 10 + (*arg - '0');
@@ -72,7 +70,7 @@ int		corewar_atoi(char *arg, void *numptr, int size)
 	result *= sign;
 	if (*arg || digits > 10 || (size == 2 && (result > SHRT_MAX || result < SHRT_MIN))
 		|| (size == 4 && (result > INT_MAX || result < INT_MIN)) || (size == 1 &&
-		(result < 1 || result > 16)))
+		(result < 1 || result > REG_NUMBER)))
 		return (1);
 	num = numptr;
 	*num = size == 1 ? (char)result : *num;
