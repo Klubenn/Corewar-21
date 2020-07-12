@@ -67,9 +67,9 @@ u_int32_t	take_value_from_field(t_vm_field_memory *vm_field_memory,
 	{
 		tmp = 0;
 		tmp = (u_int8_t)(vm_field_memory->field[player_process->arg_position % MEM_SIZE]);
-		tmp = tmp << (i * 8);
+		tmp = tmp << ((size - 1 - i) * 8);
 		number = number | tmp;
-		player_process->arg_position++;
+		(player_process->arg_position)++;
 		i++;
 	}
 	if (type == T_IND)
@@ -90,9 +90,10 @@ void	put_value_to_field(u_int32_t value, t_vm_field_memory *vm_field_memory, u_i
 	i = 0;
 	while (i < 4)
 	{
-		vm_field_memory->field[(PC + i) % MEM_SIZE] = (u_int8_t)(value << (i * 8));
+		vm_field_memory->field[(PC + i) % MEM_SIZE] = (u_int8_t)(value >> ((3 - i) * 8));
 		i++;
 	}
+	// printf("%u\n", *((int *)&(vm_field_memory->field[PC])));
 }
 
 void	put_value_to_register(u_int8_t *regist, u_int32_t value)
@@ -129,7 +130,7 @@ u_int32_t	process_args(int i,	t_player_process *player_process, t_vm_field_memor
 	else
 	{
 		number = take_value_from_field(vm_field_memory, player_process, size, player_process->args[i]);
-		player_process->arg_position += size;
+		// player_process->arg_position += size;
 	}
 	return (number);
 }
@@ -210,8 +211,20 @@ void (*operation[16])(t_game_process *game_process, t_player_process *player_pro
 void operation_completer(t_game_process *game_process, t_player_process *player_process,
 	t_player_list *player_list, t_vm_field_memory *vm_field_memory)
 {
-	// player_process->registers[0] = -1;
-	// player_process->registers[1] = 1;
+	int *ex;
+	// player_process->registers[0] = COREWAR_EXEC_MAGIC;
+	// player_process->registers[0] = 171;
+	// player_process->registers[1] = 205;
+	// player_process->registers[2] = 239;
+	// player_process->registers[3] = 16;
+	// ex = (int *)(player_process->registers);
+	// *ex = COREWAR_EXEC_MAGIC;
+	// player_process->registers[0] = 0x00;
+	// player_process->registers[1] = 0xea;
+	// player_process->registers[2] = 0x83;
+	// player_process->registers[3] = 0xf3;
+	// printf("%x\n", *ex);
+	// vm_field_memory->field[69] = 0xff;
 	operation[1](game_process, player_process,
 						player_list, vm_field_memory);
 }

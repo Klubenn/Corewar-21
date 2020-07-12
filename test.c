@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 15:53:54 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/11 21:30:12 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/12 17:55:09 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,7 @@ void put_in_stack_of_players_helper(t_player_list **player_list, t_player *playe
 			player_list_loc = player_list_loc->next;
 		if (pos == player_list_loc->position && pos != 0)
 		{
-			printf("Usage:\n  -dump : dump memory after nbr cycles\n  -n : specify player's position\n");
+			printf("Usage:\n  -dump [nbr] : dump memory after nbr cycles\n  -n [pos] : specify player's position\n  -a : shows aff's operation result\n");
 			exit(1);
 		}
 		buff = player_list_loc;
@@ -364,7 +364,7 @@ void check_position(t_player_list *player_list_1, t_player_list *player_list_2)
 		len++;
 		player_list_1 = player_list_1->next;
 	}
-	if (len > 4)
+	if (len > MAX_PLAYERS)
 	{
 		printf("Too many champions\n");
 		exit(1);
@@ -373,7 +373,7 @@ void check_position(t_player_list *player_list_1, t_player_list *player_list_2)
 	{
 		if (player_list_2->position > len)
 		{
-			printf("Usage:\n  -dump : dump memory after nbr cycles\n  -n : specify player's position\n");
+			printf("Usage:\n  -dump [nbr] : dump memory after nbr cycles\n  -n [pos] : specify player's position\n  -a : shows aff's operation result\n");
 			exit(1);
 		}
 		// printf("%d\n", len);
@@ -386,7 +386,7 @@ void check_position(t_player_list *player_list_1, t_player_list *player_list_2)
 	}
 	if (len == 0)
 	{
-		printf("Usage:\n  -dump : dump memory after nbr cycles\n  -n : specify player's position\n");
+		printf("Usage:\n  -dump [nbr] : dump memory after nbr cycles\n  -n [pos] : specify player's position\n  -a : shows aff's operation result\n");
 		exit(1);
 	}
 }
@@ -416,7 +416,7 @@ void parse_arguments(char **argv, t_game_process *game_process, t_player_list **
 			}
 			else
 			{
-				printf("Usage:\n  -dump : dump memory after nbr cycles\n  -n : specify player's position\n");
+				printf("Usage:\n  -dump [nbr] : dump memory after nbr cycles\n  -n [pos] : specify player's position\n  -a : shows aff's operation result\n");
 				exit(1);
 			}
 		}
@@ -432,7 +432,7 @@ void parse_arguments(char **argv, t_game_process *game_process, t_player_list **
 			}
 			else
 			{
-				printf("Usage:\n  -dump : dump memory after nbr cycles\n  -n : specify player's position\n");
+				printf("Usage:\n  -dump [nbr] : dump memory after nbr cycles\n  -n [pos] : specify player's position\n  -a : shows aff's operation result\n");
 				exit(1);
 			}
 		}

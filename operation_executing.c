@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 21:14:34 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/11 21:42:46 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/12 18:36:45 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,34 +130,34 @@ bool	validation_before_operation_complete(t_game_process *game_process, t_player
 	return (true);
 }
 
-void demonstrate(u_int8_t *reg)
-{
-	int i;
+// void demonstrate(u_int8_t *reg)
+// {
+// 	int i;
 
-	i = 3;
-	// reg[3] = 256;
-	// while (i < REG_SIZE * REG_NUMBER - 1)
-	// {
-	// 	if (i % 3 == 1 && i != 3)
-	// 		reg[i] = 1;
-	// 	i++;
-	// }
-	reg[0] = 0;
-	reg[1] = 0;
-	reg[2] = 0;
-	reg[3] = 1;
-	reg[4] = 0;
-	reg[5] = 0;
-	reg[6] = 0;
-	reg[7] = 1;
-	i = 6;
-	while(i >= 3)
-	{
-		printf("%d\n", *((int *)(&reg[i])));
-		i--;
-	}
-	exit(0);
-}
+// 	i = 3;
+// 	// reg[3] = 256;
+// 	// while (i < REG_SIZE * REG_NUMBER - 1)
+// 	// {
+// 	// 	if (i % 3 == 1 && i != 3)
+// 	// 		reg[i] = 1;
+// 	// 	i++;
+// 	// }
+// 	reg[0] = 0;
+// 	reg[1] = 0;
+// 	reg[2] = 0;
+// 	reg[3] = 1;
+// 	reg[4] = 0;
+// 	reg[5] = 0;
+// 	reg[6] = 0;
+// 	reg[7] = 1;
+// 	i = 6;
+// 	while(i >= 3)
+// 	{
+// 		printf("%d\n", *((int *)(&reg[i])));
+// 		i--;
+// 	}
+// 	exit(0);
+// }
 
 t_player_process *players_operations_executing(t_game_process *game_process, t_player_process *player_process,
 	t_player_list *player_list, t_vm_field_memory *vm_field_memory)
@@ -177,9 +177,9 @@ t_player_process *players_operations_executing(t_game_process *game_process, t_p
 				if (validation_before_operation_complete(game_process,
 					player_process, vm_field_memory))
 				{
-					// operation_completer(game_process, player_process,
-					// 	player_list, vm_field_memory);
-					move_pc(game_process->op_tab, player_process);
+					operation_completer(game_process, player_process,
+						player_list, vm_field_memory);
+					// move_pc(game_process->op_tab, player_process);
 					// move_pc(game_process->op_tab, player_process);
 				}
 				player_process->operation_code = vm_field_memory->

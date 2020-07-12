@@ -12,6 +12,7 @@
 				"${workspaceFolder}/virtual_machine.c",
 				"${workspaceFolder}/operation_executing.c",
 				"${workspaceFolder}/ops-gtristan.c",
+				"${workspaceFolder}/memory_deleter.c",
 				"${workspaceFolder}/op.c",
 				"-o",
 				"${workspaceFolder}/test"
