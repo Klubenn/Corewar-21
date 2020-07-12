@@ -33,16 +33,21 @@ t_op *check_op(char *str)
 	char	*op;
 
 	instr_len = 0;
-	while (!ft_isspace(str[instr_len]) && str[instr_len] != '\0')
+	while (!ft_isspace(str[instr_len]) && str[instr_len] != '\0'&& str[instr_len] != '-' && str[instr_len] != '%')
 		instr_len++;
 	if (!(op = ft_strsub(str, 0, instr_len)))
 		return (NULL);
 	i = 1;
-	while (i <= 16)
+	while (i <= 17)
 	{
 		if (ft_strcmp(op, op_tab[i].name) == 0)
-			return (&(op_tab[i]));
+		{
+		    free(op);
+            return (&(op_tab[i]));
+        }
 		i++;
 	}
+	free(op);
 	return (NULL);
 }
+
