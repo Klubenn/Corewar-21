@@ -8,6 +8,25 @@
 #include <fcntl.h>
 #include "op.h"
 
+// void	op1(t_game_process *game_process, t_player_process *player_process,
+// 			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
+// {
+// 	int32_t arg;
+
+// 	player_process->arg_position = (player_process->PC + 1) % MEM_SIZE;
+// 	arg = (int32_t)take_value_from_field(vm_field_memory, player_process,
+// 		(int)(game_process->op_tab[player_process->operation_code].dir_size), (u_int8_t)DIR_CODE);
+// 	while (player_list)
+// 	{
+// 		if (arg == (-1 * player_list->position))
+// 			player_list->player->last_live_cycle_number = game_process->cycle_number;
+// 		player_list = player_list->next;
+// 	}
+// 	player_process->live_counter += 1;
+// 	player_process->last_live_cycle_number = game_process->cycle_number;
+// 	move_pc(game_process->op_tab, player_process);
+// }
+
 void 	op16(t_game_process *game_process, t_player_process *player_process,
 			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
 {
@@ -83,6 +102,26 @@ u_int32_t	take_value_from_field(t_vm_field_memory *vm_field_memory,
 	return (number);
 }
 
+void	op1(t_game_process *game_process, t_player_process *player_process,
+			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
+{
+	int32_t arg;
+
+	player_process->arg_position = (player_process->PC + 1) % MEM_SIZE;
+	arg = (int32_t)take_value_from_field(vm_field_memory, player_process,
+		(int)(game_process->op_tab[player_process->operation_code].dir_size),
+			(u_int8_t)DIR_CODE);
+	while (player_list)
+	{
+		if (arg == (-1 * player_list->position))
+			player_list->player->last_live_cycle_number = game_process->cycle_number;
+		player_list = player_list->next;
+	}
+	player_process->live_counter += 1;
+	player_process->last_live_cycle_number = game_process->cycle_number;
+	move_pc(game_process->op_tab, player_process);
+}
+
 void	put_value_to_field(u_int32_t value, t_vm_field_memory *vm_field_memory, u_int64_t PC)
 {
 	int i;
@@ -115,8 +154,8 @@ u_int32_t	process_args(int i,	t_player_process *player_process, t_vm_field_memor
 	u_int32_t	number;
 	u_int8_t	size;
 
-	size = (player_process->args[i] == T_IND) ? IND_SIZE : vm_field_memory->op_tab[player_process->operation_code].dir_size;
-	if (player_process->args[i] == T_REG)
+	size = (player_process->args[i] == IND_CODE) ? IND_SIZE : vm_field_memory->op_tab[player_process->operation_code].dir_size;
+	if (player_process->args[i] == REG_CODE)
 	{
 		reg = (u_int8_t)vm_field_memory->field[(player_process->arg_position) % MEM_SIZE];
 		if (reg < 1 || reg > REG_NUMBER)
@@ -133,6 +172,160 @@ u_int32_t	process_args(int i,	t_player_process *player_process, t_vm_field_memor
 		// player_process->arg_position += size;
 	}
 	return (number);
+}
+
+void op2(t_game_process *game_process, t_player_process *player_process,
+			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
+{
+	u_int32_t	arg_value[2];
+
+	player_process->arg_position = (player_process->PC + 2) % MEM_SIZE;
+	arg_value[0] = process_args(0, player_process, vm_field_memory);
+	arg_value[1] = (u_int8_t)vm_field_memory->field[(player_process->arg_position) % MEM_SIZE];
+	if (((int)arg_value[1]) >= 1 && ((int)arg_value[1]) <= REG_NUMBER)
+	{
+		*((u_int32_t *)&(player_process->registers[REG_SIZE * (arg_value[1] - 1)])) = arg_value[0];
+		if (arg_value[0] == 0)
+			player_process->carry = true;
+		else
+			player_process->carry = false;
+	}
+	move_pc(game_process->op_tab, player_process);
+}
+
+void op3(t_game_process *game_process, t_player_process *player_process,
+			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
+{
+	u_int32_t	arg_value[2];
+
+	player_process->arg_position = (player_process->PC + 2) % MEM_SIZE;
+	arg_value[0] = process_args(0, player_process, vm_field_memory);
+	if (player_process->args[1] == REG_CODE)
+		arg_value[1] = (u_int8_t)vm_field_memory->field[(player_process->arg_position) % MEM_SIZE];
+	else if (player_process->args[1] == IND_CODE)
+		arg_value[1] = take_value_from_field(vm_field_memory, player_process, 2, DIR_CODE);
+	// arg_value[0] = (u_int8_t)vm_field_memory->field[(player_process->arg_position) % MEM_SIZE];
+	// arg_value[1] = process_args(1, player_process, vm_field_memory);
+	if (player_process->args[1] == REG_CODE)
+	{
+		if (((int)arg_value[1]) >= 1 && ((int)arg_value[1]) <= REG_NUMBER)
+			put_value_to_register(&(player_process->registers[REG_SIZE * ((u_int8_t)arg_value[1] - 1)]),
+				arg_value[0]);
+	}
+	else if (player_process->args[1] == IND_CODE)
+		put_value_to_field(arg_value[0], vm_field_memory, player_process->PC + (arg_value[1] % IDX_MOD));
+	move_pc(game_process->op_tab, player_process);
+	printf("%d\n", *((int *)(&(vm_field_memory->field[10]))));
+}
+
+void op4(t_game_process *game_process, t_player_process *player_process,
+			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
+{
+	u_int32_t	arg_value[3];
+
+	player_process->arg_position = (player_process->PC + 2) % MEM_SIZE;
+	arg_value[0] = process_args(0, player_process, vm_field_memory);
+	arg_value[1] = process_args(1, player_process, vm_field_memory);
+	arg_value[2] = (u_int8_t)vm_field_memory->field[(player_process->arg_position) % MEM_SIZE];
+	if (((int)arg_value[2]) >= 1 && ((int)arg_value[2]) <= REG_NUMBER)
+	{
+		put_value_to_register(&(player_process->registers[REG_SIZE * ((u_int8_t)arg_value[2] - 1)]),
+			arg_value[0] + arg_value[1]);
+		if ((arg_value[0] + arg_value[1]) == 0)
+			player_process->carry = true;
+		else
+			player_process->carry = false;
+	}
+	move_pc(game_process->op_tab, player_process);
+	printf("%d\n", *((int *)(&(player_process->registers[8]))));
+}
+
+void op5(t_game_process *game_process, t_player_process *player_process,
+			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
+{
+	u_int32_t	arg_value[3];
+
+	player_process->arg_position = (player_process->PC + 2) % MEM_SIZE;
+	arg_value[0] = process_args(0, player_process, vm_field_memory);
+	arg_value[1] = process_args(1, player_process, vm_field_memory);
+	arg_value[2] = (u_int8_t)vm_field_memory->field[(player_process->arg_position) % MEM_SIZE];
+	if (((int)arg_value[2]) >= 1 && ((int)arg_value[2]) <= REG_NUMBER)
+	{
+		put_value_to_register(&(player_process->registers[REG_SIZE * ((u_int8_t)arg_value[2] - 1)]),
+			arg_value[0] - arg_value[1]);
+		if ((arg_value[0] - arg_value[1]) == 0)
+			player_process->carry = true;
+		else
+			player_process->carry = false;
+	}
+	move_pc(game_process->op_tab, player_process);
+	printf("%d\n", *((int *)(&(player_process->registers[8]))));
+}
+
+void op6(t_game_process *game_process, t_player_process *player_process,
+			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
+{
+	u_int32_t	arg_value[3];
+
+	player_process->arg_position = (player_process->PC + 2) % MEM_SIZE;
+	arg_value[0] = process_args(0, player_process, vm_field_memory);
+	arg_value[1] = process_args(1, player_process, vm_field_memory);
+	arg_value[2] = (u_int8_t)vm_field_memory->field[(player_process->arg_position) % MEM_SIZE];
+	if (((int)arg_value[2]) >= 1 && ((int)arg_value[2]) <= REG_NUMBER)
+	{
+		put_value_to_register(&(player_process->registers[REG_SIZE * ((u_int8_t)arg_value[2] - 1)]),
+			(arg_value[0] & arg_value[1]));
+		if ((arg_value[0] & arg_value[1]) == 0)
+			player_process->carry = true;
+		else
+			player_process->carry = false;
+	}
+	move_pc(game_process->op_tab, player_process);
+	printf("%d\n", *((int *)(&(player_process->registers[8]))));
+}
+
+void op6(t_game_process *game_process, t_player_process *player_process,
+			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
+{
+	u_int32_t	arg_value[3];
+
+	player_process->arg_position = (player_process->PC + 2) % MEM_SIZE;
+	arg_value[0] = process_args(0, player_process, vm_field_memory);
+	arg_value[1] = process_args(1, player_process, vm_field_memory);
+	arg_value[2] = (u_int8_t)vm_field_memory->field[(player_process->arg_position) % MEM_SIZE];
+	if (((int)arg_value[2]) >= 1 && ((int)arg_value[2]) <= REG_NUMBER)
+	{
+		put_value_to_register(&(player_process->registers[REG_SIZE * ((u_int8_t)arg_value[2] - 1)]),
+			(arg_value[0] | arg_value[1]));
+		if ((arg_value[0] | arg_value[1]) == 0)
+			player_process->carry = true;
+		else
+			player_process->carry = false;
+	}
+	move_pc(game_process->op_tab, player_process);
+	printf("%d\n", *((int *)(&(player_process->registers[8]))));
+}
+
+void op7(t_game_process *game_process, t_player_process *player_process,
+			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
+{
+	u_int32_t	arg_value[3];
+
+	player_process->arg_position = (player_process->PC + 2) % MEM_SIZE;
+	arg_value[0] = process_args(0, player_process, vm_field_memory);
+	arg_value[1] = process_args(1, player_process, vm_field_memory);
+	arg_value[2] = (u_int8_t)vm_field_memory->field[(player_process->arg_position) % MEM_SIZE];
+	if (((int)arg_value[2]) >= 1 && ((int)arg_value[2]) <= REG_NUMBER)
+	{
+		put_value_to_register(&(player_process->registers[REG_SIZE * ((u_int8_t)arg_value[2] - 1)]),
+			(arg_value[0] ^ arg_value[1]));
+		if ((arg_value[0] ^ arg_value[1]) == 0)
+			player_process->carry = true;
+		else
+			player_process->carry = false;
+	}
+	move_pc(game_process->op_tab, player_process);
+	printf("%d\n", *((int *)(&(player_process->registers[8]))));
 }
 
 void	op11(t_game_process *game_process, t_player_process *player_process,
@@ -185,6 +378,11 @@ void	op10(t_game_process *game_process, t_player_process *player_process,
 void (*operation[16])(t_game_process *game_process, t_player_process *player_process,
 					  t_player_list *player_list, t_vm_field_memory *vm_field_memory) =
 {
+		op1,
+		op2,
+		op3,
+		op4,
+		op5,
 		// op01(game_process, player_process, player_list, vm_field_memory),
 		// op02(game_process, player_process, player_list, vm_field_memory),
 		// op03(game_process, player_process, player_list, vm_field_memory),
@@ -220,7 +418,7 @@ void operation_completer(t_game_process *game_process, t_player_process *player_
 	// player_process->registers[2] = 0x83;
 	// player_process->registers[3] = 0xf3;
 	// printf("%x\n", *ex);
-	vm_field_memory->field[73] = 0xff;
-	operation[1](game_process, player_process,
+	// vm_field_memory->field[73] = 0xff;
+	operation[4](game_process, player_process,
 						player_list, vm_field_memory);
 }

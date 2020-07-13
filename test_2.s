@@ -1,4 +1,5 @@
 .name "kfkfkfkf"
 .comment "vjfjfjfjfj"
 
-and r1, r2, r3
+live %-2
+live %-2

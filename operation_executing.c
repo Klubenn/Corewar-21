@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 21:14:34 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/13 13:54:46 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/13 22:53:44 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,9 +179,9 @@ t_player_process *players_operations_executing(t_game_process *game_process, t_p
 				if (validation_before_operation_complete(game_process,
 					player_process, vm_field_memory))
 				{
-					// operation_completer(game_process, player_process,
-					// 	player_list, vm_field_memory);
-					move_pc(game_process->op_tab, player_process);
+					operation_completer(game_process, player_process,
+						player_list, vm_field_memory);
+					// move_pc(game_process->op_tab, player_process);
 					// move_pc(game_process->op_tab, player_process);
 				}
 				player_process->operation_code = vm_field_memory->
