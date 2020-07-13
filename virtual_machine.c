@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 18:06:36 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/13 16:24:12 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/13 20:04:09 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_player_process *create_processes(t_player_list *player_list,
 		counter = REG_SIZE - 1;
 		if (player_list->next == 0)
 		{
-			begin = (t_player_process *)malloc(sizeof(t_player_process));
+			begin = (t_player_process *)ft_memalloc(sizeof(t_player_process));
 			while(counter > 0)
 			{
 				begin->registers[counter] = (unsigned char)(255);
@@ -56,7 +56,7 @@ t_player_process *create_processes(t_player_list *player_list,
 		}
 		else
 		{
-			player_process->next = (t_player_process *)malloc(sizeof(t_player_process));
+			player_process->next = (t_player_process *)ft_memalloc(sizeof(t_player_process));
 			player_process->next->prev = player_process;
 			player_process = player_process->next;
 			player_process->next = 0;
@@ -279,8 +279,8 @@ void virtual_machine_creator(t_game_process *game_process,
 	t_vm_field_memory *vm_field_memory;
 
 	game_process->op_tab = op_tab;
-	vm_field_memory = (t_vm_field_memory *)malloc(sizeof(t_vm_field_memory));
-	vm_field_memory->field = (unsigned char *)malloc(MEM_SIZE);
+	vm_field_memory = (t_vm_field_memory *)ft_memalloc(sizeof(t_vm_field_memory));
+	vm_field_memory->field = (unsigned char *)ft_memalloc(MEM_SIZE);
 	vm_field_memory->op_tab = op_tab;
 	player_list_buff = player_list;
 	while(player_list_buff->next != 0)

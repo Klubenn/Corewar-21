@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 15:53:54 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/13 15:07:13 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/13 21:00:17 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void read_code(int fd, char *str, t_player *player, int count)
 
 	i = 0;
 	j = 0;
-	player->code = (unsigned char *)malloc(count);
+	player->code = (unsigned char *)ft_memalloc(count);
 	// printf("code size = %x\n", player->player_header.prog_size);
 	while (i < player->player_header.prog_size)
 	{
@@ -81,7 +81,7 @@ int check_nulls_and_code_size(int count, char *str, t_player *player, char **arg
 		printf("Error : mistake in the separating nulls\n");
 		exit(1);
 	}
-	code_size_point = (unsigned char *)malloc(4);
+	code_size_point = (unsigned char *)ft_memalloc(4);
 	while (j < 4)
 	{
 		code_size_point[j] = str[11 + PROG_NAME_LENGTH - j];
@@ -171,7 +171,7 @@ void put_in_stack_of_players_helper(t_player_list **player_list, t_player *playe
 	player_list_loc = *player_list;
 	if (player_list_loc == NULL)
 	{
-		*player_list = (t_player_list *)malloc(sizeof(t_player_list));
+		*player_list = (t_player_list *)ft_memalloc(sizeof(t_player_list));
 		(*player_list)->player = player;
 		(*player_list)->next = NULL;
 		(*player_list)->prev = NULL;
@@ -190,12 +190,11 @@ void put_in_stack_of_players_helper(t_player_list **player_list, t_player *playe
 			printf("Usage:\n  -dump [nbr] : dump memory after nbr cycles\n  -n [pos] : specify player's position\n  -a : shows aff's operation result\n");
 			exit(1);
 		}
-		buff = player_list_loc;
-		player_list_loc = (t_player_list *)malloc(sizeof(t_player_list));
+		player_list_loc->next = (t_player_list *)ft_memalloc(sizeof(t_player_list));
+		player_list_loc->next->prev = player_list_loc;
+		player_list_loc = player_list_loc->next;
 		player_list_loc->player = player;
-		player_list_loc->prev = buff;
 		player_list_loc->next = NULL;
-		buff->next = player_list_loc;
 		if (pos > 0)
 			player_list_loc->position = pos;
 		else
@@ -220,7 +219,7 @@ void put_in_stack_of_players(int pos, char *player_name, t_player_list **player_
 		printf("Can't read source file %s\n", player_name);
 		exit (1);
 	}
-	player = (t_player *)malloc(sizeof(t_player));
+	player = (t_player *)ft_memalloc(sizeof(t_player));
 	players_reader_parse_champions(fd, player, &player_name);
 	close(fd);
 	put_in_stack_of_players_helper(player_list, player, pos);
@@ -257,7 +256,7 @@ t_player_list *stack_deleter(t_player_list *player_list, int flag)
 		// deleter = player_list;
 		// free(deleter);
 	}
-	if (player_list->next == 0 && player_list->prev != 0)
+	else if (player_list->next == 0 && player_list->prev != 0)
 	{
 		player_list->prev->next = NULL;
 		returner = player_list->prev;
@@ -265,16 +264,16 @@ t_player_list *stack_deleter(t_player_list *player_list, int flag)
 		// deleter = player_list;
 		// free(deleter);
 	}
-	if (player_list->next != 0 && player_list->prev == 0)
+	else if (player_list->next != 0 && player_list->prev == 0)
 	{
 		player_list->next->prev = NULL;
 		returner = player_list->next;
-		returner->prev = 0;
+		// returner->prev = 0;
 		free(player_list);
 		// deleter = player_list;
 		// free(deleter);
 	}
-	if (player_list->next == 0 && player_list->prev == 0)
+	else if (player_list->next == 0 && player_list->prev == 0)
 		free(player_list);
 	if (flag == 0)
 	{
@@ -305,7 +304,7 @@ t_player_list *player_stack_creator(t_player_list *player_list_1,
 		{
 			if (player_list_final == NULL)
 			{
-				player_list_final = (t_player_list *)malloc(sizeof(t_player_list));
+				player_list_final = (t_player_list *)ft_memalloc(sizeof(t_player_list));
 				player_list_final->player = player_list_buff->player;
 				player_list_final->position = player_list_buff->position;
 				player_list_final->next = NULL;
@@ -316,7 +315,7 @@ t_player_list *player_stack_creator(t_player_list *player_list_1,
 			}
 			else
 			{
-				player_list_final->next = (t_player_list *)malloc(sizeof(t_player_list));
+				player_list_final->next = (t_player_list *)ft_memalloc(sizeof(t_player_list));
 				player_list_final->next->prev = player_list_final;
 				player_list_final = player_list_final->next;
 				player_list_final->player = player_list_buff->player;
@@ -330,7 +329,7 @@ t_player_list *player_stack_creator(t_player_list *player_list_1,
 		{
 			if (player_list_final == NULL)
 			{
-				player_list_final = (t_player_list *)malloc(sizeof(t_player_list));
+				player_list_final = (t_player_list *)ft_memalloc(sizeof(t_player_list));
 				player_list_final->player = player_list_1->player;
 				player_list_final->position = count;
 				player_list_final->next = NULL;
@@ -341,7 +340,7 @@ t_player_list *player_stack_creator(t_player_list *player_list_1,
 			}
 			else
 			{
-				player_list_final->next = (t_player_list *)malloc(sizeof(t_player_list));
+				player_list_final->next = (t_player_list *)ft_memalloc(sizeof(t_player_list));
 				player_list_final->next->prev = player_list_final;
 				player_list_final = player_list_final->next;
 				player_list_final->player = player_list_1->player;
@@ -545,7 +544,7 @@ void memory_allocator_helper(char *str, char **buff)
 	while (buff_2[j] != 0)
 	{
 		i = 0;
-		*buff = (char *)malloc(sizeof(char)*(ft_strlen(buff_2[j]) + 1));
+		*buff = (char *)ft_memalloc(sizeof(char)*(ft_strlen(buff_2[j]) + 1));
 		while (buff_2[j][i] != 0)
 		{
 			(*buff)[i] = buff_2[j][i];
@@ -572,7 +571,7 @@ void memory_allocator_helper(char *str, char **buff)
 // 		i++;
 // 	}
 // 	// printf("%d\n", counter);
-// 	buff = (char **)malloc(sizeof(char *)*(counter + 1));
+// 	buff = (char **)ft_memalloc(sizeof(char *)*(counter + 1));
 // 	i = 0;
 // 	while (i < counter)
 // 	{
@@ -613,7 +612,7 @@ void memory_allocator_helper(char *str, char **buff)
 // 	i = 0;
 // 	j = 0;
 // 	player_list = NULL;
-// 	game_process = (t_game_process *)malloc(sizeof(t_game_process));
+// 	game_process = (t_game_process *)ft_memalloc(sizeof(t_game_process));
 // 	// printf("control_point\n");
 // 	parse_arguments(ppp, game_process, &player_list);
 // 	player_list_1 = player_list;

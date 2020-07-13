@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/12 15:29:30 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/12 20:37:55 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/13 20:06:34 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@
 #include <fcntl.h>
 #include "op.h"
 
-void player_deleter(t_player *player)
-{
+// void player_deleter(t_player *player)
+// {
 	
-}
+// }
 
 void memory_deleter(t_player_list *player_list, t_vm_field_memory *vm_field_memory,
 	t_game_process *game_process)
