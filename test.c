@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 15:53:54 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/12 20:38:12 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/13 15:07:13 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,6 +245,7 @@ int check_atoi_honest(char *argv)
 t_player_list *stack_deleter(t_player_list *player_list, int flag)
 {
 	t_player_list *returner;
+	t_player_list *deleter;
 
 	returner = NULL;
 	if (player_list->next != 0 && player_list->prev != 0)
@@ -253,12 +254,16 @@ t_player_list *stack_deleter(t_player_list *player_list, int flag)
 		player_list->next->prev = player_list->prev;
 		returner = player_list->prev;
 		free(player_list);
+		// deleter = player_list;
+		// free(deleter);
 	}
 	if (player_list->next == 0 && player_list->prev != 0)
 	{
 		player_list->prev->next = NULL;
 		returner = player_list->prev;
 		free(player_list);
+		// deleter = player_list;
+		// free(deleter);
 	}
 	if (player_list->next != 0 && player_list->prev == 0)
 	{
@@ -266,6 +271,8 @@ t_player_list *stack_deleter(t_player_list *player_list, int flag)
 		returner = player_list->next;
 		returner->prev = 0;
 		free(player_list);
+		// deleter = player_list;
+		// free(deleter);
 	}
 	if (player_list->next == 0 && player_list->prev == 0)
 		free(player_list);

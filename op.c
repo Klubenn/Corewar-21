@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 19:43:05 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/12 20:41:55 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/13 13:51:20 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,24 @@ char **memory_allocator(char **argv)
 	return (buff);
 }
 
+void arguments_memory_deleter(char **argv)
+{
+	char **begin;
+
+	begin = argv;
+	while (*argv)
+	{
+		free(*argv);
+		argv++;
+	}
+	free(*argv);
+	free(begin);
+}
+
 int main(int argc, char **argv)
 {
 	t_game_process *game_process;
-	t_player_list		*player_list_1;
+	t_player_list	*player_list_1;
 	t_player_list	*player_list;
 	int fd;
 	int i;
@@ -104,6 +118,7 @@ int main(int argc, char **argv)
 	// printf("control_point\n");
 	parse_arguments(ppp, game_process, &player_list);
 	player_list_1 = player_list;
+	arguments_memory_deleter(ppp);
 	// printf("\n\n\n\n\n\n\n\n");
 	printf("Introducing contestants...\n");
 	while(player_list_1 != 0)

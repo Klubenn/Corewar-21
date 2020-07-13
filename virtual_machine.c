@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 18:06:36 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/12 20:28:40 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/13 16:24:12 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ t_player_process *create_processes(t_player_list *player_list,
 				begin->registers[counter] = (unsigned char)(255);
 				counter--;
 			}
+			// counter = REG_SIZE;
+			// while (counter < (REG_NUMBER * REG_SIZE))
+			// {
+			// 	begin->registers[counter] = 0;
+			// 	counter++;
+			// }
 			begin->registers[counter] = (unsigned char)(-1 * (player_list->position));
 			player_process = begin;
 			player_process->next = 0;
@@ -59,6 +65,12 @@ t_player_process *create_processes(t_player_list *player_list,
 				player_process->registers[counter] = (unsigned char)(255);
 				counter--;
 			}
+			// counter = REG_SIZE;
+			// while (counter < (REG_NUMBER * REG_SIZE))
+			// {
+			// 	begin->registers[counter] = 0;
+			// 	counter++;
+			// }
 			player_process->registers[counter] = (unsigned char)(-1 * (player_list->position));
 			player_process->PC = (MEM_SIZE / divider) * (player_list->position - 1);
 			player_process->operation_code = vm_field_memory->field[player_process->PC];
