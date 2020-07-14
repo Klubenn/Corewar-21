@@ -1,6 +1,5 @@
 #include <stdbool.h>
 #include <stdlib.h>
-#include "libft/includes/libft.h"
 #include <unistd.h>
 #include <stdio.h>
 #include "corewar.h"
@@ -73,12 +72,19 @@ void	op15(t_game_process *game_process, t_player_process *player_process,
 	player_process->PC += 3;
 }
 
-u_int32_t	take_value_from_field(t_vm_field_memory *vm_field_memory,
+int32_t make_number_positive(int32_t number)
+{
+	while (number < 0)
+		number += MEM_SIZE;
+	return (number);
+}
+
+int32_t	take_value_from_field(t_vm_field_memory *vm_field_memory,
 			t_player_process *player_process, int size, u_int8_t type)//todo previous name put_value_to_arg
 {
-	u_int32_t number;
+	int32_t number;
 	u_int32_t tmp;
-	u_int32_t i;
+	int32_t i;
 
 	number = 0;
 	i = 0;
@@ -94,7 +100,7 @@ u_int32_t	take_value_from_field(t_vm_field_memory *vm_field_memory,
 	if (type == IND_CODE)
 	{
 		i = player_process->arg_position;
-		player_process->arg_position = number + player_process->PC;
+		player_process->arg_position = make_number_positive(number + player_process->PC);
 		number = take_value_from_field(vm_field_memory, player_process, DIR_SIZE, DIR_CODE);
 		player_process->arg_position = i + IND_SIZE;
 		return (number);
@@ -148,10 +154,10 @@ void	put_value_to_register(u_int8_t *regist, u_int32_t value)
  	}
  }
 
-u_int32_t	process_args(int i,	t_player_process *player_process, t_vm_field_memory *vm_field_memory)
+int32_t	process_args(int i,	t_player_process *player_process, t_vm_field_memory *vm_field_memory)
 {
 	u_int8_t	reg;
-	u_int32_t	number;
+	int32_t	number;
 	u_int8_t	size;
 
 	size = (player_process->args[i] == IND_CODE) ? IND_SIZE : vm_field_memory->op_tab[player_process->operation_code].dir_size;
@@ -163,7 +169,7 @@ u_int32_t	process_args(int i,	t_player_process *player_process, t_vm_field_memor
 			player_process->arg_position = -1;
 			return (0);
 		}
-		number = *(u_int32_t *)(&(player_process->registers[reg * REG_SIZE - REG_SIZE]));
+		number = *(int32_t *)(&(player_process->registers[reg * REG_SIZE - REG_SIZE]));
 		player_process->arg_position += 1;
 	}
 	else
@@ -213,7 +219,7 @@ void op3(t_game_process *game_process, t_player_process *player_process,
 				arg_value[0]);
 	}
 	else if (player_process->args[1] == IND_CODE)
-		put_value_to_field(arg_value[0], vm_field_memory, player_process->PC + (arg_value[1] % IDX_MOD));
+		put_value_to_field(arg_value[0], vm_field_memory, (player_process->PC + (make_number_positive(arg_value[1]) % IDX_MOD)) % MEM_SIZE);
 	move_pc(game_process->op_tab, player_process);
 	printf("%d\n", *((int *)(&(vm_field_memory->field[10]))));
 }
@@ -284,30 +290,10 @@ void op6(t_game_process *game_process, t_player_process *player_process,
 	printf("%d\n", *((int *)(&(player_process->registers[8]))));
 }
 
-void op6(t_game_process *game_process, t_player_process *player_process,
-			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
-{
-	u_int32_t	arg_value[3];
-
-	player_process->arg_position = (player_process->PC + 2) % MEM_SIZE;
-	arg_value[0] = process_args(0, player_process, vm_field_memory);
-	arg_value[1] = process_args(1, player_process, vm_field_memory);
-	arg_value[2] = (u_int8_t)vm_field_memory->field[(player_process->arg_position) % MEM_SIZE];
-	if (((int)arg_value[2]) >= 1 && ((int)arg_value[2]) <= REG_NUMBER)
-	{
-		put_value_to_register(&(player_process->registers[REG_SIZE * ((u_int8_t)arg_value[2] - 1)]),
-			(arg_value[0] | arg_value[1]));
-		if ((arg_value[0] | arg_value[1]) == 0)
-			player_process->carry = true;
-		else
-			player_process->carry = false;
-	}
-	move_pc(game_process->op_tab, player_process);
-	printf("%d\n", *((int *)(&(player_process->registers[8]))));
-}
-
 void op7(t_game_process *game_process, t_player_process *player_process,
-			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
+			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)//todo всюду по аналогии с моими операциями
+			 // в цикле надо запустить получение аргументов, т.к. при невалидном регистре arg_position становится меньше нуля
+			 // и из цикла нужно делать break, а потом проверить это условие при выполнении самой операции
 {
 	u_int32_t	arg_value[3];
 
@@ -344,8 +330,9 @@ void	op11(t_game_process *game_process, t_player_process *player_process,
 		i++;
 	}
 	if (player_process->arg_position >= 0)
-		put_value_to_field(arg_value[0], vm_field_memory, (player_process->PC + (arg_value[1] + arg_value[2]) %
-				IDX_MOD) % MEM_SIZE);
+		put_value_to_field(arg_value[0], vm_field_memory,
+			(player_process->PC + (make_number_positive(arg_value[1]
+			+ arg_value[2])) % IDX_MOD) % MEM_SIZE);
 	move_pc(game_process->op_tab, player_process);
 }
 
@@ -353,7 +340,7 @@ void	op10(t_game_process *game_process, t_player_process *player_process,
  			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
 {
 	u_int8_t	regnum;
-	u_int32_t	arg_value[3];
+	int32_t		arg_value[3];
 	int			i;
 
 	player_process->arg_position = (player_process->PC + 2) % MEM_SIZE;
@@ -368,7 +355,7 @@ void	op10(t_game_process *game_process, t_player_process *player_process,
 	regnum = vm_field_memory->field[player_process->arg_position];
 	if (regnum > 0 && regnum <= REG_NUMBER && player_process->arg_position >= 0)
 	{
-		player_process->arg_position = player_process->PC + (arg_value[0] + arg_value[1]) % IDX_MOD;
+		player_process->arg_position = player_process->PC + make_number_positive(arg_value[0] + arg_value[1]) % IDX_MOD;
 		put_value_to_register(&player_process->registers[regnum * REG_SIZE - REG_SIZE],
 				take_value_from_field(vm_field_memory, player_process, REG_SIZE, DIR_CODE));
 	}
