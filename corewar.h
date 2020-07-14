@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 19:13:16 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/13 15:01:01 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/15 00:00:13 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ typedef struct s_vm_field_memory
 {
 	unsigned char *field;
 	t_op		*op_tab;
+	bool		modulo;
 }			t_vm_field_memory; 
 
 typedef struct 			s_player
@@ -56,6 +57,7 @@ typedef struct s_player_process
 	u_int64_t	arg_position;
 	struct s_player_process *next;
 	struct s_player_process *prev;
+	bool		flag;
 	
 }				t_player_process;
 
@@ -107,5 +109,6 @@ t_player_process *players_operations_executing(t_game_process *game_process, t_p
 	t_player_list *player_list, t_vm_field_memory *vm_field_memory);
 void operation_completer(t_game_process *game_process, t_player_process *player_process,
 	t_player_list *player_list, t_vm_field_memory *vm_field_memory);
+bool	move_pc(t_op *op_tab, t_player_process *player_process);
 
 #endif
