@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 18:06:36 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/13 20:04:09 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/15 20:50:36 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ t_player_process *create_processes(t_player_list *player_list,
 			player_process = begin;
 			player_process->next = 0;
 			player_process->prev = 0;
+			player_process->carry = false;
 			player_process->PC = (MEM_SIZE / divider) * (player_list->position - 1);
 			player_process->operation_code = vm_field_memory->field[player_process->PC];
 			player_process->cycles_to_wait = (vm_field_memory->op_tab)[(vm_field_memory->field)[player_process->PC] - 1].cycles_before_complete;
@@ -73,6 +74,7 @@ t_player_process *create_processes(t_player_list *player_list,
 			// }
 			player_process->registers[counter] = (unsigned char)(-1 * (player_list->position));
 			player_process->PC = (MEM_SIZE / divider) * (player_list->position - 1);
+			player_process->carry = false;
 			player_process->operation_code = vm_field_memory->field[player_process->PC];
 			player_process->cycles_to_wait = (vm_field_memory->op_tab)[(vm_field_memory->field)[player_process->PC] - 1].cycles_before_complete;
 			printf("%d %llu %llu\n", ((int *)(player_process->registers))[0], player_process->PC, player_process->cycles_to_wait);
