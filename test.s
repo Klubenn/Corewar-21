@@ -1,4 +1,5 @@
 .name "kfkfkfkf"
 .comment "vjfjfjfjfj"
 
-ld 435, r1
+ld %323, r2
+aff r2
