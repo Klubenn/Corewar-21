@@ -1,4 +1,4 @@
 .name "kfkfkfkf"
 .comment "vjfjfjfjfj"
 
-lfork %-2
+ld 435, r1

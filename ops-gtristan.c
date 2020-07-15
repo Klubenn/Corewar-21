@@ -26,18 +26,6 @@
 // 	move_pc(game_process->op_tab, player_process);
 // }
 
-void 	op16(t_game_process *game_process, t_player_process *player_process,
-			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
-{
-	u_int8_t	regnum;
-	u_int8_t	args_type_code;
-
-	regnum = vm_field_memory->field[(player_process->PC + 2) % MEM_SIZE];
-	if (regnum > 0 && regnum <= REG_NUMBER && game_process->aff)
-		ft_putchar(player_process->registers[regnum * REG_SIZE - REG_SIZE]);
-	move_pc(game_process->op_tab, player_process);
-}
-
 // void	op12(t_game_process *game_process, t_player_process *player_process,
 // 			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
 // {
@@ -97,6 +85,8 @@ int32_t	take_value_from_field(t_vm_field_memory *vm_field_memory,
 		(player_process->arg_position)++;
 		i++;
 	}
+	if (i == 2)
+		number = (int32_t)(int16_t)number;
 	if (type == IND_CODE)
 	{
 		i = player_process->arg_position;
@@ -119,6 +109,7 @@ void	op1(t_game_process *game_process, t_player_process *player_process,
 	int32_t arg;
 
 	player_process->arg_position = (player_process->PC + 1) % MEM_SIZE;
+	vm_field_memory->modulo = false;
 	arg = (int32_t)take_value_from_field(vm_field_memory, player_process,
 		(int)(game_process->op_tab[player_process->operation_code].dir_size),
 			(u_int8_t)DIR_CODE);
@@ -189,13 +180,15 @@ void op2(t_game_process *game_process, t_player_process *player_process,
 {
 	u_int32_t	arg_value[2];
 
+	vm_field_memory->modulo = false;
 	player_process->arg_position = (player_process->PC + 2) % MEM_SIZE;
 	arg_value[0] = process_args(0, player_process, vm_field_memory);
 	arg_value[1] = (u_int8_t)vm_field_memory->field[(player_process->arg_position) % MEM_SIZE];
 	if (((int)arg_value[1]) >= 1 && ((int)arg_value[1]) <= REG_NUMBER
 		&& player_process->arg_position >= 0)
 	{
-		*((u_int32_t *)&(player_process->registers[REG_SIZE * (arg_value[1] - 1)])) = arg_value[0];
+		put_value_to_register(&(player_process->registers[REG_SIZE * (arg_value[1] - 1)]),
+			arg_value[0]);
 		if (arg_value[0] == 0)
 			player_process->carry = true;
 		else
@@ -424,8 +417,10 @@ void	op12(t_game_process *game_process, t_player_process *player_process,
 		new = new->prev;
 	new->prev = (t_player_process *)ft_memalloc(sizeof(t_player_process));
 	ft_memcpy(new->prev, player_process, sizeof(t_player_process));
-	new->prev->PC = (u_int64_t)make_number_positive((int64_t)(*((short *)&(vm_field_memory->field[player_process->PC
-		+ 1])) % IDX_MOD));
+	// printf("%d\n", (*((short *)(&(vm_field_memory->field[player_process->PC
+	// 	+ 1])))));
+	player_process->arg_position = (player_process->PC + 1) % MEM_SIZE;
+	new->prev->PC = (u_int64_t)make_number_positive(((int64_t)(int16_t)(process_args(0, player_process, vm_field_memory))) % IDX_MOD);
 	new->prev->operation_code = vm_field_memory->field[new->prev->PC];
 	new->prev->next = new;
 	new->prev->prev = NULL;
@@ -488,12 +483,28 @@ void	op15(t_game_process *game_process, t_player_process *player_process,
 		new = new->prev;
 	new->prev = (t_player_process *)ft_memalloc(sizeof(t_player_process));
 	ft_memcpy(new->prev, player_process, sizeof(t_player_process));
-	new->prev->PC = (u_int64_t)make_number_positive((int64_t)(*((short *)&(vm_field_memory->field[player_process->PC
-		+ 1]))) + (int64_t)(player_process->PC));
+	// printf("%hd\n", (*((int16_t *)(&(vm_field_memory->field[player_process->PC + 1])))));
+	player_process->arg_position = (player_process->PC + 1) % MEM_SIZE;
+	new->prev->PC = (u_int64_t)make_number_positive((int64_t)(int16_t)process_args(0, player_process, vm_field_memory)
+		+ (int64_t)(player_process->PC));
 	new->prev->operation_code = vm_field_memory->field[new->prev->PC];
 	new->prev->next = new;
 	new->prev->prev = NULL;
 	player_process->PC += (player_process->PC + 3) % MEM_SIZE;
+}
+
+void 	op16(t_game_process *game_process, t_player_process *player_process,
+			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
+{
+	u_int8_t	regnum;
+	u_int8_t	args_type_code;
+
+	regnum = vm_field_memory->field[(player_process->PC + 2) % MEM_SIZE];
+	if (regnum > 0 &&
+		regnum <= REG_NUMBER &&
+			game_process->flag_a)
+		ft_putchar(player_process->registers[regnum * REG_SIZE - REG_SIZE]);
+	move_pc(game_process->op_tab, player_process);
 }
 
 void (*operation[17])(t_game_process *game_process, t_player_process *player_process,
