@@ -1,35 +1,5 @@
 .name "jdjfjfjf"
 .comment "kfjfjfjfj"
 
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
-fork %257
+ld %0, r2
+zjmp %-8

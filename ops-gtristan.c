@@ -359,7 +359,7 @@ void op9(t_game_process *game_process, t_player_process *player_process,
 		player_process->arg_position = (player_process->PC + 1) % MEM_SIZE;
 		arg_value =	take_value_from_field(vm_field_memory, player_process, 2, DIR_CODE);
 		// printf("%d\n", (int32_t)arg_value);
-		player_process->PC = make_number_positive((int64_t)(player_process->PC)
+		player_process->PC = (u_int64_t)make_number_positive((int64_t)(player_process->PC)
 			+ (((int64_t)arg_value) % ((int64_t)IDX_MOD)));
 	}
 	else
@@ -432,8 +432,14 @@ void	op12(t_game_process *game_process, t_player_process *player_process,
 	// printf("%d\n", (*((short *)(&(vm_field_memory->field[player_process->PC
 	// 	+ 1])))));
 	player_process->arg_position = (player_process->PC + 1) % MEM_SIZE;
-	new->prev->PC = (u_int64_t)make_number_positive(((int64_t)(int16_t)(process_args(0, player_process, vm_field_memory))) % IDX_MOD);
+	new->prev->PC = (u_int64_t)make_number_positive(((int64_t)(player_process->PC))
+		+ ((int64_t)(int16_t)(take_value_from_field(vm_field_memory, player_process, 2, DIR_CODE)) % ((int64_t)IDX_MOD)));
 	new->prev->operation_code = vm_field_memory->field[new->prev->PC];
+	if ((1 <= new->prev->operation_code) &&
+		(new->prev->operation_code <= 16))
+		new->prev->cycles_to_wait =
+			(game_process->op_tab)[new->prev->
+					operation_code].cycles_before_complete;
 	new->prev->next = new;
 	new->prev->prev = NULL;
 	player_process->PC = (player_process->PC + 3) % MEM_SIZE;
@@ -512,9 +518,14 @@ void	op15(t_game_process *game_process, t_player_process *player_process,
 	ft_memcpy(new->prev, player_process, sizeof(t_player_process));
 	// printf("%hd\n", (*((int16_t *)(&(vm_field_memory->field[player_process->PC + 1])))));
 	player_process->arg_position = (player_process->PC + 1) % MEM_SIZE;
-	new->prev->PC = (u_int64_t)make_number_positive((int64_t)(int16_t)process_args(0, player_process, vm_field_memory)
+	new->prev->PC = (u_int64_t)make_number_positive(((int64_t)(int16_t)(take_value_from_field(vm_field_memory, player_process, 2, DIR_CODE)))
 		+ (int64_t)(player_process->PC));
 	new->prev->operation_code = vm_field_memory->field[new->prev->PC];
+	if ((1 <= new->prev->operation_code) &&
+		(new->prev->operation_code <= 16))
+		new->prev->cycles_to_wait =
+			(game_process->op_tab)[new->prev->
+					operation_code].cycles_before_complete;
 	new->prev->next = new;
 	new->prev->prev = NULL;
 	player_process->PC += (player_process->PC + 3) % MEM_SIZE;

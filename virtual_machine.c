@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 18:06:36 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/15 20:50:36 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/17 00:15:05 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_player_process *create_processes(t_player_list *player_list,
 			player_process->carry = false;
 			player_process->PC = (MEM_SIZE / divider) * (player_list->position - 1);
 			player_process->operation_code = vm_field_memory->field[player_process->PC];
-			player_process->cycles_to_wait = (vm_field_memory->op_tab)[(vm_field_memory->field)[player_process->PC] - 1].cycles_before_complete;
+			player_process->cycles_to_wait = (vm_field_memory->op_tab)[(vm_field_memory->field)[player_process->PC]].cycles_before_complete;
 			printf("%d %llu %llu\n", ((int *)(player_process->registers))[0], player_process->PC, player_process->cycles_to_wait);
 		}
 		else
@@ -76,7 +76,7 @@ t_player_process *create_processes(t_player_list *player_list,
 			player_process->PC = (MEM_SIZE / divider) * (player_list->position - 1);
 			player_process->carry = false;
 			player_process->operation_code = vm_field_memory->field[player_process->PC];
-			player_process->cycles_to_wait = (vm_field_memory->op_tab)[(vm_field_memory->field)[player_process->PC] - 1].cycles_before_complete;
+			player_process->cycles_to_wait = (vm_field_memory->op_tab)[(vm_field_memory->field)[player_process->PC]].cycles_before_complete;
 			printf("%d %llu %llu\n", ((int *)(player_process->registers))[0], player_process->PC, player_process->cycles_to_wait);
 		}
 		player_list = player_list->prev;
@@ -141,7 +141,8 @@ void check_alives(t_game_process *game_process,
 	}
 	if (live_counter >= NBR_LIVE)
 	{
-		game_process->cycle_to_die -= CYCLE_DELTA;
+		if (game_process->cycle_to_die > 0)
+			game_process->cycle_to_die -= CYCLE_DELTA;
 		game_process->checks_counter = 0;
 	}
 }
@@ -212,17 +213,17 @@ void play_corewar(t_game_process *game_process, t_player_list *player_list, int 
 	while(game_process->cycle_to_die > 0 && player_process != NULL
 			&& (game_process->dump_cycle == 0 || (game_process->dump_cycle > game_process->cycle_number)))
 	{
-		if (cycles_counter_between_checks == game_process->cycle_to_die)
-		{
-			check_alives(game_process, &player_process);
-			game_process->checks_counter += 1;
-			cycles_counter_between_checks = 0;
-			if (game_process->checks_counter == MAX_CHECKS)
-			{
-				game_process->cycle_to_die -= CYCLE_DELTA;
-				game_process->checks_counter = 0;
-			}
-		}
+		// if (cycles_counter_between_checks == game_process->cycle_to_die)
+		// {
+		// 	check_alives(game_process, &player_process);
+		// 	game_process->checks_counter += 1;
+		// 	cycles_counter_between_checks = 0;
+		// 	if (game_process->checks_counter == MAX_CHECKS)
+		// 	{
+		// 		game_process->cycle_to_die -= CYCLE_DELTA;
+		// 		game_process->checks_counter = 0;
+		// 	}
+		// }
 		// else
 		// {
 		player_process = players_operations_executing(game_process,
@@ -230,14 +231,16 @@ void play_corewar(t_game_process *game_process, t_player_list *player_list, int 
 		cycles_counter_between_checks += 1;
 		// }
 		game_process->cycle_number += 1;
-		if (cycles_counter_between_checks == game_process->cycle_to_die)
+		if ((cycles_counter_between_checks == game_process->cycle_to_die && game_process->cycle_to_die > 0)
+				|| game_process->cycle_to_die <= 0)
 		{
-			check_alives(game_process, &player_process);
 			game_process->checks_counter += 1;
+			check_alives(game_process, &player_process);
 			cycles_counter_between_checks = 0;
 			if (game_process->checks_counter == MAX_CHECKS)
 			{
-				game_process->cycle_to_die -= CYCLE_DELTA;
+				if (game_process->cycle_to_die > 0)
+					game_process->cycle_to_die -= CYCLE_DELTA;
 				game_process->checks_counter = 0;
 			}
 		}
