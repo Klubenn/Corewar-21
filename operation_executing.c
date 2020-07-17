@@ -170,47 +170,63 @@ t_player_process *players_operations_executing(t_game_process *game_process, t_p
 	// demonstrate(player_process->registers);
 	while (player_process)
 	{
-		if (player_process->operation_code <= 16 && player_process->operation_code >= 1)
+//		if (player_process->operation_code <= 16 && player_process->operation_code >= 1)
+//		{
+		if (player_process->cycles_to_wait == 1)
 		{
-			if (player_process->cycles_to_wait > 0)
-				player_process->cycles_to_wait -= 1;
-			if (player_process->cycles_to_wait == 0)
+			if (validation_before_operation_complete(game_process,
+													 player_process, vm_field_memory))
 			{
-				if (validation_before_operation_complete(game_process,
-					player_process, vm_field_memory))
-				{
-					operation_completer(game_process, player_process,
-						player_list, vm_field_memory);
-					// move_pc(game_process->op_tab, player_process);
-					// move_pc(game_process->op_tab, player_process);
-				}
-				player_process->operation_code = vm_field_memory->
-					field[player_process->PC];
-				if ((1 <= vm_field_memory->field[player_process->PC]) &&
-					(vm_field_memory->field[player_process->PC] <= 16))
-					player_process->cycles_to_wait =
-						(game_process->op_tab)[player_process->
-								operation_code].cycles_before_complete;
+				operation_completer(game_process, player_process,
+									player_list, vm_field_memory);
+				// move_pc(game_process->op_tab, player_process);
+				// move_pc(game_process->op_tab, player_process);
 			}
-			// else
-			// 	player_process->cycles_to_wait -= 1;
+//				player_process->operation_code = vm_field_memory->
+//					field[player_process->PC];
+//				if ((1 <= vm_field_memory->field[player_process->PC]) &&
+//					(vm_field_memory->field[player_process->PC] <= 16))
+//					player_process->cycles_to_wait =
+//						(game_process->op_tab)[player_process->
+//								operation_code].cycles_before_complete;
+			player_process->cycles_to_wait -= 1;
 		}
-		else
+		else if (player_process->cycles_to_wait == 0)
 		{
-			// printf("%llx - not valid\n", player_process->PC);
-			if (player_process->PC == MEM_SIZE - 1)
-				player_process->PC = 0;
-			else
-				player_process->PC += 1;
 			player_process->operation_code = vm_field_memory->
-						field[player_process->PC];
+					field[player_process->PC];
 			if ((1 <= vm_field_memory->field[player_process->PC]) &&
 				(vm_field_memory->field[player_process->PC] <= 16))
 				player_process->cycles_to_wait =
-					(game_process->op_tab)[player_process->
-							operation_code].cycles_before_complete;
+						(game_process->op_tab)[player_process->
+								operation_code].cycles_before_complete - 1;
+			else
+				player_process->PC = (player_process->PC + 1) % MEM_SIZE;
 		}
+		else
+			player_process->cycles_to_wait -= 1;
+
+
+		// else
+		// 	player_process->cycles_to_wait -= 1;
+//		}
+//		else
+//		{
+//			// printf("%llx - not valid\n", player_process->PC);
+//			if (player_process->PC == MEM_SIZE - 1)
+//				player_process->PC = 0;
+//			else
+//				player_process->PC += 1;
+//			player_process->operation_code = vm_field_memory->
+//						field[player_process->PC];
+//			if ((1 <= vm_field_memory->field[player_process->PC]) &&
+//				(vm_field_memory->field[player_process->PC] <= 16))
+//				player_process->cycles_to_wait =
+//					(game_process->op_tab)[player_process->
+//							operation_code].cycles_before_complete;
+//	}
 		player_process = player_process->next;
+
 	}
 	while (begin->prev)
 		begin = begin->prev;

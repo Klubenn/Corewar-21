@@ -7,58 +7,7 @@
 #include <fcntl.h>
 #include "op.h"
 
-// void	op1(t_game_process *game_process, t_player_process *player_process,
-// 			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
-// {
-// 	int32_t arg;
-
-// 	player_process->arg_position = (player_process->PC + 1) % MEM_SIZE;
-// 	arg = (int32_t)take_value_from_field(vm_field_memory, player_process,
-// 		(int)(game_process->op_tab[player_process->operation_code].dir_size), (u_int8_t)DIR_CODE);
-// 	while (player_list)
-// 	{
-// 		if (arg == (-1 * player_list->position))
-// 			player_list->player->last_live_cycle_number = game_process->cycle_number;
-// 		player_list = player_list->next;
-// 	}
-// 	player_process->live_counter += 1;
-// 	player_process->last_live_cycle_number = game_process->cycle_number;
-// 	move_pc(game_process->op_tab, player_process);
-// }
-
-// void	op12(t_game_process *game_process, t_player_process *player_process,
-// 			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
-// {
-// 	t_player_process *new;
-
-// 	new = player_process;
-// 	while (new->prev)
-// 		new = new->prev;
-// 	new->prev = (t_player_process *)ft_memalloc(sizeof(t_player_process));
-// 	ft_memcpy(new->prev, player_process, sizeof(t_player_process));
-// 	new->prev->PC = *((short *)&(vm_field_memory->field[player_process->PC + 1])) % IDX_MOD;
-// 	new->prev->operation_code = vm_field_memory->field[new->prev->PC];
-// 	new->prev->next = new;
-// 	new->prev->prev = NULL;
-// 	player_process->PC += 3;
-// }
-
-// void	op15(t_game_process *game_process, t_player_process *player_process,
-// 			 t_player_list *player_list, t_vm_field_memory *vm_field_memory)
-// {
-// 	t_player_process *new;
-
-// 	new = player_process;
-// 	while (new->prev)
-// 		new = new->prev;
-// 	new->prev = (t_player_process *)ft_memalloc(sizeof(t_player_process));
-// 	ft_memcpy(new->prev, player_process, sizeof(t_player_process));
-// 	new->prev->PC = (new->prev->PC + *((short *)(&(vm_field_memory->field[player_process->PC + 1])))) % MEM_SIZE;
-// 	new->prev->operation_code = vm_field_memory->field[new->prev->PC];
-// 	new->prev->next = new;
-// 	new->prev->prev = NULL;
-// 	player_process->PC += 3;
-// }
+//todo поменять считывание операции после перемещения
 
 int32_t make_number_positive(int64_t number)
 {
@@ -434,12 +383,7 @@ void	op12(t_game_process *game_process, t_player_process *player_process,
 	player_process->arg_position = (player_process->PC + 1) % MEM_SIZE;
 	new->prev->PC = (u_int64_t)make_number_positive(((int64_t)(player_process->PC))
 		+ ((int64_t)(int16_t)(take_value_from_field(vm_field_memory, player_process, 2, DIR_CODE)) % ((int64_t)IDX_MOD)));
-	new->prev->operation_code = vm_field_memory->field[new->prev->PC];
-	if ((1 <= new->prev->operation_code) &&
-		(new->prev->operation_code <= 16))
-		new->prev->cycles_to_wait =
-			(game_process->op_tab)[new->prev->
-					operation_code].cycles_before_complete;
+	new->prev->cycles_to_wait = 0;
 	new->prev->next = new;
 	new->prev->prev = NULL;
 	player_process->PC = (player_process->PC + 3) % MEM_SIZE;
@@ -520,12 +464,7 @@ void	op15(t_game_process *game_process, t_player_process *player_process,
 	player_process->arg_position = (player_process->PC + 1) % MEM_SIZE;
 	new->prev->PC = (u_int64_t)make_number_positive(((int64_t)(int16_t)(take_value_from_field(vm_field_memory, player_process, 2, DIR_CODE)))
 		+ (int64_t)(player_process->PC));
-	new->prev->operation_code = vm_field_memory->field[new->prev->PC];
-	if ((1 <= new->prev->operation_code) &&
-		(new->prev->operation_code <= 16))
-		new->prev->cycles_to_wait =
-			(game_process->op_tab)[new->prev->
-					operation_code].cycles_before_complete;
+	new->prev->cycles_to_wait = 0;
 	new->prev->next = new;
 	new->prev->prev = NULL;
 	player_process->PC += (player_process->PC + 3) % MEM_SIZE;
