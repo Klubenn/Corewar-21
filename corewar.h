@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 19:13:16 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/15 00:00:13 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/17 23:08:04 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,9 @@ typedef struct s_game_process		/*Хранит*/
 	u_int64_t	checks_counter;
 	t_op		*op_tab;
 	bool 		aff;
+	u_int64_t	process_numbers;
 	bool		flag_a;
+	u_int8_t		flag_v;
 }				t_game_process;
 
 typedef struct s_player_process
@@ -53,8 +55,10 @@ typedef struct s_player_process
 	u_int64_t	live_counter;
 	u_int64_t	last_live_cycle_number;
 	bool		carry;
+	u_int8_t	reg[3];
 	u_int8_t	args[3];
 	u_int64_t	arg_position;
+	u_int64_t	ident;
 	struct s_player_process *next;
 	struct s_player_process *prev;
 	bool		flag;

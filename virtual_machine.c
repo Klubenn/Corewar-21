@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 18:06:36 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/17 00:15:05 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/17 22:30:12 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,12 @@ t_player_process *create_processes(t_player_list *player_list,
 			player_process = begin;
 			player_process->next = 0;
 			player_process->prev = 0;
+			player_process->ident = (u_int64_t)(*((int *)(&(player_process->registers[0]))))*(-1);
 			player_process->carry = false;
 			player_process->PC = (MEM_SIZE / divider) * (player_list->position - 1);
 			player_process->operation_code = vm_field_memory->field[player_process->PC];
 			player_process->cycles_to_wait = (vm_field_memory->op_tab)[(vm_field_memory->field)[player_process->PC]].cycles_before_complete;
-			printf("%d %llu %llu\n", ((int *)(player_process->registers))[0], player_process->PC, player_process->cycles_to_wait);
+			printf("%llu %llu %llu\n", player_process->ident, player_process->PC, player_process->cycles_to_wait);
 		}
 		else
 		{
@@ -75,9 +76,10 @@ t_player_process *create_processes(t_player_list *player_list,
 			player_process->registers[counter] = (unsigned char)(-1 * (player_list->position));
 			player_process->PC = (MEM_SIZE / divider) * (player_list->position - 1);
 			player_process->carry = false;
+			player_process->ident = (u_int64_t)(*((int *)(&(player_process->registers[0]))))*(-1);
 			player_process->operation_code = vm_field_memory->field[player_process->PC];
 			player_process->cycles_to_wait = (vm_field_memory->op_tab)[(vm_field_memory->field)[player_process->PC]].cycles_before_complete;
-			printf("%d %llu %llu\n", ((int *)(player_process->registers))[0], player_process->PC, player_process->cycles_to_wait);
+			printf("%llu %llu %llu\n", player_process->ident, player_process->PC, player_process->cycles_to_wait);
 		}
 		player_list = player_list->prev;
 	}
@@ -210,6 +212,8 @@ void play_corewar(t_game_process *game_process, t_player_list *player_list, int 
 	game_process->cycle_to_die = CYCLE_TO_DIE;
 	game_process->cycle_number = 0;
 	player_process = create_processes(player_list, divider, vm_field_memory);
+	game_process->process_numbers = player_process->ident;
+	// printf("%llu\n", game_process->process_numbers);
 	while(game_process->cycle_to_die > 0 && player_process != NULL
 			&& (game_process->dump_cycle == 0 || (game_process->dump_cycle > game_process->cycle_number)))
 	{
@@ -231,6 +235,8 @@ void play_corewar(t_game_process *game_process, t_player_list *player_list, int 
 		cycles_counter_between_checks += 1;
 		// }
 		game_process->cycle_number += 1;
+		if (game_process->flag_v & (u_int8_t)2)
+			printf("It is now cycle %llu\n", game_process->cycle_number);
 		if ((cycles_counter_between_checks == game_process->cycle_to_die && game_process->cycle_to_die > 0)
 				|| game_process->cycle_to_die <= 0)
 		{
@@ -246,10 +252,10 @@ void play_corewar(t_game_process *game_process, t_player_list *player_list, int 
 		}
 	}
 	if (game_process->dump_cycle == game_process->cycle_number)
-			print_memory(vm_field_memory->field);
+		print_memory(vm_field_memory->field);
 	// else
 	// {
-	printf("\n\n%llu %llu\n", game_process->cycle_number, game_process->checks_counter);
+	// printf("\n\n%llu %llu\n", game_process->cycle_number, game_process->checks_counter);
 	winner_definer(player_list);
 	// }
 	memory_deleter(player_list, vm_field_memory, game_process);
@@ -301,3 +307,8 @@ void virtual_machine_creator(t_game_process *game_process,
 	// print_memory(vm_field_memory->field);
 	play_corewar(game_process, player_list, divider, vm_field_memory);
 }
+
+// void operation_log_printer(t_player_process *player_process, int32_t *arg_value, )
+// {
+	
+// }

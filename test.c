@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 15:53:54 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/15 13:45:21 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/18 00:18:19 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -445,6 +445,17 @@ void parse_arguments(char **argv, t_game_process *game_process, t_player_list **
 		}
 		else if (ft_strcmp(*argv, "-a") == 0)
 			game_process->flag_a = true;
+		else if (ft_strcmp(*argv, "-v") == 0)
+		{
+			if (*(argv + 1) != 0)
+				game_process->flag_v = (uint8_t)(ft_atoi(*(argv + 1)));
+			else
+			{
+				printf("Usage:\n  -dump [nbr] : dump memory after nbr cycles\n  -n [pos] : specify player's position\n  -a : shows aff's operation result\n");
+				exit(1);
+			}
+			argv++;
+		}
 		else
 			put_in_stack_of_players(0, *argv, &player_list_1);
 		argv++;
