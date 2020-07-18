@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.16)
+project(cor_vm C)
+include_directories(./libft)
+set(CMAKE_C_STANDARD 99)
+set(SOURCE_FILES op.c op.h operation_executing.c test.c virtual_machine.c ops-gtristan.c memory_deleter.c)
+add_executable(cor_vm ${SOURCE_FILES})
+target_link_libraries(cor_vm /Users/gtristan/CLionProjects/cor-vm/libft/libft.a)

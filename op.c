@@ -37,7 +37,7 @@ t_op    op_tab[17] =
 	{"sti", 3, {T_REG, T_REG | T_DIR | T_IND, T_DIR | T_REG}, 11, 25,
 		"store index", 0, 1, 2},
 	{"fork", 1, {T_DIR}, 12, 800, "fork", 0, 0, 2},
-	{"lld", 2, {T_DIR | T_IND, T_REG}, 13, 10, "long load", 1, 1, 4},
+	{"lld", 2, {T_DIR | T_IND, T_REG}, 13, 10, "long load", 1, 1, 2},
 	{"lldi", 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 14, 50,
 		"long load index", 1, 1, 2},
 	{"lfork", 1, {T_DIR}, 15, 1000, "long fork", 0, 0, 2},

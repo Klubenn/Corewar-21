@@ -468,10 +468,13 @@ void	op11(t_game_process *game_process, t_player_process *player_process,
 	else
 		arg_value[2] = process_args(2, player_process, vm_field_memory);
 	if (player_process->arg_position >= 0)
+	{
 		put_value_to_field(arg_value[0], vm_field_memory,
-			make_number_positive((int64_t)player_process->PC +
-			(((int64_t)arg_value[1] + (int64_t)arg_value[2]) % (int64_t)IDX_MOD)));
-	print_operation_logs(player_process, arg_value, game_process);
+						   make_number_positive((int64_t) player_process->PC +
+												(((int64_t) arg_value[1] + (int64_t) arg_value[2]) %
+												 (int64_t) IDX_MOD)));
+		print_operation_logs(player_process, arg_value, game_process);
+	}
 	move_pc(game_process->op_tab, player_process, game_process, vm_field_memory);
 }
 
