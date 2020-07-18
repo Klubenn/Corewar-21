@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 18:06:36 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/18 16:15:25 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/18 18:59:43 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,11 @@ void check_alives(t_game_process *game_process,
 	if (live_counter >= NBR_LIVE)
 	{
 		if (game_process->cycle_to_die > 0)
+		{
 			game_process->cycle_to_die -= CYCLE_DELTA;
+			if (game_process->flag_v & 2)
+				printf("Cycle to die is now %d\n", (int32_t)game_process->cycle_to_die);
+		}
 		game_process->checks_counter = 0;
 	}
 }
@@ -256,7 +260,11 @@ void play_corewar(t_game_process *game_process, t_player_list *player_list, int 
 			if (game_process->checks_counter == MAX_CHECKS)
 			{
 				if (game_process->cycle_to_die > 0)
+				{
 					game_process->cycle_to_die -= CYCLE_DELTA;
+					if (game_process->flag_v & 2)
+						printf("Cycle to die is now %d\n", (int32_t)game_process->cycle_to_die);
+				}
 				game_process->checks_counter = 0;
 			}
 		}

@@ -67,7 +67,7 @@ void print_operation_logs(t_player_process *player_process, int32_t	*arg_value, 
 		if (ft_strcmp(game_process->op_tab[player_process->operation_code].name, "fork") == 0 ||
 			ft_strcmp(game_process->op_tab[player_process->operation_code].name, "lfork") == 0)
 			printf("P%5.llu | %s",
-				player_process->ident - 1, game_process->op_tab[player_process->operation_code].name);
+				player_process->parent, game_process->op_tab[player_process->operation_code].name);
 		else
 			printf("P%5.llu | %s",
 				player_process->ident, game_process->op_tab[player_process->operation_code].name);
@@ -496,6 +496,7 @@ void	op12(t_game_process *game_process, t_player_process *player_process,
 	new->prev->next = new;
 	new->prev->prev = NULL;
 	new->prev->ident = game_process->process_numbers + 1;
+	new->prev->parent = player_process->ident;
 	game_process->process_numbers += 1;
 	// player_process->PC = (player_process->PC + 3) % MEM_SIZE;
 	print_operation_logs(new->prev, ((int32_t *)(&bias)), game_process);
@@ -586,6 +587,7 @@ void	op15(t_game_process *game_process, t_player_process *player_process,
 	new->prev->next = new;
 	new->prev->prev = NULL;
 	new->prev->ident = game_process->process_numbers + 1;
+	new->prev->parent = player_process->ident;
 	game_process->process_numbers += 1;
 	print_operation_logs(new->prev, ((int32_t *)(&bias)), game_process);
 	move_pc(game_process->op_tab, player_process, game_process, vm_field_memory);

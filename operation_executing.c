@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 21:14:34 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/18 15:29:16 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/18 18:53:07 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ void move_pc_logger(t_game_process *game_process, t_vm_field_memory *vm_field_me
 		while ((int)counter[2] < (int)player_process->PC)
 		{
 			if ((int)counter[2] == (int)player_process->PC - 1)
-				printf("%02x", vm_field_memory->field[(u_int8_t)counter[2]]);
+				printf("%02x", vm_field_memory->field[(u_int64_t)counter[2]]);
 			else
-				printf("%02x ", vm_field_memory->field[(u_int8_t)counter[2]]);
+				printf("%02x ", vm_field_memory->field[(u_int64_t)counter[2]]);
 			counter[2] += 1;
 		}
 		printf("\n");

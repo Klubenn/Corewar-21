@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 19:13:16 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/18 13:43:17 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/18 18:23:48 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,9 @@ typedef struct s_player_process
 	bool		carry;
 	u_int8_t	reg[3];
 	u_int8_t	args[3];
-	u_int64_t	arg_position;
+	int64_t		arg_position;
 	u_int64_t	ident;
+	u_int64_t	parent;
 	struct s_player_process *next;
 	struct s_player_process *prev;
 	bool		flag;
