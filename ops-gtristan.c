@@ -135,12 +135,13 @@ void	op1(t_game_process *game_process, t_player_process *player_process,
 		if (arg == (-1 * player_list->position))
 		{
 			player_list->player->last_live_cycle_number = game_process->cycle_number;
+			// player_process->live_counter_valid += 1;
 			flag = true;
 			break ;
 		}
 		player_list = player_list->next;
 	}
-	player_process->live_counter += 1;
+	player_process->live_counter += (u_int64_t)1;
 	player_process->last_live_cycle_number = game_process->cycle_number;
 	print_operation_logs(player_process, &arg, game_process);
 	if ((game_process->flag_v & 1) && flag == true)

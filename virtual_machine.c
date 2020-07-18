@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 18:06:36 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/18 21:20:27 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/18 23:11:11 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,9 +142,9 @@ void check_alives(t_game_process *game_process,
 		}
 		else
 		{
-			if (player_process->live_counter > live_counter)
-				live_counter = player_process->live_counter;
-			// live_counter = live_counter + player_process->live_counter;
+			// if (player_process->live_counter > live_counter)
+			// 	live_counter = player_process->live_counter;
+			live_counter = live_counter + player_process->live_counter;
 			player_process->live_counter = 0;
 			player_process = player_process->next;
 		}
@@ -258,6 +258,7 @@ void play_corewar(t_game_process *game_process, t_player_list *player_list, int 
 		{
 			game_process->checks_counter += 1;
 			check_alives(game_process, &player_process);
+			// game_process->checks_counter += 1;
 			cycles_counter_between_checks = 0;
 			if (game_process->checks_counter == MAX_CHECKS)
 			{
