@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 18:06:36 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/18 19:03:34 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/18 20:47:26 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void check_alives(t_game_process *game_process,
 	player_process = *player_process_begin;
 	while(player_process)
 	{
-		if (player_process->live_counter == 0)
+		if (player_process->live_counter == 0 || game_process->cycle_to_die <= 0)
 		{
 			player_process_buff = player_process;
 			player_process = player_process->next;
@@ -224,7 +224,7 @@ void play_corewar(t_game_process *game_process, t_player_list *player_list, int 
 	player_process = create_processes(player_list, divider, vm_field_memory);
 	game_process->process_numbers = player_process->ident;
 	// printf("%llu\n", game_process->process_numbers);
-	while(game_process->cycle_to_die > 0 && player_process != NULL
+	while(/* game_process->cycle_to_die > 0 && */player_process != NULL
 			&& (game_process->dump_cycle == 0 || (game_process->dump_cycle > game_process->cycle_number)))
 	{
 		// if (cycles_counter_between_checks == game_process->cycle_to_die)
@@ -251,7 +251,7 @@ void play_corewar(t_game_process *game_process, t_player_list *player_list, int 
 		// game_process->cycle_number += 1;
 		// if (game_process->flag_v & (u_int8_t)2)
 		// 	printf("It is now cycle %llu\n", game_process->cycle_number);
-		if ((cycles_counter_between_checks == game_process->cycle_to_die && game_process->cycle_to_die > 0)
+		if ((cycles_counter_between_checks == game_process->cycle_to_die/* && game_process->cycle_to_die > 0*/)
 				|| game_process->cycle_to_die <= 0)
 		{
 			game_process->checks_counter += 1;
