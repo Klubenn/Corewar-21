@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 21:14:34 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/15 20:51:09 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/18 15:29:16 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,50 +32,117 @@
 // 	op1
 // };
 
-bool	move_pc(t_op *op_tab, t_player_process *player_process)
+void move_pc_logger(t_game_process *game_process, t_vm_field_memory *vm_field_memory,
+	t_player_process *player_process, int *counter)
+{
+	if (ft_strcmp(game_process->op_tab[player_process->operation_code].name, "zjmp") == 0
+		&& player_process->carry == true)
+		return ;
+	if (game_process->flag_v & 16)
+	{
+		printf("ADV %d (%#06x -> %#06x) ", counter[1], counter[2], (int)player_process->PC);
+		while ((int)counter[2] < (int)player_process->PC)
+		{
+			if ((int)counter[2] == (int)player_process->PC - 1)
+				printf("%02x", vm_field_memory->field[(u_int8_t)counter[2]]);
+			else
+				printf("%02x ", vm_field_memory->field[(u_int8_t)counter[2]]);
+			counter[2] += 1;
+		}
+		printf("\n");
+	}
+}
+
+bool	move_pc(t_op *op_tab, t_player_process *player_process,
+	t_game_process *game_process, t_vm_field_memory *vm_field_memory)
 {
 	u_int8_t	op_code;
-	int counter;
+	int counter[3];
 
-	counter = 0;
+	counter[0] = 0;
+	counter[1] = 0;
+	counter[2] = (int)(player_process->PC);
 	op_code = player_process->operation_code;
 	if (op_tab[op_code].have_a_code_type_code == 0)
 	{
 		if (op_tab[op_code].arg_types[0] == T_REG)
 		{
 			player_process->PC = (player_process->PC + 1) % MEM_SIZE;
+			counter[1] += 1;
 		}
 		else if (op_tab[op_code].arg_types[0] == T_IND)
 		{
 			player_process->PC = (player_process->PC + IND_SIZE) % MEM_SIZE;
+			counter[1] += IND_SIZE;
 		}
 		else if (op_tab[op_code].arg_types[0] == T_DIR)
 		{
 			player_process->PC = (player_process->PC + op_tab[op_code].dir_size) % MEM_SIZE;
+			counter[1] += op_tab[op_code].dir_size;
 		}
 		player_process->PC = (player_process->PC + 1) % MEM_SIZE;
+		counter[1] += 1;
+		move_pc_logger(game_process, vm_field_memory,
+			player_process, counter);
+		// if (game_process->flag_v & 16)
+		// {
+		// 	printf("ADV %d (%#06x -> %#06x) ", counter[1], counter[2], (int)player_process->PC);
+		// 	while ((int)counter[2] < (int)player_process->PC)
+		// 	{
+		// 		if ((int)counter[2] == (int)player_process->PC - 1)
+		// 			printf("%02x", vm_field_memory->field[(u_int8_t)counter[2]]);
+		// 		else
+		// 			printf("%02x ", vm_field_memory->field[(u_int8_t)counter[2]]);
+		// 		counter[2] += 1;
+		// 	}
+		// 	printf("\n");
+		// }
 		return(false);
 	}
-	while (counter < 3)
+	while (counter[0] < 3)
 	{
-		if (player_process->args[counter] == REG_CODE)
+		if (player_process->args[counter[0]] == REG_CODE)
 		{
 			player_process->PC = (player_process->PC + 1) % MEM_SIZE;
+			counter[1] += 1;
 		}
-		else if (player_process->args[counter] == IND_CODE)
+		else if (player_process->args[counter[0]] == IND_CODE)
 		{
 			player_process->PC = (player_process->PC + IND_SIZE) % MEM_SIZE;
+			counter[1] += IND_SIZE;
 		}
-		else if (player_process->args[counter] == DIR_CODE)
+		else if (player_process->args[counter[0]] == DIR_CODE)
 		{
 			player_process->PC = (player_process->PC + op_tab[op_code].dir_size) % MEM_SIZE;
+			counter[1] += op_tab[op_code].dir_size;
 		}
-		counter++;
+		counter[0]++;
 	}
-	if (player_process->PC == MEM_SIZE - 1)
-		player_process->PC = 1;
-	else
-		player_process->PC += 2;
+	// if (game_process->flag_v & 16)
+	// {
+	// 	printf("ADV %d (%#06x -> %#06x) ", counter[1], counter[2], (int)player_process->PC);
+	// 	while ((int)counter[2] < (int)player_process->PC)
+	// 	{
+	// 		if ((int)counter[2] == (int)player_process->PC - 1)
+	// 			printf("%02x", vm_field_memory->field[(u_int8_t)counter[2]]);
+	// 		else
+	// 			printf("%02x ", vm_field_memory->field[(u_int8_t)counter[2]]);
+	// 		counter[2] += 1;
+	// 	}
+	// 	printf("\n");
+	// }
+	player_process->PC = (player_process->PC + 2) % MEM_SIZE;
+	// if (player_process->PC == MEM_SIZE - 1)
+	// {
+	// 	player_process->PC = 1;
+	// }
+	// else
+	// {
+	// 	player_process->PC += 2;
+	// }
+	counter[1] += 2;
+	move_pc_logger(game_process, vm_field_memory,
+			player_process, counter);
 	return (false);
 }
 
@@ -116,13 +183,13 @@ bool	validation_before_operation_complete(t_game_process *game_process, t_player
 	{
 		comparator = (game_process->op_tab)[player_process->operation_code].arg_types[counter];
 		if (player_process->args[counter] == REG_CODE && !(comparator & T_REG))
-			return (move_pc(game_process->op_tab, player_process));
+			return (move_pc(game_process->op_tab, player_process, game_process, vm_field_memory));
 		else if (player_process->args[counter] == DIR_CODE && !(comparator & T_DIR))
-			return (move_pc(game_process->op_tab, player_process));
+			return (move_pc(game_process->op_tab, player_process, game_process, vm_field_memory));
 		else if (player_process->args[counter] == IND_CODE && !(comparator & T_IND))
-			return (move_pc(game_process->op_tab, player_process));
+			return (move_pc(game_process->op_tab, player_process, game_process, vm_field_memory));
 		else if (player_process->args[counter] == 0 && (comparator))
-			return (move_pc(game_process->op_tab, player_process));
+			return (move_pc(game_process->op_tab, player_process, game_process, vm_field_memory));
 		else
 			counter++;
 	}

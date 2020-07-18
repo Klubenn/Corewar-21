@@ -1,5 +1,7 @@
 .name "jdjfjfjf"
 .comment "kfjfjfjfj"
 
-ld %0, r2
-zjmp %-8
+live %1
+lfork %345
+aff r1
+

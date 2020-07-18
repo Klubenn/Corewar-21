@@ -4,4 +4,5 @@
 .comment "en fait C forker !"
 
 fork %23
+live %1
 

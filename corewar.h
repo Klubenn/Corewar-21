@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 19:13:16 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/17 23:08:04 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/18 13:43:17 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct s_game_process		/*Хранит*/
 	bool 		aff;
 	u_int64_t	process_numbers;
 	bool		flag_a;
-	u_int8_t		flag_v;
+	u_int8_t	flag_v;
 }				t_game_process;
 
 typedef struct s_player_process
@@ -113,6 +113,7 @@ t_player_process *players_operations_executing(t_game_process *game_process, t_p
 	t_player_list *player_list, t_vm_field_memory *vm_field_memory);
 void operation_completer(t_game_process *game_process, t_player_process *player_process,
 	t_player_list *player_list, t_vm_field_memory *vm_field_memory);
-bool	move_pc(t_op *op_tab, t_player_process *player_process);
+bool	move_pc(t_op *op_tab, t_player_process *player_process,
+	t_game_process *game_process, t_vm_field_memory *vm_field_memory);
 
 #endif
