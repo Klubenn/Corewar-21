@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 18:06:36 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/18 18:59:43 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/18 19:03:34 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,8 +269,6 @@ void play_corewar(t_game_process *game_process, t_player_list *player_list, int 
 			}
 		}
 	}
-	if (game_process->flag_v & (u_int8_t)2)
-			printf("It is now cycle %llu\n", game_process->cycle_number);
 	if (game_process->dump_cycle == game_process->cycle_number)
 		print_memory(vm_field_memory->field);
 	// else
