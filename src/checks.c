@@ -34,8 +34,48 @@ int check_params_num(char **params, int needed_num)
 	return ((i == needed_num) ? 1 : 0);
 }
 
+int check_reg(char* param)
+{
+    int reg;
 
-int check_type(char **params, t_op *op)
+    if (!param || !param[0] || param[0] != 'r' || !ft_isdigit(&param[1]))
+        return (0);
+    reg = ft_atoi(&param[1]);
+    if (reg > 0 && reg <= REG_NUMBER)
+        return (1);
+    return (0);
+}
+
+int check_param_correctness(char type, char* param)
+{
+    if (type & T_DIR)
+    {
+        if (!param || !param[0] || !param[1])
+            return (0);
+        if (param[1] == LABEL_CHAR)
+            return 1;//(check_label(&param[1]));
+        if (ft_strlen(param) >= 3 && param[1] == '-' && ft_isdigit(&param[2]))
+            return (1);
+        if (ft_isdigit(&param[1]))
+            return (1);
+    }
+    else if (type & T_IND)
+    {
+        if (!param || !param[0])
+            return (0);
+        if (param[0] == LABEL_CHAR)
+            return 1;//(check_label(ind));
+        if (ft_strlen(param) >= 2 && ft_isdigit(&param[1]) && param[0] == '-')
+            return (1);
+        if (ft_isdigit(param))
+            return (1);
+    }
+    else if (type & T_REG)
+        return check_reg(param);
+    return 0;
+}
+
+int check_params(char **params, t_op *op)
 {
     char type;
     char *param;
@@ -62,7 +102,7 @@ char get_type(char *param)
     if (trim_param[0] == 'r' || trim_param[0] == '-')
         return (T_REG);
 
-    if (trim_param[0] == '%')
+    if (trim_param[0] == DIRECT_CHAR)
     {
         if (ft_isdigit(trim_param[1]) || trim_param[1] == '-')
             return (T_DIR);
@@ -96,7 +136,7 @@ int check_param(t_struct *data, char *str, t_op *op)// str2 already starts with 
 
 	if (!(params = ft_strsplit(str, SEPARATOR_CHAR)))
 	    return (MALLOC_FAIL);
-	if (!(check_params_num(params, op->arg_num) && check_type(params, op)) )
+	if (!(check_params_num(params, op->arg_num) && check_params(params, op)) )
 	{
         free_arr(params);
         free(str);
