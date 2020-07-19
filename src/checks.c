@@ -98,23 +98,21 @@ char get_type(char *param)
     char *trim_param;
 
     trim_param = param + skip_spaces(param);
-    if (ft_isdigit(trim_param[0]))
+    if (ft_isdigit(trim_param[0]) || trim_param[0] == '-')
         return (T_IND);
-    if (trim_param[0] == 'r' || trim_param[0] == '-')
+    if (trim_param[0] == 'r')
         return (T_REG);
-
     if (trim_param[0] == DIRECT_CHAR)
     {
         if (ft_isdigit(trim_param[1]) || trim_param[1] == '-')
             return (T_DIR);
 
         if (trim_param[1] == ':')
-            return (T_DIR | T_LAB);//todo remove T_LAB
+            return (T_DIR | T_LAB);
     }
-
     if (trim_param[0] == ':')
-        return (T_IND | T_LAB);//todo remove T_LAB
-    return (0);//TODO проверить, может ли быть ошибка, если да, то какой ретюрн
+        return (T_IND | T_LAB);
+    return (0);
 }
 
 

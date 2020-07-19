@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/asm.h"
 
 static int	ft_buf_to_line(char *buff, size_t i, char **line, char **buf_list)
 {
@@ -60,21 +60,17 @@ static int	ft_read(const int fd, char **buf_list, char **line)
 
 static int	ft_prev_proc(char **buf_list, char **line)
 {
-	char	*a;
+	char	*rest;
 	char	*tmp;
-	int		c;
-	int		d;
-	int		j;
+	int		len;
 
-	a = ft_strchr(*buf_list, '\n');
-	c = ft_strlen(*buf_list);
-	if (a)
+	rest = ft_strchr(*buf_list, '\n');
+	if (rest)
 	{
-		d = ft_strlen(a);
-		j = c - d;
-		if (!(*line = ft_strndup(*buf_list, j)))
+		len = rest - *buf_list;
+		if (!(*line = ft_strndup(*buf_list, len)))
 			return (-1);
-		if (!(tmp = ft_strsub(*buf_list, j + 1, BUFF_SIZE)))
+		if (!(tmp = ft_strsub(*buf_list, len + 1, BUFF_SIZE)))
 			return (-1);
 		free(*buf_list);
 		*buf_list = tmp;

@@ -12,7 +12,6 @@
 
 #include <stdio.h>
 #include <unistd.h>
-#include "libft.h"
 #include "op.h"
 #include "asm.h"
 
@@ -121,7 +120,7 @@ int		continue_reading(int fd, char **string, t_struct *data)
 	char *tmp2;
 	tmp1 = ft_strdup("\n");
 	big = NULL;
-	while(gnl(fd, &small, &(data->gnl_buf)) > 0 && ++(data->line))
+	while(get_next_line(fd, &small) > 0 && ++(data->line))
 	{
 		data->str = small;
 		if ((tmp2 = ft_strchr(small, '"')))
@@ -233,7 +232,7 @@ void	is_valid_file(char *file_name, t_struct *data)
 	flag = 1;
 	if ((fd = open(file_name, O_RDONLY)) == -1)
 		error_management(NO_FILE, data);
-	while (gnl(fd, &str, &(data->gnl_buf)) > 0 && ++(data->line))
+	while (get_next_line(fd, &str) > 0 && ++(data->line))
 	{
 		data->str = str;
 		if (!data->name || !data->comment)

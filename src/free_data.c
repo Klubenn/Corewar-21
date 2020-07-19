@@ -87,7 +87,7 @@ void	error_management(int err, t_struct *data)
 		}
 		print_error_message(err);
 		if (data->str)
-			ft_putstr_fd(data->str, 2);
+			ft_putendl_fd(data->str, 2);
 	}
 	if (data)
 		free_data(data);
