@@ -6,6 +6,7 @@
 #include "libft/libft.h"
 #include <fcntl.h>
 #include "op.h"
+#include <time.h>
 
 //todo поменять считывание операции после перемещения
 
@@ -66,10 +67,10 @@ void print_operation_logs(t_player_process *player_process, int32_t	*arg_value, 
 	{
 		if (ft_strcmp(game_process->op_tab[player_process->operation_code].name, "fork") == 0 ||
 			ft_strcmp(game_process->op_tab[player_process->operation_code].name, "lfork") == 0)
-			printf("P%5.llu | %s",
+			printf("P %4.llu | %s",
 				player_process->parent, game_process->op_tab[player_process->operation_code].name);
 		else
-			printf("P%5.llu | %s",
+			printf("P %4.llu | %s",
 				player_process->ident, game_process->op_tab[player_process->operation_code].name);
 		print_args(player_process, arg_value, game_process);
 	}
@@ -237,12 +238,14 @@ void op3(t_game_process *game_process, t_player_process *player_process,
 	vm_field_memory->modulo = false;
 	player_process->arg_position = (player_process->PC + 2) % MEM_SIZE;
 	arg_value[0] = process_args(0, player_process, vm_field_memory);
-	if (player_process->args[1] == REG_CODE)
+	if (player_process->args[1] == REG_CODE
+			&& player_process->arg_position >= 0)
 	{
 		arg_value[1] = (u_int8_t)vm_field_memory->field[(player_process->arg_position) % MEM_SIZE];
 		player_process->reg[1] = arg_value[1];
 	}
-	else if (player_process->args[1] == IND_CODE)
+	else if (player_process->args[1] == IND_CODE
+				&& player_process->arg_position >= 0)
 		arg_value[1] = take_value_from_field(vm_field_memory, player_process, 2, DIR_CODE);
 	// arg_value[0] = (u_int8_t)vm_field_memory->field[(player_process->arg_position) % MEM_SIZE];
 	// arg_value[1] = process_args(1, player_process, vm_field_memory);
@@ -496,9 +499,7 @@ void	op12(t_game_process *game_process, t_player_process *player_process,
 	int64_t			bias;
 
 	vm_field_memory->modulo = false;
-	new = player_process;
-	while (new->prev)
-		new = new->prev;
+	new = game_process->beginner;
 	new->prev = (t_player_process *)ft_memalloc(sizeof(t_player_process));
 	ft_memcpy(new->prev, player_process, sizeof(t_player_process));
 	// printf("%d\n", (*((short *)(&(vm_field_memory->field[player_process->PC
@@ -509,8 +510,10 @@ void	op12(t_game_process *game_process, t_player_process *player_process,
 	new->prev->cycles_to_wait = 0;
 	new->prev->next = new;
 	new->prev->prev = NULL;
+	game_process->beginner = new->prev;
 	new->prev->ident = game_process->process_numbers + 1;
 	new->prev->parent = player_process->ident;
+	new->prev->live_counter = 0;
 	game_process->process_numbers += 1;
 	// player_process->PC = (player_process->PC + 3) % MEM_SIZE;
 	print_operation_logs(new->prev, ((int32_t *)(&bias)), game_process);
@@ -588,9 +591,11 @@ void	op15(t_game_process *game_process, t_player_process *player_process,
 	t_player_process *new;
 	int64_t			bias;
 
-	new = player_process;
-	while (new->prev)
-		new = new->prev;
+	// new = player_process;
+	new = game_process->beginner;
+	// while (new->prev)
+	// 	new = new->prev;
+	// printf("%llu\n", loop);
 	vm_field_memory->modulo = false;
 	new->prev = (t_player_process *)ft_memalloc(sizeof(t_player_process));
 	ft_memcpy(new->prev, player_process, sizeof(t_player_process));
@@ -601,8 +606,10 @@ void	op15(t_game_process *game_process, t_player_process *player_process,
 	new->prev->cycles_to_wait = 0;
 	new->prev->next = new;
 	new->prev->prev = NULL;
+	game_process->beginner = new->prev;
 	new->prev->ident = game_process->process_numbers + 1;
 	new->prev->parent = player_process->ident;
+	new->prev->live_counter = 0;
 	game_process->process_numbers += 1;
 	print_operation_logs(new->prev, ((int32_t *)(&bias)), game_process);
 	move_pc(game_process->op_tab, player_process, game_process, vm_field_memory);
@@ -620,7 +627,9 @@ void 	op16(t_game_process *game_process, t_player_process *player_process,
 	player_process->reg[0] = (int32_t)regnum;
 	if (regnum > 0 &&
 		regnum <= REG_NUMBER &&
-			game_process->flag_a)
+			game_process->flag_a
+			/*&& (32 <= (char)player_process->registers[regnum * REG_SIZE - REG_SIZE]
+					&& (char)player_process->registers[regnum * REG_SIZE - REG_SIZE] < 127)*/)
 		printf("Aff: %c\n", player_process->registers[regnum * REG_SIZE - REG_SIZE]);
 	// print_operation_logs(player_process, 0, game_process);
 	move_pc(game_process->op_tab, player_process, game_process, vm_field_memory);

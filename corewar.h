@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 19:13:16 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/18 18:23:48 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/19 15:51:42 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,6 @@ typedef struct 			s_player
 	u_int64_t			last_live_cycle_number;
 }						t_player;
 
-typedef struct s_game_process		/*Хранит*/
-{
-	u_int64_t	cycle_number;
-	int64_t		cycle_to_die;
-	u_int64_t	dump_cycle;
-	u_int64_t	number_of_live_since_last_check;
-	u_int64_t	checks_counter;
-	t_op		*op_tab;
-	bool 		aff;
-	u_int64_t	process_numbers;
-	bool		flag_a;
-	u_int8_t	flag_v;
-}				t_game_process;
-
 typedef struct s_player_process
 {
 	u_int64_t	PC;
@@ -53,6 +39,7 @@ typedef struct s_player_process
 	u_int8_t	registers[REG_NUMBER*REG_SIZE];
 	u_int64_t	cycles_to_wait;
 	u_int64_t	live_counter;
+	// u_int64_t	live_counter_valid;
 	u_int64_t	last_live_cycle_number;
 	bool		carry;
 	u_int8_t	reg[3];
@@ -65,6 +52,21 @@ typedef struct s_player_process
 	bool		flag;
 	
 }				t_player_process;
+
+typedef struct s_game_process		/*Хранит*/
+{
+	u_int64_t	cycle_number;
+	int64_t		cycle_to_die;
+	u_int64_t	dump_cycle;
+	u_int64_t	number_of_live_since_last_check;
+	u_int64_t	checks_counter;
+	t_op		*op_tab;
+	bool 		aff;
+	u_int64_t	process_numbers;
+	bool		flag_a;
+	u_int8_t	flag_v;
+	t_player_process	*beginner;
+}				t_game_process;
 
 typedef struct			s_player_list
 {
@@ -116,5 +118,7 @@ void operation_completer(t_game_process *game_process, t_player_process *player_
 	t_player_list *player_list, t_vm_field_memory *vm_field_memory);
 bool	move_pc(t_op *op_tab, t_player_process *player_process,
 	t_game_process *game_process, t_vm_field_memory *vm_field_memory);
+t_player_process *create_processes(t_player_list *player_list,
+	int divider, t_vm_field_memory *vm_field_memory, t_game_process *game_process);
 
 #endif

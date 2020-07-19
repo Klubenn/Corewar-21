@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 21:14:34 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/18 20:37:19 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/19 17:09:25 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "libft/libft.h"
 #include <fcntl.h>
 #include "op.h"
+#include <time.h>
 
 // void	op1(t_game_process *game_process, t_player_process *player_process,
 // 	t_player_list *player_list, t_vm_field_memory *vm_field_memory)
@@ -230,6 +231,8 @@ t_player_process *players_operations_executing(t_game_process *game_process, t_p
 {
 	int counter;
 	t_player_process *begin;
+	clock_t			start, stop;
+	static u_int64_t loop = 0;
 
 	counter = 0;
 	begin = player_process;
@@ -294,7 +297,5 @@ t_player_process *players_operations_executing(t_game_process *game_process, t_p
 		player_process = player_process->next;
 
 	}
-	while (begin->prev)
-		begin = begin->prev;
-	return(begin);
+	return(game_process->beginner);
 }

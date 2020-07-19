@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 18:06:36 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/18 23:11:11 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/19 17:14:03 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include "op.h"
 
 t_player_process *create_processes(t_player_list *player_list,
-	int divider, t_vm_field_memory *vm_field_memory)
+	int divider, t_vm_field_memory *vm_field_memory, t_game_process *game_process)
 {
 	t_player_process	*begin;
 	t_player_process	*player_process;
@@ -53,6 +53,7 @@ t_player_process *create_processes(t_player_list *player_list,
 			player_process->carry = false;
 			player_process->PC = (MEM_SIZE / divider) * (player_list->position - 1);
 			player_process->operation_code = vm_field_memory->field[player_process->PC];
+			game_process->beginner = player_process;
 			player_process->cycles_to_wait = (vm_field_memory->op_tab)[(vm_field_memory->field)[player_process->PC]].cycles_before_complete;
 			// printf("%llu %llu %llu\n", player_process->ident, player_process->PC, player_process->cycles_to_wait);
 		}
@@ -128,9 +129,13 @@ void check_alives(t_game_process *game_process,
 	player_process = *player_process_begin;
 	while(player_process)
 	{
-		if (player_process->live_counter == 0 || game_process->cycle_to_die <= 0)
+		if ((player_process->live_counter == 0 &&
+				game_process->cycle_number - player_process->last_live_cycle_number >= game_process->cycle_to_die)
+					|| game_process->cycle_to_die <= 0)
 		{
 			player_process_buff = player_process;
+			if (game_process->beginner == player_process_buff)
+				game_process->beginner = player_process->next;
 			player_process = player_process->next;
 			if (game_process->flag_v & 8)
 				printf("Process %llu hasn't lived for %llu cycles (CTD %d)\n",
@@ -182,7 +187,7 @@ void winner_definer(t_player_list *player_list)
 		}
 		player_list = player_list->prev;
 	}
-	printf("Player %d (%s) won\n", winner_number, winner_name);
+	printf("Contestant %d, \"%s\", has won !\n", winner_number, winner_name);
 }
 
 void print_memory(unsigned char *field)
@@ -223,7 +228,7 @@ void play_corewar(t_game_process *game_process, t_player_list *player_list, int 
 	checks_counter = 0;
 	game_process->cycle_to_die = CYCLE_TO_DIE;
 	game_process->cycle_number = 0;
-	player_process = create_processes(player_list, divider, vm_field_memory);
+	player_process = create_processes(player_list, divider, vm_field_memory, game_process);
 	game_process->process_numbers = player_process->ident;
 	// printf("%llu\n", game_process->process_numbers);
 	while(/* game_process->cycle_to_die > 0 && */player_process != NULL

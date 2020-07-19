@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 15:53:54 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/18 00:18:19 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/19 18:44:43 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int check_nulls_and_code_size(int count, char *str, t_player *player, char **arg
 		  		| str[14 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0 | str[15 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0)
 	{
 		printf("Error : mistake in the separating nulls\n");
-		exit(1);
+		exit(-1);
 	}
 	code_size_point = (unsigned char *)ft_memalloc(4);
 	while (j < 4)
@@ -131,7 +131,7 @@ void check_magic_header(char *str, char **argv, t_player *player)
 		| (unsigned char)str[2] != 0x83 | (unsigned char)str[3] != 0xf3)
 	{
 		printf("Error: File %s has an invalid header\n", *argv);
-		exit(1);
+		exit(-1);
 	}
 	helper[0] = str[3];
 	helper[1] = str[2];
@@ -188,7 +188,7 @@ void put_in_stack_of_players_helper(t_player_list **player_list, t_player *playe
 		if (pos == player_list_loc->position && pos != 0)
 		{
 			printf("Usage:\n  -dump [nbr] : dump memory after nbr cycles\n  -n [pos] : specify player's position\n  -a : shows aff's operation result\n");
-			exit(1);
+			exit(-1);
 		}
 		player_list_loc->next = (t_player_list *)ft_memalloc(sizeof(t_player_list));
 		player_list_loc->next->prev = player_list_loc;
@@ -374,27 +374,27 @@ void check_position(t_player_list *player_list_1, t_player_list *player_list_2)
 	if (len > MAX_PLAYERS)
 	{
 		printf("Too many champions\n");
-		exit(1);
+		exit(-1);
 	}
 	while (player_list_2 != 0)
 	{
 		if (player_list_2->position > len)
 		{
 			printf("Usage:\n  -dump [nbr] : dump memory after nbr cycles\n  -n [pos] : specify player's position\n  -a : shows aff's operation result\n");
-			exit(1);
+			exit(-1);
 		}
 		// printf("%d\n", len);
 		// if (len > 4)
 		// {
 		// 	printf("Too many champions\n");
-		// 	exit(1);
+		// 	exit(-1);
 		// }
 		player_list_2 = player_list_2->next;
 	}
 	if (len == 0)
 	{
 		printf("Usage:\n  -dump [nbr] : dump memory after nbr cycles\n  -n [pos] : specify player's position\n  -a : shows aff's operation result\n");
-		exit(1);
+		exit(-1);
 	}
 }
 
@@ -424,7 +424,7 @@ void parse_arguments(char **argv, t_game_process *game_process, t_player_list **
 			else
 			{
 				printf("Usage:\n  -dump [nbr] : dump memory after nbr cycles\n  -n [pos] : specify player's position\n  -a : shows aff's operation result\n");
-				exit(1);
+				exit(-1);
 			}
 		}
 		else if (ft_strcmp(*argv, "-n") == 0)
@@ -440,7 +440,7 @@ void parse_arguments(char **argv, t_game_process *game_process, t_player_list **
 			else
 			{
 				printf("Usage:\n  -dump [nbr] : dump memory after nbr cycles\n  -n [pos] : specify player's position\n  -a : shows aff's operation result\n");
-				exit(1);
+				exit(-1);
 			}
 		}
 		else if (ft_strcmp(*argv, "-a") == 0)
@@ -452,7 +452,7 @@ void parse_arguments(char **argv, t_game_process *game_process, t_player_list **
 			else
 			{
 				printf("Usage:\n  -dump [nbr] : dump memory after nbr cycles\n  -n [pos] : specify player's position\n  -a : shows aff's operation result\n");
-				exit(1);
+				exit(-1);
 			}
 			argv++;
 		}
