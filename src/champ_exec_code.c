@@ -134,7 +134,7 @@ void arguments_code(int fd, t_struct *data, t_instruction *instruction)
 	i = 0;
 	while (i < instruction->num_of_args)
 	{
-		func[instruction->args_of_func[i]->type](fd, data, instruction, instruction->args_of_func[i]);
+		func[(instruction->args_of_func[i]->type)&(T_REG | T_DIR | T_IND)](fd, data, instruction, instruction->args_of_func[i]);
 		i++;
 	}
 }

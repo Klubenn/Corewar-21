@@ -16,7 +16,7 @@
 #include "op.h"
 #include "asm.h"
 
-char 		*trim_start(char *str, t_struct *data)
+char 		*trim_start(char *str)
 {
 	if (str)
 	{
@@ -80,7 +80,7 @@ int	check_other_strings(char *str, t_struct *data)
 		free(cut_str);
 		return (SYNTAX_ERROR);
 	}
-	str = trim_start(cut_str + ft_strlen(op->name), data);
+	str = trim_start(cut_str + ft_strlen(op->name));
 	result = check_param(data, str, op);
 	free(cut_str);
 	return (result);
@@ -160,7 +160,7 @@ int		extract_name_comment(char *str, t_struct *data, int fd, int len)
 	char *add_string;
 	int i;
 
-	str = trim_start(str, data);
+	str = trim_start(str);
 	if (!*str || *str != '"')
 		return(QUOTES_BEGIN);
 	i = 1;
@@ -184,7 +184,7 @@ void	process_name_and_comment(char *str, t_struct *data, int fd)
 {
 	int err;
 
-	str = trim_start(str, data);
+	str = trim_start(str);
 	if (*str == COMMENT_CHAR || !*str)
 		return ;
 	if (ft_strnequ(str, NAME_CMD_STRING, 5))
@@ -202,7 +202,7 @@ void		process_string(char *str, t_struct *data, int fd)
 	int		error;
 	char	*str_trim;
 
-	str_trim = trim_start(str, data);
+	str_trim = trim_start(str);
 	if (!*str_trim || *str_trim == COMMENT_CHAR)
 		return ;
 	if (*str_trim == '.')
@@ -224,7 +224,7 @@ void		process_string(char *str, t_struct *data, int fd)
 	}
 }
 
-void	*is_valid_file(char *file_name, t_struct *data)
+void	is_valid_file(char *file_name, t_struct *data)
 {
 	int			fd;
 	int 		flag;
@@ -285,8 +285,8 @@ int		main(int ac, char **av)
 	i = 1;
 	if (ac < 2)
 		error_management(USAGE, NULL);
-	while (i < ac)
-	{
+//	while (i < ac)
+//	{
 		if (!(data = change_extension(av[i])))
 			error_management(FILE_NAME, NULL);
 		else
@@ -295,14 +295,12 @@ int		main(int ac, char **av)
 			instructions_position(data);
 			check_labels(data);
 			to_bytecode(data);
-
 			ft_putstr("file ");
 			ft_putstr(data->file_name);
 			ft_putendl(" was successfully created");//как альтернатива
-
 			free_data(data);
 		}
-		i++;
-	}
+//		i++;
+//	}
 	return (0);
 }

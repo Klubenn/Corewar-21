@@ -34,40 +34,40 @@ int check_params_num(char **params, int needed_num)
 	return ((i == needed_num) ? 1 : 0);
 }
 
-int check_reg(char* param)
+int check_reg(char *param)
 {
     int reg;
 
-    if (!param || !param[0] || param[0] != 'r' || !ft_isdigit(&param[1]))
+    if (!param || !param[0] || param[0] != 'r' || !ft_isdigit(param[1]))
         return (0);
-    reg = ft_atoi(&param[1]);
+    reg = ft_atoi(param + 1);
     if (reg > 0 && reg <= REG_NUMBER)
         return (1);
     return (0);
 }
 
-int check_param_correctness(char type, char* param)
+int check_param_correctness(unsigned char type, char* param)
 {
     if (type & T_DIR)
     {
         if (!param || !param[0] || !param[1])
             return (0);
-        if (param[1] == LABEL_CHAR)
-            return 1;//(check_label(&param[1]));
-        if (ft_strlen(param) >= 3 && param[1] == '-' && ft_isdigit(&param[2]))
+        if (type & T_LAB)
             return (1);
-        if (ft_isdigit(&param[1]))
+        if (ft_strlen(param) >= 3 && param[1] == '-' && ft_isdigit(param[2]))
+            return (1);
+        if (ft_isdigit(param[1]))
             return (1);
     }
     else if (type & T_IND)
     {
         if (!param || !param[0])
             return (0);
-        if (param[0] == LABEL_CHAR)
-            return 1;//(check_label(ind));
-        if (ft_strlen(param) >= 2 && ft_isdigit(&param[1]) && param[0] == '-')
+        if (type & T_LAB)
             return (1);
-        if (ft_isdigit(param))
+        if (ft_strlen(param) >= 2 && ft_isdigit(param[1]) && param[0] == '-')
+            return (1);
+        if (ft_isdigit(param[0]))
             return (1);
     }
     else if (type & T_REG)
@@ -77,15 +77,16 @@ int check_param_correctness(char type, char* param)
 
 int check_params(char **params, t_op *op)
 {
-    char type;
+    unsigned char type;
     char *param;
     int i;
 
     i = 0;
-    while (i < op->arg_num) {
-        param = params[i] + skip_spaces(params[i]);
+    while (i < op->arg_num)
+    {
+        param = params[i];
         type = get_type(param);
-        if (!(type & op->arg[i]))
+        if (!(type & op->arg[i]) || !check_param_correctness(type, param))
             return (0);
         i++;
     }
@@ -119,34 +120,30 @@ char get_type(char *param)
 
 void free_arr(char **arr)
 {
-    char *tmp;
+	int i;
 
-    tmp = *arr;
-    while (tmp != NULL)
-    {
-        free(tmp);
-        tmp++;
-    }
-    free(arr);
+	i = 0;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
 }
 
 int check_param(t_struct *data, char *str, t_op *op)// str2 already starts with word! not contains comments
 {
 	char **params;
 
-	if (!(params = ft_strsplit(str, SEPARATOR_CHAR)))
+	if (!(params = split_corewar(str)))
 	    return (MALLOC_FAIL);
 	if (!(check_params_num(params, op->arg_num) && check_params(params, op)) )
 	{
         free_arr(params);
-        free(str);
         return (SYNTAX_ERROR);
     }
 	else
-	{
-        free(str);
         return (create_instruction(op, params, data));
-	}
 }
 
 void push_back(t_struct *data, t_instruction *instruction)
@@ -174,10 +171,10 @@ int create_instruction(t_op *op, char **params, t_struct *data)
         return (MALLOC_FAIL);
 
     instruction->op = op;
-    instruction->num_of_args = op->arg_num;//todo add to the new version
-
+    instruction->num_of_args = op->arg_num;
+	instruction->function = op->func_num;
 	if (!(create_args(instruction->args_of_func, params)))
-		return (SYNTAX_ERROR);// or syntaxis
+		return (SYNTAX_ERROR);
 
     if (data->label_present == 1)
     {
@@ -200,7 +197,6 @@ int create_args(t_args **args_of_func, char **params)
 {
     int i;
 	unsigned char type;
-	char *cutted_string;
 
     i = 0;
     while (params[i])
@@ -209,9 +205,9 @@ int create_args(t_args **args_of_func, char **params)
 			!(type = get_type(params[i])))
 			return (0);
 
-		args_of_func[i]->type = type;
+		args_of_func[i]->type = type;//todo совместить с предыдущей проверкой типа
 
-		if ((check_ending(params[i] + skip_word(params[i]))))
+		if (check_ending(params[i] + skip_word(params[i])))
 			return (0);
 		args_of_func[i]->str = params[i];
         i++;

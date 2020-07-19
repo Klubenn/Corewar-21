@@ -83,9 +83,9 @@ int		argument_size(t_instruction *instruction)
 	while (num-- > 0)
 	{
 		size = 0;
-		size += instruction->args_of_func[num]->type == T_DIR ? op_data->t_dir_size : 0;
-		size += instruction->args_of_func[num]->type == T_IND ? 2 : 0;
-		size += instruction->args_of_func[num]->type == T_REG ? 1 : 0;
+		size += (instruction->args_of_func[num]->type & T_DIR) ? op_data->t_dir_size : 0;
+		size += (instruction->args_of_func[num]->type & T_IND) ? 2 : 0;
+		size += (instruction->args_of_func[num]->type & T_REG) ? 1 : 0;
 		size_total += size;
 		instruction->args_of_func[num]->size = size;
 	}

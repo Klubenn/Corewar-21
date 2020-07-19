@@ -100,7 +100,7 @@ int			gnl(const int fd, char **line, char **gnl_buf)
 	e = ft_read(fd, gnl_buf, line);
 	if (e != 0)
 		return (e);
-	if (*gnl_buf && *gnl_buf[0])
+	if (*gnl_buf)
 	{
 		if (!(*line = ft_strdup(*gnl_buf)))
 			return (-1);
