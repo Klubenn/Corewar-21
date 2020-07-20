@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 21:14:34 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/19 17:09:25 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/20 14:52:31 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,7 @@ bool	validation_before_operation_complete(t_game_process *game_process, t_player
 	player_process->args[0] = (args_type_code & 192) >> 6;
 	player_process->args[1] = (args_type_code & 48) >> 4;
 	player_process->args[2] = (args_type_code & 12) >> 2;
-	while (counter < 3)
+	while (counter < game_process->op_tab[player_process->operation_code].args_number)
 	{
 		comparator = (game_process->op_tab)[player_process->operation_code].arg_types[counter];
 		if (player_process->args[counter] == REG_CODE && !(comparator & T_REG))
@@ -251,6 +251,9 @@ t_player_process *players_operations_executing(t_game_process *game_process, t_p
 				// move_pc(game_process->op_tab, player_process);
 				// move_pc(game_process->op_tab, player_process);
 			}
+			player_process->args[0] = 0;
+			player_process->args[1] = 0;
+			player_process->args[2] = 0;
 //				player_process->operation_code = vm_field_memory->
 //					field[player_process->PC];
 //				if ((1 <= vm_field_memory->field[player_process->PC]) &&

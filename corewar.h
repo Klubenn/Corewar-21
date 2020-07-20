@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 19:13:16 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/19 15:51:42 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/20 23:13:28 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <unistd.h>
 # include "op.h"
 # include <stdbool.h>
+# include <errno.h>
 
 typedef struct s_vm_field_memory
 {
@@ -28,7 +29,7 @@ typedef struct 			s_player
 	t_header			player_header;
 	int					ident;
 	unsigned char		*code;
-	u_int64_t			last_live_cycle_number;
+	// u_int64_t			last_live_cycle_number;
 }						t_player;
 
 typedef struct s_player_process
@@ -53,11 +54,22 @@ typedef struct s_player_process
 	
 }				t_player_process;
 
+typedef struct			s_player_list
+{
+	t_player					*player;
+	int							position;
+	struct s_player_list		*next;
+	struct s_player_list		*prev;
+}						t_player_list;
+
 typedef struct s_game_process		/*Хранит*/
 {
 	u_int64_t	cycle_number;
 	int64_t		cycle_to_die;
 	u_int64_t	dump_cycle;
+	u_int64_t	d_cycle;
+	bool		dump_flag;
+	int			bytes_dump_per_line;
 	u_int64_t	number_of_live_since_last_check;
 	u_int64_t	checks_counter;
 	t_op		*op_tab;
@@ -66,15 +78,8 @@ typedef struct s_game_process		/*Хранит*/
 	bool		flag_a;
 	u_int8_t	flag_v;
 	t_player_process	*beginner;
+	t_player_list		*last_live_player;
 }				t_game_process;
-
-typedef struct			s_player_list
-{
-	t_player					*player;
-	int							position;
-	struct s_player_list		*next;
-	struct s_player_list		*prev;
-}						t_player_list;
 
 // void (*operation[16])(t_game_process *game_process, t_player_process *player_process,
 // 	t_player_list *player_list, t_vm_field_memory *vm_field_memory) =

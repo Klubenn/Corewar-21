@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 15:53:54 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/19 18:44:43 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/20 23:22:34 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,12 +212,16 @@ void put_in_stack_of_players(int pos, char *player_name, t_player_list **player_
 	if (ft_strstr(player_name, ".cor") == NULL)
 	{
 		printf("Wrong file format %s\n", player_name);
+		errno = -1;
+		return ;
 		exit (1);
 	}
 	if (fd < 0)
 	{
 		printf("Can't read source file %s\n", player_name);
-		exit (1);
+		errno = -1;
+		exit (-1);
+		return ;
 	}
 	player = (t_player *)ft_memalloc(sizeof(t_player));
 	players_reader_parse_champions(fd, player, &player_name);
@@ -309,7 +313,7 @@ t_player_list *player_stack_creator(t_player_list *player_list_1,
 				player_list_final->position = player_list_buff->position;
 				player_list_final->next = NULL;
 				player_list_final->prev = NULL;
-				player_list_final->player->last_live_cycle_number = 0;
+				// player_list_final->player->last_live_cycle_number = 0;
 				player_list_final_begin = player_list_final;
 				player_list_2 = stack_deleter(player_list_buff, 0);
 			}
@@ -321,7 +325,7 @@ t_player_list *player_stack_creator(t_player_list *player_list_1,
 				player_list_final->player = player_list_buff->player;
 				player_list_final->position = player_list_buff->position;
 				player_list_final->next = NULL;
-				player_list_final->player->last_live_cycle_number = 0;
+				// player_list_final->player->last_live_cycle_number = 0;
 				player_list_2 = stack_deleter(player_list_buff, 0);
 			}
 		}
@@ -334,7 +338,7 @@ t_player_list *player_stack_creator(t_player_list *player_list_1,
 				player_list_final->position = count;
 				player_list_final->next = NULL;
 				player_list_final->prev = NULL;
-				player_list_final->player->last_live_cycle_number = 0;
+				// player_list_final->player->last_live_cycle_number = 0;
 				player_list_final_begin = player_list_final;
 				player_list_1 = stack_deleter(player_list_1, 1);
 			}
@@ -346,7 +350,7 @@ t_player_list *player_stack_creator(t_player_list *player_list_1,
 				player_list_final->player = player_list_1->player;
 				player_list_final->position = count;
 				player_list_final->next = NULL;
-				player_list_final->player->last_live_cycle_number = 0;
+				// player_list_final->player->last_live_cycle_number = 0;
 				player_list_1 = stack_deleter(player_list_1, 1);
 			}
 		}
@@ -403,8 +407,12 @@ void parse_arguments(char **argv, t_game_process *game_process, t_player_list **
 	t_player_list *player_list_1;
 	t_player_list *player_list_2;
 	int count_dump;
+	int count_d;
+	int count_v;
 
 	count_dump = 0;
+	count_d = 0;
+	count_v = 0;
 	player_list_1 = NULL;
 	player_list_2 = NULL;
 	game_process->flag_a  = false;
@@ -414,16 +422,38 @@ void parse_arguments(char **argv, t_game_process *game_process, t_player_list **
 		if (ft_strcmp(*argv, "-dump") == 0)
 		{
 			argv++;
-			if (ft_atoi(*argv) >= 0 &&
+			if (*argv && ft_atoi(*argv) >= 0 &&
 					check_atoi_honest(*argv) == 1 &&
-						count_dump == 0)
+						count_dump == 0 && count_d == 0)
 			{
 				game_process->dump_cycle = ft_atoi(*argv);
+				game_process->bytes_dump_per_line = 32;
+				game_process->dump_flag = true;
 				count_dump++;
 			}
 			else
 			{
 				printf("Usage:\n  -dump [nbr] : dump memory after nbr cycles\n  -n [pos] : specify player's position\n  -a : shows aff's operation result\n");
+				errno = -1;
+				exit(-1);
+			}
+		}
+		else if (ft_strcmp(*argv, "-d") == 0)
+		{
+			argv++;
+			if (*argv && ft_atoi(*argv) >= 0 &&
+					check_atoi_honest(*argv) == 1 &&
+						count_dump == 0 && count_d == 0)
+			{
+				game_process->d_cycle = ft_atoi(*argv);
+				game_process->bytes_dump_per_line = 64;
+				game_process->dump_flag = true;
+				count_d++;
+			}
+			else
+			{
+				printf("Usage:\n  -dump [nbr] : dump memory after nbr cycles\n  -n [pos] : specify player's position\n  -a : shows aff's operation result\n");
+				errno = -1;
 				exit(-1);
 			}
 		}
@@ -447,7 +477,7 @@ void parse_arguments(char **argv, t_game_process *game_process, t_player_list **
 			game_process->flag_a = true;
 		else if (ft_strcmp(*argv, "-v") == 0)
 		{
-			if (*(argv + 1) != 0)
+			if (*(argv + 1) != 0 && count_v == 0)
 				game_process->flag_v = (uint8_t)(ft_atoi(*(argv + 1)));
 			else
 			{
@@ -455,6 +485,7 @@ void parse_arguments(char **argv, t_game_process *game_process, t_player_list **
 				exit(-1);
 			}
 			argv++;
+			count_v++;
 		}
 		else
 			put_in_stack_of_players(0, *argv, &player_list_1);

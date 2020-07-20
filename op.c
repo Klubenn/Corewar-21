@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 19:43:05 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/17 18:20:42 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/20 23:19:58 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_op    op_tab[17] =
 	{"sti", 3, {T_REG, T_REG | T_DIR | T_IND, T_DIR | T_REG}, 11, 25,
 		"store index", 0, 1, 2},
 	{"fork", 1, {T_DIR}, 12, 800, "fork", 0, 0, 2},
-	{"lld", 2, {T_DIR | T_IND, T_REG}, 13, 10, "long load", 1, 1, 2},
+	{"lld", 2, {T_DIR | T_IND, T_REG}, 13, 10, "long load", 1, 1, 4},
 	{"lldi", 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 14, 50,
 		"long load index", 1, 1, 2},
 	{"lfork", 1, {T_DIR}, 15, 1000, "long fork", 0, 0, 2},
@@ -132,9 +132,13 @@ int main(int argc, char **argv)
 	}
 	game_process->cycle_to_die = CYCLE_TO_DIE;
 	game_process->cycle_number = 0;
+	game_process->dump_cycle = 0;
+	game_process->dump_cycle = 0;
 	game_process->number_of_live_since_last_check = 0;
 	game_process->checks_counter = 0;
+	game_process->last_live_player = 0;
 	virtual_machine_creator(game_process, player_list, op_tab);
+	return(errno);
 	// printf("%d\n", T_REG | T_DIR | T_IND);
 	// printf("%s\n", op_tab[11].name);
 	// printf("%d", pui);

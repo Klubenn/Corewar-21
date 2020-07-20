@@ -17,7 +17,7 @@ void print_args(t_player_process *player_process, int32_t *arg_value, t_game_pro
 	i = 0;
 	if (game_process->op_tab[player_process->operation_code].have_a_code_type_code != 0)
 	{
-		while (player_process->args[i] != 0)
+		while (i < game_process->op_tab[player_process->operation_code].args_number)
 		{
 			if (player_process->args[i] == 1 &&
 				(game_process->op_tab[player_process->operation_code].arg_types[i]
@@ -135,7 +135,8 @@ void	op1(t_game_process *game_process, t_player_process *player_process,
 	{
 		if (arg == (-1 * player_list->position))
 		{
-			player_list->player->last_live_cycle_number = game_process->cycle_number;
+			// player_list->player->last_live_cycle_number = game_process->cycle_number;
+			game_process->last_live_player = player_list;
 			// player_process->live_counter_valid += 1;
 			flag = true;
 			break ;
@@ -514,6 +515,9 @@ void	op12(t_game_process *game_process, t_player_process *player_process,
 	new->prev->ident = game_process->process_numbers + 1;
 	new->prev->parent = player_process->ident;
 	new->prev->live_counter = 0;
+	new->prev->args[0] = 0;
+	new->prev->args[1] = 0;
+	new->prev->args[2] = 0;
 	game_process->process_numbers += 1;
 	// player_process->PC = (player_process->PC + 3) % MEM_SIZE;
 	print_operation_logs(new->prev, ((int32_t *)(&bias)), game_process);
@@ -528,7 +532,7 @@ void op13(t_game_process *game_process, t_player_process *player_process,
 	vm_field_memory->modulo = true;
 	player_process->arg_position = (player_process->PC + 2) % MEM_SIZE;
 	if (player_process->args[0] == DIR_CODE)
-		arg_value[0] = (int32_t)((int16_t)process_args(0, player_process, vm_field_memory));
+		arg_value[0] = (int32_t)process_args(0, player_process, vm_field_memory);
 	else
 		arg_value[0] = process_args(0, player_process, vm_field_memory);
 	arg_value[1] = (u_int8_t)vm_field_memory->field[(player_process->arg_position) % MEM_SIZE];
@@ -610,6 +614,9 @@ void	op15(t_game_process *game_process, t_player_process *player_process,
 	new->prev->ident = game_process->process_numbers + 1;
 	new->prev->parent = player_process->ident;
 	new->prev->live_counter = 0;
+	new->prev->args[0] = 0;
+	new->prev->args[1] = 0;
+	new->prev->args[2] = 0;
 	game_process->process_numbers += 1;
 	print_operation_logs(new->prev, ((int32_t *)(&bias)), game_process);
 	move_pc(game_process->op_tab, player_process, game_process, vm_field_memory);
