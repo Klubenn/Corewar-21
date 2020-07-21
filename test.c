@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 15:53:54 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/21 23:11:24 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/21 23:24:10 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void read_code(int fd, char *str, t_player *player, int count)
 	i = 0;
 	j = 0;
 	player->code = (unsigned char *)ft_memalloc(count);
-	// printf("code size = %x\n", player->player_header.prog_size);
+	// ft_printf("code size = %x\n", player->player_header.prog_size);
 	while (i < player->player_header.prog_size)
 	{
 		player->code[i] = str[i];
@@ -58,16 +58,16 @@ void read_code(int fd, char *str, t_player *player, int count)
 	// while (j < player->player_header.prog_size)
 	// {
 	// 	if ((player->code[j]) >= 16)
-	// 		printf("%x ", (player->code[j]));
+	// 		ft_printf("%x ", (player->code[j]));
 	// 	else
-	// 		printf("0%x ", (player->code[j]));
+	// 		ft_printf("0%x ", (player->code[j]));
 	// 	j++;
 	// 	if (j % 8 == 0 && j % 16 != 0)
-	// 		printf("  ");
+	// 		ft_printf("  ");
 	// 	if (j % 16 == 0)
-	// 		printf("\n");
+	// 		ft_printf("\n");
 	// }
-	// printf("\n");
+	// ft_printf("\n");
 }
 
 void read_comment(char *str, t_player *player)
@@ -80,7 +80,7 @@ void read_comment(char *str, t_player *player)
 		player->player_header.comment[i] = str[i + 12 + PROG_NAME_LENGTH];
 		i++;
 	}
-	// printf("comment - %s\n", player->player_header.comment);
+	// ft_printf("comment - %s\n", player->player_header.comment);
 }
 
 int check_nulls_and_code_size(int count, char *str, t_player *player, char **argv)

@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 18:06:36 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/21 22:00:33 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/21 23:29:35 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_player_process *create_processes(t_player_list *player_list,
 			player_process->operation_code = vm_field_memory->field[player_process->PC];
 			game_process->beginner = player_process;
 			player_process->cycles_to_wait = (vm_field_memory->op_tab)[(vm_field_memory->field)[player_process->PC]].cycles_before_complete;
-			// printf("%llu %llu %llu\n", player_process->ident, player_process->PC, player_process->cycles_to_wait);
+			// ft_printf("%llu %llu %llu\n", player_process->ident, player_process->PC, player_process->cycles_to_wait);
 		}
 		else
 		{
@@ -92,7 +92,7 @@ t_player_process *create_processes(t_player_list *player_list,
 			player_process->ident = (u_int64_t)(*((int *)(&(player_process->registers[0]))))*(-1);
 			player_process->operation_code = vm_field_memory->field[player_process->PC];
 			player_process->cycles_to_wait = (vm_field_memory->op_tab)[(vm_field_memory->field)[player_process->PC]].cycles_before_complete;
-			// printf("%llu %llu %llu\n", player_process->ident, player_process->PC, player_process->cycles_to_wait);
+			// ft_printf("%llu %llu %llu\n", player_process->ident, player_process->PC, player_process->cycles_to_wait);
 		}
 		player_list = player_list->prev;
 	}
@@ -152,7 +152,7 @@ void check_alives(t_game_process *game_process,
 			live_counter = live_counter + player_process->live_counter;
 			player_process = player_process->next;
 			if (game_process->flag_v & 8)
-				printf("Process %llu hasn't lived for %llu cycles (CTD %d)\n",
+				ft_printf("Process %llu hasn't lived for %llu cycles (CTD %d)\n",
 					player_process_buff->ident,
 						game_process->cycle_number -
 							player_process_buff->last_live_cycle_number,
@@ -174,7 +174,7 @@ void check_alives(t_game_process *game_process,
 		// {
 		game_process->cycle_to_die -= CYCLE_DELTA;
 		if (game_process->flag_v & 2)
-			printf("Cycle to die is now %d\n", (int32_t)game_process->cycle_to_die);
+			ft_printf("Cycle to die is now %d\n", (int32_t)game_process->cycle_to_die);
 		// }
 		game_process->checks_counter = 0;
 	}
@@ -184,14 +184,14 @@ void winner_definer(t_player_list *player_list, t_game_process *game_process)
 {
 	if (game_process->last_live_player)
 	{
-		printf("Contestant %d, \"%s\", has won !\n",
+		ft_printf("Contestant %d, \"%s\", has won !\n",
 			game_process->last_live_player->position,
 				game_process->last_live_player->player->player_header.prog_name);
 		return ;
 	}
 	while (player_list->next)
 		player_list = player_list->next;
-	printf("Contestant %d, \"%s\", has won !\n", player_list->position,
+	ft_printf("Contestant %d, \"%s\", has won !\n", player_list->position,
 		player_list->player->player_header.prog_name);
 }
 
@@ -205,16 +205,16 @@ void print_memory(unsigned char *field, t_game_process *game_process)
 		if ((counter % game_process->bytes_dump_per_line) == 0)
 		{
 			if (counter != 0) 
-				printf("\n");
-			printf("0x%04x : ", counter);	
+				ft_printf("\n");
+			ft_printf("0x%04x : ", counter);	
 		}
 		if (field[counter] / 16 > 0)
-			printf("%hhx ", field[counter]);
+			ft_printf("%hhx ", field[counter]);
 		else
-			printf("0%hhx ", field[counter]);
+			ft_printf("0%hhx ", field[counter]);
 		counter++;
 	}
-	printf("\n");
+	ft_printf("\n");
 	exit(0);
 }
 
@@ -238,7 +238,7 @@ void play_corewar(t_game_process *game_process, t_player_list *player_list, int 
 		cycles_counter_between_checks += 1;
 		game_process->cycle_number += 1;
 		if (game_process->flag_v & (u_int8_t)2)
-			printf("It is now cycle %llu\n", game_process->cycle_number);
+			ft_printf("It is now cycle %llu\n", game_process->cycle_number);
 		player_process = players_operations_executing(game_process,
 			player_process, player_list, vm_field_memory);
 		if ((cycles_counter_between_checks == game_process->cycle_to_die)
@@ -253,7 +253,7 @@ void play_corewar(t_game_process *game_process, t_player_list *player_list, int 
 				{
 					game_process->cycle_to_die -= CYCLE_DELTA;
 					if (game_process->flag_v & 2)
-						printf("Cycle to die is now %d\n", (int32_t)game_process->cycle_to_die);
+						ft_printf("Cycle to die is now %d\n", (int32_t)game_process->cycle_to_die);
 				}
 				game_process->checks_counter = 0;
 			}

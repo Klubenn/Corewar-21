@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 21:14:34 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/21 15:41:30 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/21 23:24:10 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ void move_pc_logger(t_game_process *game_process, t_vm_field_memory *vm_field_me
 		return ;
 	if (game_process->flag_v & 16)
 	{
-		printf("ADV %d (0x%04x -> 0x%04x) ", counter[1], counter[2], (int)player_process->PC);
+		ft_printf("ADV %d (0x%04x -> 0x%04x) ", counter[1], counter[2], (int)player_process->PC);
 		while ((int)counter[2] % MEM_SIZE != (int)player_process->PC)
 		{
-			printf("%02x ", vm_field_memory->field[(u_int64_t)counter[2] % MEM_SIZE]);
+			ft_printf("%02x ", vm_field_memory->field[(u_int64_t)counter[2] % MEM_SIZE]);
 			counter[2] += 1;
 		}
-		printf("\n");
+		ft_printf("\n");
 	}
 }
 
@@ -84,16 +84,16 @@ bool	move_pc(t_op *op_tab, t_player_process *player_process,
 			player_process, counter);
 		// if (game_process->flag_v & 16)
 		// {
-		// 	printf("ADV %d (%#06x -> %#06x) ", counter[1], counter[2], (int)player_process->PC);
+		// 	ft_printf("ADV %d (%#06x -> %#06x) ", counter[1], counter[2], (int)player_process->PC);
 		// 	while ((int)counter[2] < (int)player_process->PC)
 		// 	{
 		// 		if ((int)counter[2] == (int)player_process->PC - 1)
-		// 			printf("%02x", vm_field_memory->field[(u_int8_t)counter[2]]);
+		// 			ft_printf("%02x", vm_field_memory->field[(u_int8_t)counter[2]]);
 		// 		else
-		// 			printf("%02x ", vm_field_memory->field[(u_int8_t)counter[2]]);
+		// 			ft_printf("%02x ", vm_field_memory->field[(u_int8_t)counter[2]]);
 		// 		counter[2] += 1;
 		// 	}
-		// 	printf("\n");
+		// 	ft_printf("\n");
 		// }
 		return(false);
 	}
@@ -120,16 +120,16 @@ bool	move_pc(t_op *op_tab, t_player_process *player_process,
 	}
 	// if (game_process->flag_v & 16)
 	// {
-	// 	printf("ADV %d (%#06x -> %#06x) ", counter[1], counter[2], (int)player_process->PC);
+	// 	ft_printf("ADV %d (%#06x -> %#06x) ", counter[1], counter[2], (int)player_process->PC);
 	// 	while ((int)counter[2] < (int)player_process->PC)
 	// 	{
 	// 		if ((int)counter[2] == (int)player_process->PC - 1)
-	// 			printf("%02x", vm_field_memory->field[(u_int8_t)counter[2]]);
+	// 			ft_printf("%02x", vm_field_memory->field[(u_int8_t)counter[2]]);
 	// 		else
-	// 			printf("%02x ", vm_field_memory->field[(u_int8_t)counter[2]]);
+	// 			ft_printf("%02x ", vm_field_memory->field[(u_int8_t)counter[2]]);
 	// 		counter[2] += 1;
 	// 	}
-	// 	printf("\n");
+	// 	ft_printf("\n");
 	// }
 	player_process->PC = (player_process->PC + 2) % MEM_SIZE;
 	// if (player_process->PC == MEM_SIZE - 1)
@@ -220,7 +220,7 @@ bool	validation_before_operation_complete(t_game_process *game_process, t_player
 // 	i = 6;
 // 	while(i >= 3)
 // 	{
-// 		printf("%d\n", *((int *)(&reg[i])));
+// 		ft_printf("%d\n", *((int *)(&reg[i])));
 // 		i--;
 // 	}
 // 	exit(0);
@@ -284,7 +284,7 @@ t_player_process *players_operations_executing(t_game_process *game_process, t_p
 //		}
 //		else
 //		{
-//			// printf("%llx - not valid\n", player_process->PC);
+//			// ft_printf("%llx - not valid\n", player_process->PC);
 //			if (player_process->PC == MEM_SIZE - 1)
 //				player_process->PC = 0;
 //			else

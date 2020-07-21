@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 19:43:05 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/21 23:19:08 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/21 23:24:10 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void arguments_memory_deleter(char **argv)
 
 void print_intro(t_player_list *player_list)
 {
-	printf("Introducing contestants...\n");
+	ft_printf("Introducing contestants...\n");
 	while(player_list != 0)
 	{
 		ft_printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\") !\n",
