@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 19:43:05 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/20 23:19:58 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/21 23:19:08 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,11 @@ char **memory_allocator(char **argv)
 		counter += ft_count_words(argv[i], ' ');
 		i++;
 	}
-	// printf("%d\n", counter);
-	buff = (char **)malloc(sizeof(char *)*(counter + 1));
+	if (!(buff = (char **)malloc(sizeof(char *)*(counter + 1))))
+	{
+		perror("Error");
+		exit(1);
+	}
 	i = 0;
 	while (i < counter)
 	{
@@ -72,14 +75,6 @@ char **memory_allocator(char **argv)
 		memory_allocator_helper(argv[i], buff);
 		i++;
 	}
-	// free(buff);
-	// i = 0;
-	// while (buff[i] != 0)
-	// {
-	// 	printf("%s\n", buff[i]);
-	// 	i++;
-	// }
-	// buff[i] = 0;
 	return (buff);
 }
 
@@ -97,54 +92,54 @@ void arguments_memory_deleter(char **argv)
 	free(begin);
 }
 
-int main(int argc, char **argv)
+void print_intro(t_player_list *player_list)
 {
-	t_game_process *game_process;
-	t_player_list	*player_list_1;
-	t_player_list	*player_list;
-	int fd;
-	int i;
-	int j;
-	int c;
-	char **ppp;
-	char **ppp1;
-
-	argv++;
-	ppp = memory_allocator(argv);
-	i = 0;
-	j = 0;
-	player_list = NULL;
-	game_process = (t_game_process *)malloc(sizeof(t_game_process));
-	// printf("control_point\n");
-	parse_arguments(ppp, game_process, &player_list);
-	player_list_1 = player_list;
-	arguments_memory_deleter(ppp);
-	// printf("\n\n\n\n\n\n\n\n");
 	printf("Introducing contestants...\n");
-	while(player_list_1 != 0)
+	while(player_list != 0)
 	{
-		printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\") !\n",
-			player_list_1->position,
-			player_list_1->player->player_header.prog_size,
-			player_list_1->player->player_header.prog_name,
-			player_list_1->player->player_header.comment);
-		player_list_1 = player_list_1->next;
+		ft_printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\") !\n",
+			player_list->position,
+			player_list->player->player_header.prog_size,
+			player_list->player->player_header.prog_name,
+			player_list->player->player_header.comment);
+		player_list = player_list->next;
 	}
+}
+
+void game_process_initializer(t_game_process *game_process)
+{
 	game_process->cycle_to_die = CYCLE_TO_DIE;
 	game_process->cycle_number = 0;
 	game_process->dump_cycle = 0;
 	game_process->dump_cycle = 0;
 	game_process->number_of_live_since_last_check = 0;
 	game_process->checks_counter = 0;
-	game_process->last_live_player = 0;
-	virtual_machine_creator(game_process, player_list, op_tab);
-	return(errno);
-	// printf("%d\n", T_REG | T_DIR | T_IND);
-	// printf("%s\n", op_tab[11].name);
-	// printf("%d", pui);
-	// while (*ppp)
-	// {
-	// 	printf("%s\n", *ppp);
-	// 	ppp++;
-	// }
+	game_process->last_live_player = 0;	
+	game_process->begin_list = 0;
+}
+
+int main(int argc, char **argv)
+{
+	t_game_process *game_process;
+	t_player_list	*player_list_1;
+	t_player_list	*player_list;
+	char **split_argv;
+
+	argv++;
+	split_argv = memory_allocator(argv);
+	player_list = NULL;
+	if (!(game_process = (t_game_process *)ft_memalloc(sizeof(t_game_process))))
+	{
+		arguments_memory_deleter(split_argv);
+		perror("Error");
+		exit(1);
+	}
+	parse_arguments(split_argv, game_process, &player_list);
+	player_list_1 = player_list;
+	// arguments_memory_deleter(split_argv);
+	print_intro(player_list);
+	game_process_initializer(game_process);
+	virtual_machine(game_process, player_list, op_tab);
+	// free(game_process);
+	return(0);
 }

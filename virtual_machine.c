@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/05 18:06:36 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/20 22:57:47 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/21 22:00:33 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,13 @@ t_player_process *create_processes(t_player_list *player_list,
 		counter = REG_SIZE - 1;
 		if (player_list->next == 0)
 		{
-			begin = (t_player_process *)ft_memalloc(sizeof(t_player_process));
+			
+			if (!(begin = (t_player_process *)ft_memalloc(sizeof(t_player_process))))
+			{
+				memory_deleter(game_process->begin_list, vm_field_memory, game_process);
+				perror("Error");
+				exit(1);
+			}
 			while(counter > 0)
 			{
 				begin->registers[counter] = (unsigned char)(255);
@@ -59,7 +65,13 @@ t_player_process *create_processes(t_player_list *player_list,
 		}
 		else
 		{
-			player_process->next = (t_player_process *)ft_memalloc(sizeof(t_player_process));
+			if (!(player_process->next = (t_player_process *)ft_memalloc(sizeof(t_player_process))))
+			{
+				memory_error_cleaner(game_process->beginner);
+				memory_deleter(game_process->begin_list, vm_field_memory, game_process);
+				perror("Error");
+				exit(1);
+			}
 			player_process->next->prev = player_process;
 			player_process = player_process->next;
 			player_process->next = 0;
@@ -136,6 +148,8 @@ void check_alives(t_game_process *game_process,
 			player_process_buff = player_process;
 			if (game_process->beginner == player_process_buff)
 				game_process->beginner = player_process->next;
+			// if (player_process->live_counter != 0)
+			live_counter = live_counter + player_process->live_counter;
 			player_process = player_process->next;
 			if (game_process->flag_v & 8)
 				printf("Process %llu hasn't lived for %llu cycles (CTD %d)\n",
@@ -156,22 +170,18 @@ void check_alives(t_game_process *game_process,
 	}
 	if (live_counter >= NBR_LIVE)
 	{
-		if (game_process->cycle_to_die > 0)
-		{
-			game_process->cycle_to_die -= CYCLE_DELTA;
-			if (game_process->flag_v & 2)
-				printf("Cycle to die is now %d\n", (int32_t)game_process->cycle_to_die);
-		}
+		// if (game_process->cycle_to_die > 0)
+		// {
+		game_process->cycle_to_die -= CYCLE_DELTA;
+		if (game_process->flag_v & 2)
+			printf("Cycle to die is now %d\n", (int32_t)game_process->cycle_to_die);
+		// }
 		game_process->checks_counter = 0;
 	}
 }
 
 void winner_definer(t_player_list *player_list, t_game_process *game_process)
 {
-	// u_int64_t	last_live_cycle_number;
-	// int			winner_number;
-	// char		*winner_name;
-
 	if (game_process->last_live_player)
 	{
 		printf("Contestant %d, \"%s\", has won !\n",
@@ -181,19 +191,6 @@ void winner_definer(t_player_list *player_list, t_game_process *game_process)
 	}
 	while (player_list->next)
 		player_list = player_list->next;
-	// last_live_cycle_number = player_list->player->last_live_cycle_number;
-	// winner_number = player_list->position;
-	// winner_name = player_list->player->player_header.prog_name;
-	// while(player_list)
-	// {
-	// 	if (player_list->player->last_live_cycle_number > last_live_cycle_number)
-	// 	{
-	// 		last_live_cycle_number = player_list->player->last_live_cycle_number;
-	// 		winner_name = player_list->player->player_header.prog_name;
-	// 		winner_number = player_list->position;
-	// 	}
-	// 	player_list = player_list->prev;
-	// }
 	printf("Contestant %d, \"%s\", has won !\n", player_list->position,
 		player_list->player->player_header.prog_name);
 }
@@ -207,14 +204,9 @@ void print_memory(unsigned char *field, t_game_process *game_process)
 	{
 		if ((counter % game_process->bytes_dump_per_line) == 0)
 		{
-			// if (counter != 0)
-			// {
 			if (counter != 0) 
 				printf("\n");
-			printf("0x%04x : ", counter);
-			// }
-			// else
-			// 	printf("000000 : ");	
+			printf("0x%04x : ", counter);	
 		}
 		if (field[counter] / 16 > 0)
 			printf("%hhx ", field[counter]);
@@ -239,41 +231,21 @@ void play_corewar(t_game_process *game_process, t_player_list *player_list, int 
 	game_process->cycle_number = 0;
 	player_process = create_processes(player_list, divider, vm_field_memory, game_process);
 	game_process->process_numbers = player_process->ident;
-	// printf("%llu\n", game_process->process_numbers);
-	while(/* game_process->cycle_to_die > 0 && */player_process != NULL
+	while(player_process != NULL
 			&& (game_process->dump_flag == false || (game_process->dump_cycle > game_process->cycle_number
 				 || game_process->d_cycle > game_process->cycle_number)))
 	{
-		// if (cycles_counter_between_checks == game_process->cycle_to_die)
-		// {
-		// 	check_alives(game_process, &player_process);
-		// 	game_process->checks_counter += 1;
-		// 	cycles_counter_between_checks = 0;
-		// 	if (game_process->checks_counter == MAX_CHECKS)
-		// 	{
-		// 		game_process->cycle_to_die -= CYCLE_DELTA;
-		// 		game_process->checks_counter = 0;
-		// 	}
-		// }
-		// else
-		// {
 		cycles_counter_between_checks += 1;
 		game_process->cycle_number += 1;
 		if (game_process->flag_v & (u_int8_t)2)
 			printf("It is now cycle %llu\n", game_process->cycle_number);
 		player_process = players_operations_executing(game_process,
 			player_process, player_list, vm_field_memory);
-		// cycles_counter_between_checks += 1;
-		// }
-		// game_process->cycle_number += 1;
-		// if (game_process->flag_v & (u_int8_t)2)
-		// 	printf("It is now cycle %llu\n", game_process->cycle_number);
-		if ((cycles_counter_between_checks == game_process->cycle_to_die/* && game_process->cycle_to_die > 0*/)
+		if ((cycles_counter_between_checks == game_process->cycle_to_die)
 				|| game_process->cycle_to_die <= 0)
 		{
 			game_process->checks_counter += 1;
 			check_alives(game_process, &player_process);
-			// game_process->checks_counter += 1;
 			cycles_counter_between_checks = 0;
 			if (game_process->checks_counter == MAX_CHECKS)
 			{
@@ -290,11 +262,7 @@ void play_corewar(t_game_process *game_process, t_player_list *player_list, int 
 	if (game_process->dump_cycle == game_process->cycle_number ||
 			game_process->d_cycle == game_process->cycle_number)
 		print_memory(vm_field_memory->field, game_process);
-	// else
-	// {
-	// printf("\n\n%llu %llu\n", game_process->cycle_number, game_process->checks_counter);
 	winner_definer(player_list, game_process);
-	// }
 	memory_deleter(player_list, vm_field_memory, game_process);
 }
 
@@ -318,7 +286,27 @@ void memory_allocator_for_vm(t_player_list *player_list, int divider, unsigned c
 	}
 }
 
-void virtual_machine_creator(t_game_process *game_process,
+int vm_field_memory_initializer(t_vm_field_memory **vm_field_memory,
+	t_op *op_tab)
+{
+	if (!(*vm_field_memory =
+		(t_vm_field_memory *)ft_memalloc(sizeof(t_vm_field_memory))))
+	{
+		perror("Error");
+		return (1);
+	}
+	if (!((*vm_field_memory)->field =
+		(unsigned char *)ft_memalloc(MEM_SIZE * sizeof(u_int8_t))))
+	{
+		free(*vm_field_memory);
+		perror("Error");
+		return (1);
+	}
+	(*vm_field_memory)->op_tab = op_tab;
+	return (0);
+}
+
+void virtual_machine(t_game_process *game_process,
 	t_player_list *player_list,  t_op *op_tab)
 {
 	int				counter;
@@ -327,9 +315,11 @@ void virtual_machine_creator(t_game_process *game_process,
 	t_vm_field_memory *vm_field_memory;
 
 	game_process->op_tab = op_tab;
-	vm_field_memory = (t_vm_field_memory *)ft_memalloc(sizeof(t_vm_field_memory));
-	vm_field_memory->field = (unsigned char *)ft_memalloc(MEM_SIZE);
-	vm_field_memory->op_tab = op_tab;
+	if (vm_field_memory_initializer(&vm_field_memory, op_tab))
+	{
+		memory_deleter(player_list, 0, game_process);
+		exit(1);
+	}
 	player_list_buff = player_list;
 	while(player_list_buff->next != 0)
 		player_list_buff = player_list_buff->next;
@@ -341,11 +331,5 @@ void virtual_machine_creator(t_game_process *game_process,
 		memory_allocator_for_vm(player_list_buff, divider, vm_field_memory->field);
 		player_list_buff = player_list_buff->next;
 	}
-	// print_memory(vm_field_memory->field);
 	play_corewar(game_process, player_list, divider, vm_field_memory);
 }
-
-// void operation_log_printer(t_player_process *player_process, int32_t *arg_value, )
-// {
-	
-// }

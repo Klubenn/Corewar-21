@@ -6,7 +6,7 @@
 /*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 19:13:16 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/20 23:13:28 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/21 23:21:44 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,13 @@
 # include "op.h"
 # include <stdbool.h>
 # include <errno.h>
+# include <stdio.h>
+# include "ft_printf/includes/ft_printf.h"
+# include "libft/libft.h"
+
+# define ERR_INVALID_CODE_SIZE	"ERROR: Invalid code size"
+
+extern int errno;
 
 typedef struct s_vm_field_memory
 {
@@ -66,6 +73,7 @@ typedef struct s_game_process		/*Хранит*/
 {
 	u_int64_t	cycle_number;
 	int64_t		cycle_to_die;
+	t_player_list *begin_list;
 	u_int64_t	dump_cycle;
 	u_int64_t	d_cycle;
 	bool		dump_flag;
@@ -109,10 +117,9 @@ typedef struct s_game_process		/*Хранит*/
 
 // };
 
-void 	virtual_machine_creator(t_game_process *game_process,
+void virtual_machine(t_game_process *game_process,
 	t_player_list *player_list,  t_op *op_tab);
-void 	parse_arguments(char **argv, t_game_process *game_process,
-	t_player_list **player_list);
+void 	parse_arguments(char **argv, t_game_process *game_process, t_player_list **player_list);
 void 	memory_allocator_helper(char *str, char **buff);
 size_t	ft_count_words(char const *s, char c);
 void	op1(t_game_process *game_process, t_player_process *player_process,
@@ -125,5 +132,10 @@ bool	move_pc(t_op *op_tab, t_player_process *player_process,
 	t_game_process *game_process, t_vm_field_memory *vm_field_memory);
 t_player_process *create_processes(t_player_list *player_list,
 	int divider, t_vm_field_memory *vm_field_memory, t_game_process *game_process);
+void	arguments_memory_deleter(char **argv);
+void	memory_deleter(t_player_list *player_list, t_vm_field_memory *vm_field_memory,
+	t_game_process *game_process);
+void	memory_error_cleaner(t_player_process *player_process);
+int		ft_printf(char *format, ...);
 
 #endif
