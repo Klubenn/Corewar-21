@@ -107,10 +107,10 @@ char get_type(char *param)
         if (ft_isdigit(trim_param[1]) || trim_param[1] == '-')
             return (T_DIR);
 
-        if (trim_param[1] == ':')
+        if (trim_param[1] == LABEL_CHAR)
             return (T_DIR | T_LAB);
     }
-    if (trim_param[0] == ':')
+    if (trim_param[0] == LABEL_CHAR)
         return (T_IND | T_LAB);
     return (0);
 }
@@ -134,8 +134,8 @@ int check_param(t_struct *data, char *str, t_op *op)// str2 already starts with 
 	char **params;
 
 	if (!(params = split_corewar(str)))
-	    return (MALLOC_FAIL);
-	if (!(check_params_num(params, op->arg_num) && check_params(params, op)) )
+	    return (INCORRECT_ARGUMENT);
+	if (!(check_params_num(params, op->arg_num) && check_params(params, op)))
 	{
         free_arr(params);
         return (SYNTAX_ERROR);
@@ -203,7 +203,7 @@ int create_args(t_args **args_of_func, char **params)
 			!(type = get_type(params[i])))
 			return (0);
 
-		args_of_func[i]->type = type;//todo совместить с предыдущей проверкой типа
+		args_of_func[i]->type = type;
 
 		if (check_ending(params[i] + skip_word(params[i])))
 			return (0);

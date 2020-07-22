@@ -1,70 +1,108 @@
 #include "../includes/asm.h"
 
-void	write_backwards(int fd, void *source, int size)
+void	write_to_array(char *ptr, char c)
+{
+	*ptr = c;
+}
+
+void	write_to_file(t_struct *data, int fd)
+{
+	write(fd, data->file_arr_start, data->file_size);
+}
+
+void	write_backwards(t_struct *data, void *source, int size)
 {
 	char *c;
 
 	c = (char *)source;
 	while (--size >= 0)
-		write(fd, c + size, 1);
+	{
+		write_to_array(data->file_arr, *(c + size));
+		(data->file_arr)++;
+	}
 }
 
-void	bin_magic(int fd)
+void	bin_magic(t_struct *data)
 {
 	int x = COREWAR_EXEC_MAGIC;
 
-	write_backwards(fd, &x, sizeof(int));
+	write_backwards(data, &x, sizeof(int));
 }
 
-void bin_champ_name(int fd, t_struct *data)
+void bin_champ_name(t_struct *data)
 {
-	char *name;
+	char	*name;
+	int 	len;
 
-	name = (char *)ft_memalloc(PROG_NAME_LENGTH);
-	if (data->name && name)
+	name = (char *)ft_memalloc(PROG_NAME_LENGTH * sizeof(char));
+	if (data->name)
 		ft_strcpy(name, data->name);
-	write(fd, name, PROG_NAME_LENGTH);
-	free(name);
+	len = 0;
+	while (len < PROG_NAME_LENGTH)
+	{
+		write_to_array(data->file_arr, *name);
+		name++;
+		(data->file_arr)++;
+		len++;
+	}
 }
 
-void bin_null(int fd)
+void bin_null(t_struct *data)
 {
-	int x = 0;
+	int i;
 
-	write(fd, &x, 4);
+	i = 0;
+	while (i < 4)
+	{
+		write_to_array(data->file_arr, (char)0);
+		(data->file_arr)++;
+		i++;
+	}
 }
 
-void	bin_exec_code_size(int fd, t_struct *data)
+void	bin_exec_code_size(t_struct *data)
 {
 	int size;
 
 	size = data->code_length;
-	write_backwards(fd, &size, sizeof(int));
+	write_backwards(data, &size, sizeof(int));
 }
 
-void	bin_comment(int fd, t_struct *data)
+void	bin_comment(t_struct *data)
 {
-	char *comment;
+	char	*comment;
+	int 	len;
 
 	comment = (char *)ft_memalloc(COMMENT_LENGTH * sizeof(char));
 	if (data->comment)
 		ft_strcpy(comment, data->comment);
-	write(fd, comment, COMMENT_LENGTH);
+	len = 0;
+	while (len < COMMENT_LENGTH)
+	{
+		write_to_array(data->file_arr, *comment);
+		comment++;
+		(data->file_arr)++;
+		len++;
+	}
 }
-
 
 void    to_bytecode(t_struct *data)
 {
 	int fd;
 
+	data->file_size = 16 + PROG_NAME_LENGTH + COMMENT_LENGTH + data->code_length;
+	if (!(data->file_arr = (char *)ft_memalloc(sizeof(char) * data->file_size)))
+		error_management(MALLOC_FAIL, data, 0);
+	data->file_arr_start = data->file_arr;
+	bin_magic(data);
+	bin_champ_name(data);
+	bin_null(data);
+	bin_exec_code_size(data);
+	bin_comment(data);
+	bin_null(data);
+	bin_exec_champ(data);
 	fd = open(data->file_name, O_WRONLY | O_APPEND | O_TRUNC | O_CREAT, 0644);
-	bin_magic(fd);
-	bin_champ_name(fd, data);
-	bin_null(fd);
-	bin_exec_code_size(fd, data);
-	bin_comment(fd, data);
-	bin_null(fd);
-	bin_exec_champ(fd, data);
+	write_to_file(data, fd);
 	close(fd);
 }
 
@@ -106,6 +144,22 @@ t_instruction *create_empty_instruction(t_struct *data)
 	return (instruction->next);
 }
 
+void	change_type(t_instruction *instruction)
+{
+	int 	num;
+
+	num = instruction->num_of_args;
+	while (num-- > 0)
+	{
+		if (instruction->args_of_func[num]->type & T_DIR)
+			instruction->args_of_func[num]->type = DIR_CODE;
+		else if (instruction->args_of_func[num]->type & T_REG)
+			instruction->args_of_func[num]->type = REG_CODE;
+		else if (instruction->args_of_func[num]->type & T_IND)
+			instruction->args_of_func[num]->type = IND_CODE;
+	}
+}
+
 void	instructions_position(t_struct *data)
 {
 	t_instruction *instruction;
@@ -117,6 +171,7 @@ void	instructions_position(t_struct *data)
 	{
 		instruction->position = position;
 		position += argument_size(instruction);
+		change_type(instruction);
 		instruction = instruction->next;
 	}
 	data->code_length = position;

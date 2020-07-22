@@ -33,6 +33,7 @@ enum err_message
 	MULTIPLE_NAME,
 	MULTIPLE_COMMENT,
 	LABEL_NOT_FOUND,
+	INCORRECT_ARGUMENT,
 };
 
 
@@ -56,7 +57,7 @@ struct				s_label
 
 typedef struct		s_args
 {
-	unsigned char	type;// NULL, T_REG, T_DIR or T_IND
+	unsigned char	type;
 	int 			size;
 	char			*str;
 }					t_args;
@@ -82,14 +83,16 @@ typedef struct		s_struct
 	t_instruction	*instruction;
 	t_label			*label;
 	int 			label_present;
-	char			*str;
 	int 			line;
 	char 			*gnl_buf;
+	int 			file_size;
+	char 			*file_arr;
+	char 			*file_arr_start;
 }					t_struct;
 
 void	print_file(char *new_file);
-void	bin_exec_champ(int fd, t_struct *data);
-void	write_backwards(int fd, void *source, int size);
+void	bin_exec_champ(t_struct *data);
+void	write_backwards(t_struct *data, void *source, int size);
 void	instructions_position(t_struct *data);
 void	check_labels(t_struct *data);
 void    to_bytecode(t_struct *data);
@@ -110,6 +113,7 @@ void	free_data(t_struct *data);
 int		gnl(int fd, char **line, char **gnl_buf);
 char	**split_corewar(char *str);
 void	free_arr(char **arr);
+void	write_to_array(char *ptr, char c);
 
 
 #endif //COREWAR_ASM_H

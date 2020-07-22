@@ -1,6 +1,6 @@
 #include "op.h"
 
-int		calculate_separators(char *str)
+static int		calculate_separators(char *str)
 {
 	int i;
 
@@ -14,7 +14,7 @@ int		calculate_separators(char *str)
 	return (i);
 }
 
-int word_length(char *str)
+static int word_length(char *str)
 {
 	int i;
 
@@ -25,7 +25,7 @@ int word_length(char *str)
 	return (i);
 }
 
-int write_word(char **str, int length, char *split)
+static int write_word(char **str, int length, char *split)
 {
 	int i;
 
@@ -41,7 +41,10 @@ int write_word(char **str, int length, char *split)
 	if (**str == SEPARATOR_CHAR)
 		(*str)++;
 	else if (**str != '\0')
+	{
+		free(split);
 		return (-1);
+	}
 	return (0);
 }
 
@@ -62,6 +65,7 @@ char **split_corewar(char *str)
 		if (!(split[i] = (char *)ft_memalloc(sizeof(char) * (length + 1)))
 			|| write_word(&str, length, split[i]))
 		{
+			split[i] = NULL;
 			free_arr(split);
 			return (NULL);
 		}

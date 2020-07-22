@@ -113,7 +113,6 @@ int		continue_reading(int fd, char **string, t_struct *data)
 	big = NULL;
 	while(gnl(fd, &small, &data->gnl_buf) > 0 && ++(data->line))
 	{
-		data->str = small;
 		if ((tmp2 = ft_strchr(small, '"')))
 			return (finish_reading(string, tmp2, small, big));
 		tmp2 = ft_strjoin(tmp1, small);
@@ -130,14 +129,12 @@ int 	write_name_comment(char *substring, t_struct *data, size_t len)
 	if (len == PROG_NAME_LENGTH)
 	{
 		data->name = substring;
-		data->str = NULL;
 		if (ft_strlen(substring) > len)
 			return (LONG_NAME);
 	}
 	else
 	{
 		data->comment = substring;
-		data->str = NULL;
 		if (ft_strlen(substring) > len)
 			return (LONG_COMM);
 	}
@@ -187,17 +184,19 @@ void	process_name_and_comment(char *str, t_struct *data, int fd)
 		error_management(err, data, 0);
 }
 
-int		put_data_to_instruction(char *str, t_struct *data)
+int		put_data_to_instruction(char *str, t_struct *data, int error)
 {
 	t_instruction *instruction;
 
+	if (!data->instruction)
+		return (error);
 	instruction = data->instruction;
 	while (instruction->next)
 		instruction = instruction->next;
 	if (!(instruction->str = ft_strdup(str)))
 		return (MALLOC_FAIL);
 	instruction->line = data->line;
-	return (0);
+	return (error);
 }
 
 void		process_string(char *str, t_struct *data, int fd)
@@ -220,7 +219,7 @@ void		process_string(char *str, t_struct *data, int fd)
 	else
 	{
 		error = check_other_strings(str_trim, data);
-		error = error ? error : put_data_to_instruction(str, data);
+		error = put_data_to_instruction(str, data, error);
 	}
 	if (error)
 	{
@@ -241,7 +240,6 @@ void	is_valid_file(char *file_name, t_struct *data)
 		error_management(NO_FILE, data, 0);
 	while (gnl(fd, &str, &data->gnl_buf) > 0 && ++(data->line))
 	{
-		data->str = str;
 		if (!data->name || !data->comment)
 			process_name_and_comment(str, data, fd);
 		else
@@ -252,7 +250,6 @@ void	is_valid_file(char *file_name, t_struct *data)
 	close(fd);
 	if (flag)
 		error_management(END_INPUT, data, 0);
-	data->str = NULL;
 	data->line = 0;
 }
 

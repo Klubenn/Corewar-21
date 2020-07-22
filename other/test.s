@@ -1,8 +1,4 @@
-.name "King Sombra"
-.comment "Crystal empire is mine!"
+.name    "sebc"
+.comment "sebc"
 
-st r16, -4
-fork%:go2
-
-go2:
-go3:
+st r16, -200
