@@ -9,7 +9,7 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/test",
-			"args": ["testing1.cor         Gagant-init.cor  -n      2  42.cor"],
+			"args": ["../42-corewar/tests/vm/op/xor.cor", "../42-corewar/tests/vm/op/xor.cor"],
 			"stopAtEntry": true,
 			"cwd": "${workspaceFolder}",
 			"environment": [],

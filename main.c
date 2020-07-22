@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   op.c                                               :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
+/*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/05 19:43:05 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/21 23:24:10 by gtapioca         ###   ########.fr       */
+/*   Created: 2020/07/22 14:20:09 by gtapioca          #+#    #+#             */
+/*   Updated: 2020/07/22 15:23:09 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 #include "op.h"
 #include <stdio.h>
 
-int pui = 5;
-
-t_op    op_tab[17] =
+t_op	g_op_tab[17] =
 {
 	{0, 0, {0}, 0, 0, 0, 0, 0, 0},
 	{"live", 1, {T_DIR}, 1, 10, "alive", 0, 0, 4},
@@ -44,11 +42,11 @@ t_op    op_tab[17] =
 	{"aff", 1, {T_REG}, 16, 2, "aff", 0, 1, 4}
 };
 
-char **memory_allocator(char **argv)
+char	**memory_allocator(char **argv)
 {
-	int counter;
-	int i;
-	char **buff;
+	int			counter;
+	int			i;
+	char		**buff;
 
 	i = 0;
 	counter = 0;
@@ -57,20 +55,13 @@ char **memory_allocator(char **argv)
 		counter += ft_count_words(argv[i], ' ');
 		i++;
 	}
-	if (!(buff = (char **)malloc(sizeof(char *)*(counter + 1))))
+	if (!(buff = (char **)ft_memalloc(sizeof(char *) * (counter + 1))))
 	{
 		perror("Error");
 		exit(1);
 	}
 	i = 0;
-	while (i < counter)
-	{
-		buff[i] = 0;
-		i++;
-	}
-	buff[counter] = 0;
-	i = 0;
-	while(argv[i] != 0)
+	while (argv[i] != 0)
 	{
 		memory_allocator_helper(argv[i], buff);
 		i++;
@@ -78,7 +69,7 @@ char **memory_allocator(char **argv)
 	return (buff);
 }
 
-void arguments_memory_deleter(char **argv)
+void	arguments_memory_deleter(char **argv)
 {
 	char **begin;
 
@@ -92,10 +83,10 @@ void arguments_memory_deleter(char **argv)
 	free(begin);
 }
 
-void print_intro(t_player_list *player_list)
+void	print_intro(t_player_list *player_list)
 {
 	ft_printf("Introducing contestants...\n");
-	while(player_list != 0)
+	while (player_list != 0)
 	{
 		ft_printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\") !\n",
 			player_list->position,
@@ -106,40 +97,42 @@ void print_intro(t_player_list *player_list)
 	}
 }
 
-void game_process_initializer(t_game_process *game_process)
-{
-	game_process->cycle_to_die = CYCLE_TO_DIE;
-	game_process->cycle_number = 0;
-	game_process->dump_cycle = 0;
-	game_process->dump_cycle = 0;
-	game_process->number_of_live_since_last_check = 0;
-	game_process->checks_counter = 0;
-	game_process->last_live_player = 0;	
-	game_process->begin_list = 0;
-}
+// void	game_process_initializer(t_game_process *game_process)
+// {
+// 	// game_process->flag_v = 0;
+// 	// game_process->flag_a  = false;
+// 	game_process->cycle_to_die = CYCLE_TO_DIE;
+// 	// game_process->cycle_number = 0;
+// 	// game_process->d_cycle = 0;
+// 	// game_process->dump_cycle = 0;
+// 	// game_process->number_of_live_since_last_check = 0;
+// 	// game_process->checks_counter = 0;
+// 	// game_process->last_live_player = 0;
+// 	// game_process->begin_list = 0;
+// }
 
-int main(int argc, char **argv)
+int		main(int argc, char **argv)
 {
-	t_game_process *game_process;
+	t_game_process	*game_process;
 	t_player_list	*player_list_1;
 	t_player_list	*player_list;
-	char **split_argv;
+	char			**split_argv;
 
 	argv++;
 	split_argv = memory_allocator(argv);
 	player_list = NULL;
-	if (!(game_process = (t_game_process *)ft_memalloc(sizeof(t_game_process))))
+	if (!(game_process = (t_game_process *)
+		ft_memalloc(sizeof(t_game_process))))
 	{
 		arguments_memory_deleter(split_argv);
 		perror("Error");
 		exit(1);
 	}
+	game_process->cycle_to_die = CYCLE_TO_DIE;
+	// game_process_initializer(game_process);
 	parse_arguments(split_argv, game_process, &player_list);
 	player_list_1 = player_list;
-	// arguments_memory_deleter(split_argv);
 	print_intro(player_list);
-	game_process_initializer(game_process);
-	virtual_machine(game_process, player_list, op_tab);
-	// free(game_process);
-	return(0);
+	virtual_machine(game_process, player_list, g_op_tab);
+	return (0);
 }

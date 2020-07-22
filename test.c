@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
+/*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 15:53:54 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/21 23:24:10 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/23 00:32:32 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,25 +49,11 @@ void read_code(int fd, char *str, t_player *player, int count)
 	i = 0;
 	j = 0;
 	player->code = (unsigned char *)ft_memalloc(count);
-	// ft_printf("code size = %x\n", player->player_header.prog_size);
 	while (i < player->player_header.prog_size)
 	{
 		player->code[i] = str[i];
 		i++;
 	}
-	// while (j < player->player_header.prog_size)
-	// {
-	// 	if ((player->code[j]) >= 16)
-	// 		ft_printf("%x ", (player->code[j]));
-	// 	else
-	// 		ft_printf("0%x ", (player->code[j]));
-	// 	j++;
-	// 	if (j % 8 == 0 && j % 16 != 0)
-	// 		ft_printf("  ");
-	// 	if (j % 16 == 0)
-	// 		ft_printf("\n");
-	// }
-	// ft_printf("\n");
 }
 
 void read_comment(char *str, t_player *player)
@@ -80,7 +66,47 @@ void read_comment(char *str, t_player *player)
 		player->player_header.comment[i] = str[i + 12 + PROG_NAME_LENGTH];
 		i++;
 	}
-	// ft_printf("comment - %s\n", player->player_header.comment);
+}
+
+int check_code_size(t_player *player, u_int8_t *code_size_point,
+	char **argv, int count)
+{
+	if ((*((unsigned int *)(code_size_point))) > CHAMP_MAX_SIZE)
+	{
+		fprintf(stderr, "Error: File %s has too large a code (%d bytes > %d bytes)\n",
+			*argv, (*((unsigned int *)(code_size_point))), CHAMP_MAX_SIZE);
+		free(code_size_point);
+		return (1);
+	}
+	else if (count != (*((unsigned int *)(code_size_point))))
+	{
+		fprintf(stderr, "Error: File %s has a code size that differ from what its header says\n", *argv);
+		free(code_size_point);
+		return (1);
+	}
+	else
+	{
+		player->player_header.prog_size = (*((unsigned int *)(code_size_point)));
+		free(code_size_point);
+		return (0);
+	}
+}
+
+int check_separating_nulls(char *str)
+{
+	if (str[4 + PROG_NAME_LENGTH] != 0
+		| str[5 + PROG_NAME_LENGTH] != 0
+		| str[6 + PROG_NAME_LENGTH] != 0
+		| str[7 + PROG_NAME_LENGTH] != 0
+		| str[12 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0
+		| str[13 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0
+		| str[14 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0
+		| str[15 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0)
+	{
+		fprintf(stderr, "Error : mistake in the separating nulls\n");
+		return (1);
+	}
+	return (0);
 }
 
 int check_nulls_and_code_size(int count, char *str, t_player *player, char **argv)
@@ -91,15 +117,8 @@ int check_nulls_and_code_size(int count, char *str, t_player *player, char **arg
 
 	i = 139;
 	j = 0;
-	if (str[4 + PROG_NAME_LENGTH] != 0 | str[5 + PROG_NAME_LENGTH] != 0
-		| str[6 + PROG_NAME_LENGTH] != 0 | str[7 + PROG_NAME_LENGTH] != 0
-			| str[12 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0 | str[13 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0
-		  		| str[14 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0 | str[15 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0)
-	{
-		fprintf(stderr, "Error : mistake in the separating nulls\n");
-		// exit(1);
+	if (check_separating_nulls(str))
 		return (1);
-	}
 	if (!(code_size_point = (unsigned char *)ft_memalloc(4)))
 		return (1);
 	while (j < 4)
@@ -107,31 +126,7 @@ int check_nulls_and_code_size(int count, char *str, t_player *player, char **arg
 		code_size_point[j] = str[11 + PROG_NAME_LENGTH - j];
 		j++;
 	}
-	if ((*((unsigned int *)(code_size_point))) > CHAMP_MAX_SIZE)
-	{
-		fprintf(stderr, "Error: File %s has too large a code (%d bytes > %d bytes)\n",
-			*argv, (*((unsigned int *)(code_size_point))), CHAMP_MAX_SIZE);
-		free(code_size_point);
-		// errno = 1000;
-		// write(2, "pipec\n", 6);
-		// exit (1);
-		return (1);
-	}
-	else if (count != (*((unsigned int *)(code_size_point))))
-	{
-		fprintf(stderr, "Error: File %s has a code size that differ from what its header says\n", *argv);
-		free(code_size_point);
-		// exit (1);
-		return (1);
-	}
-	else
-	{
-		// player->code_size = (*((unsigned int *)(code_size_point)));
-		player->player_header.prog_size = (*((unsigned int *)(code_size_point)));
-		free(code_size_point);
-		// free(code_size_point);
-		return (0);
-	}
+	return(check_code_size(player, code_size_point, argv, count));
 }
 
 void set_player_name(char *str, t_player *player)
@@ -189,27 +184,30 @@ int players_reader_parse_champions(int fd, t_player *player, char **argv)
 	return (1);
 }
 
+int stack_member_initializer(t_player_list **player_list, int pos, t_player *player,
+	t_player_list *player_list_prev)
+{
+	if (!((*player_list) = (t_player_list *)ft_memalloc(sizeof(t_player_list))))
+		return (1);
+	(*player_list)->player = player;
+	(*player_list)->next = NULL;
+	(*player_list)->prev = player_list_prev;
+	if (pos > 0)
+		(*player_list)->position = pos;
+	else
+		(*player_list)->position = 0;
+	return (0);
+}
 
-
-int put_in_stack_of_players_helper(t_player_list **player_list, t_player *player, int pos)
+int put_in_stack_of_players_helper(t_player_list **player_list,
+	t_player *player, int pos)
 {
 	t_player_list	*buff;
 	t_player_list	*player_list_loc;
 
 	player_list_loc = *player_list;
 	if (player_list_loc == NULL)
-	{
-		if (!(*player_list = (t_player_list *)ft_memalloc(sizeof(t_player_list))))
-			return (1);
-		(*player_list)->player = player;
-		(*player_list)->next = NULL;
-		(*player_list)->prev = NULL;
-		if (pos > 0)
-			(*player_list)->position = pos;
-		else
-			(*player_list)->position = 0;
-		return (0);
-	}
+		return (stack_member_initializer(player_list, pos, player, NULL));
 	else
 	{
 		while (player_list_loc->next != 0)
@@ -219,18 +217,35 @@ int put_in_stack_of_players_helper(t_player_list **player_list, t_player *player
 			print_usage();
 			return (1);
 		}
-		if (!(player_list_loc->next = (t_player_list *)ft_memalloc(sizeof(t_player_list))))
+		if (stack_member_initializer(&(player_list_loc->next),
+			pos, player, player_list_loc))
 			return (1);
-		player_list_loc->next->prev = player_list_loc;
-		player_list_loc = player_list_loc->next;
-		player_list_loc->player = player;
-		player_list_loc->next = NULL;
-		if (pos > 0)
-			player_list_loc->position = pos;
-		else
-			player_list_loc->position = 0;
 		return (0);
 	}
+}
+
+int check_arguments_errors(int fd, char *player_name, t_player	**player)
+{
+	
+	if (fd < 0)
+	{
+		if (errno == 0)
+			fprintf(stderr, "Can't read source file %s\n", player_name);
+		else
+			perror("Error");
+		return (1);
+	}
+	if (!((*player) = (t_player *)ft_memalloc(sizeof(t_player))))
+	{
+		perror("Error");
+		return(1);
+	}
+	if (players_reader_parse_champions(fd, *player, &player_name))
+	{
+		free(*player);
+		return (1);
+	}
+	return (0);
 }
 
 int put_in_stack_of_players(int pos, char *player_name, t_player_list **player_list)
@@ -247,24 +262,9 @@ int put_in_stack_of_players(int pos, char *player_name, t_player_list **player_l
 			perror("Error");
 		return (1);
 	}
-	if (fd < 0)
-	{
-		if (errno == 0)
-			fprintf(stderr, "Can't read source file %s\n", player_name);
-		else
-			perror("Error");
+	if (check_arguments_errors(fd, player_name,
+		&player))
 		return (1);
-	}
-	if (!(player = (t_player *)ft_memalloc(sizeof(t_player))))
-	{
-		perror("Error");
-		return(1);
-	}
-	if (players_reader_parse_champions(fd, player, &player_name))
-	{
-		free(player);
-		return (1);
-	}
 	close(fd);
 	if (put_in_stack_of_players_helper(player_list, player, pos))
 	{
@@ -291,39 +291,160 @@ int check_atoi_honest(char *argv)
 	return (1);
 }
 
+void make_returner(t_player_list **returner, t_player_list *player_list,
+	t_player_list *player_list_returner)
+{
+	*returner = player_list_returner;
+	free(player_list);
+}
+
+void stack_deleter_helper(t_player_list **player_list, t_player_list **returner)
+{
+	if ((*player_list)->next != 0 && (*player_list)->prev != 0)
+	{
+		(*player_list)->prev->next = (*player_list)->next;
+		(*player_list)->next->prev = (*player_list)->prev;
+		make_returner(returner, (*player_list), (*player_list)->prev);
+	}
+	else if ((*player_list)->next == 0 && (*player_list)->prev != 0)
+	{
+		(*player_list)->prev->next = NULL;
+		make_returner(returner, (*player_list), (*player_list)->prev);
+	}
+	else if ((*player_list)->next != 0 && (*player_list)->prev == 0)
+	{
+		(*player_list)->next->prev = NULL;
+		make_returner(returner, (*player_list), (*player_list)->next);
+	}
+	else if ((*player_list)->next == 0 && (*player_list)->prev == 0)
+		free((*player_list));
+}
+
 t_player_list *stack_deleter(t_player_list *player_list, int flag)
 {
 	t_player_list *returner;
 	t_player_list *deleter;
 
 	returner = NULL;
-	if (player_list->next != 0 && player_list->prev != 0)
-	{
-		player_list->prev->next = player_list->next;
-		player_list->next->prev = player_list->prev;
-		returner = player_list->prev;
-		free(player_list);
-	}
-	else if (player_list->next == 0 && player_list->prev != 0)
-	{
-		player_list->prev->next = NULL;
-		returner = player_list->prev;
-		free(player_list);
-	}
-	else if (player_list->next != 0 && player_list->prev == 0)
-	{
-		player_list->next->prev = NULL;
-		returner = player_list->next;
-		free(player_list);
-	}
-	else if (player_list->next == 0 && player_list->prev == 0)
-		free(player_list);
+	stack_deleter_helper(&player_list, &returner);
 	if (flag == 0)
-	{
 		while (returner != NULL && returner->prev != NULL)
 			returner = returner->prev;
-	}
 	return(returner);
+}
+
+void memory_is_not_enough(t_player_list *player_list_1,
+	t_player_list *player_list_2, t_game_process *game_process)
+{
+	memory_deleter(player_list_1, 0, 0);
+	memory_deleter(player_list_2, 0, 0);
+	memory_deleter(game_process->begin_list, 0, game_process);
+	perror("Error");
+	exit(1);
+}
+
+void player_stack_creator_helper_4(t_player_list **player_list_final,
+	int count, t_player_list **player_list,
+	t_game_process *game_process)
+{
+	if (!((*player_list_final)->next = (t_player_list *)ft_memalloc(sizeof(t_player_list))))
+	{
+		memory_deleter(player_list[0], 0, 0);
+		memory_deleter(player_list[1], 0, 0);
+		memory_deleter(game_process->begin_list, 0, game_process);
+		perror("Error");
+		exit(1);
+	}
+	(*player_list_final)->next->prev = (*player_list_final);
+	(*player_list_final) = (*player_list_final)->next;
+	(*player_list_final)->player = player_list[0]->player;
+	(*player_list_final)->position = count;
+	(*player_list_final)->next = NULL;
+	player_list[0] = stack_deleter(player_list[0], 1);
+}
+
+void player_stack_creator_helper_3(t_player_list **player_list_final,
+	int count, t_player_list **player_list,
+	t_game_process *game_process)
+{
+	if (!((*player_list_final) = (t_player_list *)ft_memalloc(sizeof(t_player_list))))
+	{
+		memory_deleter(player_list[0], 0, 0);
+		memory_deleter(player_list[1], 0, 0);
+		memory_deleter(game_process->begin_list, 0, game_process);
+		perror("Error");
+		exit(1);
+	}
+	(*player_list_final)->player = player_list[0]->player;
+	(*player_list_final)->position = count;
+	(*player_list_final)->next = NULL;
+	(*player_list_final)->prev = NULL;
+	game_process->begin_list = (*player_list_final);
+	player_list[0] = stack_deleter(player_list[0], 1);
+}
+
+void player_stack_creator_helper_2(t_player_list **player_list_final,
+	t_player_list *player_list_buff, t_player_list **player_list,
+	t_game_process *game_process)
+{
+	if (!((*player_list_final)->next = (t_player_list *)ft_memalloc(sizeof(t_player_list))))
+	{
+		memory_deleter(player_list[0], 0, 0);
+		memory_deleter(player_list[1], 0, 0);
+		memory_deleter(game_process->begin_list, 0, game_process);
+		perror("Error");
+		exit(1);
+	}
+	(*player_list_final)->next->prev = (*player_list_final);
+	(*player_list_final) = (*player_list_final)->next;
+	(*player_list_final)->player = player_list_buff->player;
+	(*player_list_final)->position = player_list_buff->position;
+	(*player_list_final)->next = NULL;
+	player_list[1] = stack_deleter(player_list_buff, 0);
+}
+
+void player_stack_creator_helper_1(t_player_list **player_list_final,
+	t_player_list *player_list_buff, t_player_list **player_list,
+	t_game_process *game_process)
+{
+	if (!((*player_list_final) = (t_player_list *)ft_memalloc(sizeof(t_player_list))))
+	{
+		memory_deleter(player_list[0], 0, 0);
+		memory_deleter(player_list[1], 0, 0);
+		memory_deleter(game_process->begin_list, 0, game_process);
+		perror("Error");
+		exit(1);
+	}
+	(*player_list_final)->player = player_list_buff->player;
+	(*player_list_final)->position = player_list_buff->position;
+	(*player_list_final)->next = NULL;
+	(*player_list_final)->prev = NULL;
+	game_process->begin_list = *player_list_final;
+	player_list[1] = stack_deleter(player_list_buff, 0);
+}
+
+void player_stack_creator_2(t_player_list **player_list_final,
+	int count, t_player_list **pl_list_mass,
+	t_game_process *game_process)
+{
+	if (*player_list_final == NULL)
+		player_stack_creator_helper_3(player_list_final, count,
+			pl_list_mass, game_process);
+	else
+		player_stack_creator_helper_4(player_list_final, count,
+			pl_list_mass, game_process);
+}
+
+void player_stack_creator_1(t_player_list **player_list_final,
+	t_player_list *player_list_buff, t_player_list **pl_list_mass,
+	t_game_process *game_process)
+{
+	if (*player_list_final == NULL)
+		player_stack_creator_helper_1(player_list_final, player_list_buff,
+			pl_list_mass, game_process);
+	else
+		player_stack_creator_helper_2(player_list_final, player_list_buff,
+			pl_list_mass, game_process);
 }
 
 t_player_list *player_stack_creator(t_player_list *player_list_1,
@@ -331,115 +452,32 @@ t_player_list *player_stack_creator(t_player_list *player_list_1,
 {
 	t_player_list *player_list_final;
 	t_player_list *player_list_buff;
+	t_player_list *pl_list_mass[2];
 	int count;
 
 	count = 1;
 	player_list_final = NULL;
 	player_list_buff = player_list_2;
-	while (player_list_1 != NULL || player_list_2 != NULL)
+	pl_list_mass[0] = player_list_1;
+	pl_list_mass[1] = player_list_2;
+	while (pl_list_mass[0] != NULL || pl_list_mass[1] != NULL)
 	{
-		player_list_buff = player_list_2;
+		player_list_buff = pl_list_mass[1];
 		while (player_list_buff && player_list_buff->position != count)
 			player_list_buff = player_list_buff->next;
 		if (player_list_buff != NULL)
-		{
-			if (player_list_final == NULL)
-			{
-				if (!(player_list_final = (t_player_list *)ft_memalloc(sizeof(t_player_list))))
-				{
-					memory_deleter(player_list_1, 0, 0);
-					memory_deleter(player_list_2, 0, 0);
-					memory_deleter(game_process->begin_list, 0, game_process);
-					perror("Error");
-					exit(1);
-				}
-				player_list_final->player = player_list_buff->player;
-				player_list_final->position = player_list_buff->position;
-				player_list_final->next = NULL;
-				player_list_final->prev = NULL;
-				// player_list_final->player->last_live_cycle_number = 0;
-				game_process->begin_list = player_list_final;
-				player_list_2 = stack_deleter(player_list_buff, 0);
-			}
-			else
-			{
-				if (!(player_list_final->next = (t_player_list *)ft_memalloc(sizeof(t_player_list))))
-				{
-					memory_deleter(player_list_1, 0, 0);
-					memory_deleter(player_list_2, 0, 0);
-					memory_deleter(game_process->begin_list, 0, game_process);
-					perror("Error");
-					exit(1);
-				}
-				player_list_final->next->prev = player_list_final;
-				player_list_final = player_list_final->next;
-				player_list_final->player = player_list_buff->player;
-				player_list_final->position = player_list_buff->position;
-				player_list_final->next = NULL;
-				// player_list_final->player->last_live_cycle_number = 0;
-				player_list_2 = stack_deleter(player_list_buff, 0);
-			}
-		}
+			player_stack_creator_1(&player_list_final, player_list_buff,
+				pl_list_mass, game_process);
 		else
-		{
-			if (player_list_final == NULL)
-			{
-				if (!(player_list_final = (t_player_list *)ft_memalloc(sizeof(t_player_list))))
-				{
-					memory_deleter(player_list_1, 0, 0);
-					memory_deleter(player_list_2, 0, 0);
-					memory_deleter(game_process->begin_list, 0, game_process);
-					perror("Error");
-					exit(1);
-				}
-				player_list_final->player = player_list_1->player;
-				player_list_final->position = count;
-				player_list_final->next = NULL;
-				player_list_final->prev = NULL;
-				// player_list_final->player->last_live_cycle_number = 0;
-				game_process->begin_list = player_list_final;
-				player_list_1 = stack_deleter(player_list_1, 1);
-			}
-			else
-			{
-				if (!(player_list_final->next = (t_player_list *)ft_memalloc(sizeof(t_player_list))))
-				{
-					memory_deleter(player_list_1, 0, 0);
-					memory_deleter(player_list_2, 0, 0);
-					memory_deleter(game_process->begin_list, 0, game_process);
-					perror("Error");
-					exit(1);
-				}
-				player_list_final->next->prev = player_list_final;
-				player_list_final = player_list_final->next;
-				player_list_final->player = player_list_1->player;
-				player_list_final->position = count;
-				player_list_final->next = NULL;
-				// player_list_final->player->last_live_cycle_number = 0;
-				player_list_1 = stack_deleter(player_list_1, 1);
-			}
-		}
+			player_stack_creator_2(&player_list_final, count,
+				pl_list_mass, game_process);
 		count++;
 	}
 	return (game_process->begin_list);
 }
 
-int check_position(t_player_list *player_list_1, t_player_list *player_list_2)
+int check_position_help(t_player_list *player_list_2, int len)
 {
-	int len;
-
-	len = 0;
-	while (player_list_1 != 0)
-	{
-		len++;
-		player_list_1 = player_list_1->next;
-	}
-	player_list_1 = player_list_2;
-	while (player_list_1 != 0)
-	{
-		len++;
-		player_list_1 = player_list_1->next;
-	}
 	if (len > MAX_PLAYERS)
 	{
 		if (errno == 0)
@@ -465,122 +503,212 @@ int check_position(t_player_list *player_list_1, t_player_list *player_list_2)
 	return (0);
 }
 
-void parse_arguments(char **argv, t_game_process *game_process, t_player_list **player_list)
+int check_position(t_player_list *player_list_1, t_player_list *player_list_2)
+{
+	int len;
+
+	len = 0;
+	while (player_list_1 != 0)
+	{
+		len++;
+		player_list_1 = player_list_1->next;
+	}
+	player_list_1 = player_list_2;
+	while (player_list_1 != 0)
+	{
+		len++;
+		player_list_1 = player_list_1->next;
+	}
+	if (check_position_help(player_list_2, len))
+		return (1);
+	return (0);
+}
+
+void error_manager_for_parse_arguments(t_player_list *player_list_1,
+	t_player_list *player_list_2, t_game_process *game_process,
+		char **begin_buff_argv)
+{
+	memory_deleter(player_list_2, 0, game_process);
+	memory_deleter(player_list_1, 0, 0);
+	arguments_memory_deleter(begin_buff_argv);
+	if (game_process->error_flag == true)
+		print_usage();
+	exit(1);
+}
+
+bool parse_dump(char **argv, int *count,
+	t_game_process *game_process)
+{
+	if (*argv && ft_atoi(*argv) >= 0 &&
+			check_atoi_honest(*argv) == 1 &&
+				count[0] == 0 && count[1] == 0)
+	{
+		game_process->dump_cycle = ft_atoi(*argv);
+		game_process->bytes_dump_per_line = 32;
+		game_process->dump_flag = true;
+		count[0]++;
+		return (true);
+	}
+	else
+	{
+		game_process->error_flag = true;
+		return (false);
+	}
+}
+
+bool parse_d(char **argv, int *count,
+	t_game_process *game_process)
+{
+	if (*argv && ft_atoi(*argv) >= 0 &&
+		check_atoi_honest(*argv) == 1 &&
+			count[0] == 0 && count[1] == 0)
+	{
+		game_process->d_cycle = ft_atoi(*argv);
+		game_process->bytes_dump_per_line = 64;
+		game_process->dump_flag = true;
+		count[1]++;
+		return (true);
+	}
+	else
+	{
+		game_process->error_flag = true;
+		return (false);
+	}
+}
+
+bool parse_n(char ***argv, t_player_list *player_list_1,
+	t_player_list **player_list_2, t_game_process *game_process)
+{
+	if (**argv && ft_atoi(**argv) > 0 && ft_atoi(**argv) <= 4 &&
+		check_atoi_honest(**argv) == 1 && *((*argv) + 1) &&
+			ft_strcmp(*((*argv) + 1), "-n") != 0)
+	{
+		(*argv)++;
+		if (put_in_stack_of_players(ft_atoi(*((*argv) - 1)), **argv, player_list_2))
+		{
+			game_process->error_flag = false;
+			return (false);
+		}
+		return (true);
+		// {
+		// 	memory_deleter(player_list_1, 0, 0);
+		// 	memory_deleter(player_list_2, 0, game_process);
+		// 	arguments_memory_deleter(begin_buff_argv);
+		// 	exit(1);
+		// }
+	}
+	else
+	{
+		game_process->error_flag = true;
+		return (false);
+	}
+}
+
+// bool parse_arguments_1(t_player_list *player_list_1,
+// 	t_player_list *player_list_2, t_game_process *game_process,
+// 	char **begin_buff_argv)
+// {
+// 	if (ft_strcmp(*(game_process->argv),
+// 		"-dump") == 0)
+// 	{
+// 		game_process->argv += 1;
+// 		if (!(parse_dump(game_process->argv,
+// 			game_process->count, game_process)))
+// 			error_manager_for_parse_arguments(player_list_1, 
+// 			player_list_2, game_process, begin_buff_argv);
+// 	}
+// 	else if (ft_strcmp(*(game_process->argv), "-d") == 0)
+// 	{
+// 		game_process->argv += 1;
+// 		if (!(parse_d(game_process->argv, game_process->count,
+// 			game_process)))
+// 			error_manager_for_parse_arguments(player_list_1, 
+// 			player_list_2, game_process, begin_buff_argv);
+// 	}
+// 	else if (ft_strcmp(*(game_process->argv), "-n") == 0)
+// 	{
+// 		game_process->argv += 1;
+// 		if (!(parse_n(&(game_process->argv), player_list_1,
+// 			player_list_2, game_process)))
+// 			error_manager_for_parse_arguments(player_list_1, 
+// 			player_list_2, game_process, begin_buff_argv);
+// 	}
+// 	else if (ft_strcmp(*(game_process->argv),
+// 		"-a") == 0)
+// 		game_process->flag_a = true;
+// 	else if (ft_strcmp(*(game_process->argv),
+// 		"-v") == 0)
+// 	{
+// 		if (*(game_process->argv + 1) != 0 && game_process->count[2] == 0)
+// 			game_process->flag_v = (uint8_t)(ft_atoi(*(game_process->argv + 1)));
+// 		else
+// 			error_manager_for_parse_arguments(player_list_1, 
+// 				player_list_2, game_process, begin_buff_argv);
+// 		game_process->argv += 1;
+// 		game_process->count[2]++;
+// 	}
+// }
+
+void parse_arguments(char **argv, t_game_process *game_process,
+	t_player_list **player_list)
 {
 	char		**begin_buff_argv;
 	t_player_list *player_list_1;
 	t_player_list *player_list_2;
-	int count_dump;
-	int count_d;
-	int count_v;
+	int count[3];
 
 	begin_buff_argv = argv;
-	count_dump = 0;
-	count_d = 0;
-	count_v = 0;
+	count[0] = 0;
+	count[1] = 0;
+	count[2] = 0;
 	player_list_1 = NULL;
 	player_list_2 = NULL;
-	game_process->flag_a  = false;
-	game_process->dump_cycle  = 0;
-	game_process->d_cycle  = 0;
+	game_process->count = count;
+	game_process->argv = argv;
 	while (*argv != 0)
 	{
+		// game_process->count = count;
+		// game_process->argv = argv;
 		if (ft_strcmp(*argv, "-dump") == 0)
 		{
 			argv++;
-			if (*argv && ft_atoi(*argv) >= 0 &&
-					check_atoi_honest(*argv) == 1 &&
-						count_dump == 0 && count_d == 0)
-			{
-				game_process->dump_cycle = ft_atoi(*argv);
-				game_process->bytes_dump_per_line = 32;
-				game_process->dump_flag = true;
-				count_dump++;
-			}
-			else
-			{
-				memory_deleter(player_list_2, 0, game_process);
-				memory_deleter(player_list_1, 0, 0);
-				arguments_memory_deleter(begin_buff_argv);
-				print_usage();
-				exit(1);
-			}
+			if (!(parse_dump(argv, count, game_process)))
+				error_manager_for_parse_arguments(player_list_1, 
+				player_list_2, game_process, begin_buff_argv);
 		}
 		else if (ft_strcmp(*argv, "-d") == 0)
 		{
 			argv++;
-			if (*argv && ft_atoi(*argv) >= 0 &&
-					check_atoi_honest(*argv) == 1 &&
-						count_dump == 0 && count_d == 0)
-			{
-				game_process->d_cycle = ft_atoi(*argv);
-				game_process->bytes_dump_per_line = 64;
-				game_process->dump_flag = true;
-				count_d++;
-			}
-			else
-			{
-				memory_deleter(player_list_1, 0, 0);
-				arguments_memory_deleter(begin_buff_argv);
-				memory_deleter(player_list_2, 0, game_process);
-				print_usage();
-				// errno = -1;
-				// return (1);
-				exit(1);
-			}
+			if (!(parse_d(argv, count, game_process)))
+				error_manager_for_parse_arguments(player_list_1, 
+				player_list_2, game_process, begin_buff_argv);
 		}
 		else if (ft_strcmp(*argv, "-n") == 0)
 		{
 			argv++;
-			if (*argv && ft_atoi(*argv) > 0 && ft_atoi(*argv) <= 4 &&
-					check_atoi_honest(*argv) == 1 && *(argv + 1) &&
-						ft_strcmp(*(argv + 1), "-n") != 0)
-			{
-				argv++;
-				if (put_in_stack_of_players(ft_atoi(*(argv - 1)), *argv, &player_list_2))
-				{
-					memory_deleter(player_list_1, 0, 0);
-					memory_deleter(player_list_2, 0, game_process);
-					arguments_memory_deleter(begin_buff_argv);
-					exit(1);
-				}
-			}
-			else
-			{
-				memory_deleter(player_list_1, 0, 0);
-				memory_deleter(player_list_2, 0, game_process);
-				arguments_memory_deleter(begin_buff_argv);
-				print_usage();
-				exit(1);
-				// return (1);
-			}
+			if (!(parse_n(&argv, player_list_1, &player_list_2, game_process)))
+				error_manager_for_parse_arguments(player_list_1, 
+				player_list_2, game_process, begin_buff_argv);
 		}
 		else if (ft_strcmp(*argv, "-a") == 0)
 			game_process->flag_a = true;
 		else if (ft_strcmp(*argv, "-v") == 0)
 		{
-			if (*(argv + 1) != 0 && count_v == 0)
+			if (*(argv + 1) != 0 && count[2] == 0)
 				game_process->flag_v = (uint8_t)(ft_atoi(*(argv + 1)));
 			else
-			{
-				memory_deleter(player_list_1, 0, 0);
-				memory_deleter(player_list_2, 0, game_process);
-				arguments_memory_deleter(begin_buff_argv);
-				print_usage();
-				exit(1);
-				// return (1);
-			}
+				error_manager_for_parse_arguments(player_list_1, 
+					player_list_2, game_process, begin_buff_argv);
 			argv++;
-			count_v++;
+			count[2]++;
 		}
 		else
 		{
 			if (put_in_stack_of_players(0, *argv, &player_list_1))
 			{
-				memory_deleter(player_list_1, 0, 0);
-				memory_deleter(player_list_2, 0, game_process);
-				arguments_memory_deleter(begin_buff_argv);
-				exit(1);
+				game_process->error_flag = false;
+				error_manager_for_parse_arguments(player_list_1,
+					player_list_2, game_process, begin_buff_argv);
 			}
 		}
 		argv++;

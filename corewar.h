@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   corewar.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
+/*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 19:13:16 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/21 23:21:44 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/23 00:13:05 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@
 # include <stdbool.h>
 # include <errno.h>
 # include <stdio.h>
+# include <stdlib.h>
 # include "ft_printf/includes/ft_printf.h"
 # include "libft/libft.h"
-
-# define ERR_INVALID_CODE_SIZE	"ERROR: Invalid code size"
+# include "libft/includes/libft.h"
+# include <fcntl.h>
 
 extern int errno;
 
@@ -36,18 +37,15 @@ typedef struct 			s_player
 	t_header			player_header;
 	int					ident;
 	unsigned char		*code;
-	// u_int64_t			last_live_cycle_number;
 }						t_player;
 
 typedef struct s_player_process
 {
 	u_int64_t	PC;
 	u_int8_t		operation_code;
-	// uint8_t		operation_args_type;
 	u_int8_t	registers[REG_NUMBER*REG_SIZE];
 	u_int64_t	cycles_to_wait;
 	u_int64_t	live_counter;
-	// u_int64_t	live_counter_valid;
 	u_int64_t	last_live_cycle_number;
 	bool		carry;
 	u_int8_t	reg[3];
@@ -69,8 +67,12 @@ typedef struct			s_player_list
 	struct s_player_list		*prev;
 }						t_player_list;
 
-typedef struct s_game_process		/*Хранит*/
+typedef struct s_game_process
 {
+	char		**argv;
+	int			*count;
+	int 		divider;
+	bool		error_flag;
 	u_int64_t	cycle_number;
 	int64_t		cycle_to_die;
 	t_player_list *begin_list;
@@ -88,34 +90,6 @@ typedef struct s_game_process		/*Хранит*/
 	t_player_process	*beginner;
 	t_player_list		*last_live_player;
 }				t_game_process;
-
-// void (*operation[16])(t_game_process *game_process, t_player_process *player_process,
-// 	t_player_list *player_list, t_vm_field_memory *vm_field_memory) =
-// {
-// 	op1
-// };
-
-// void (*operation[16])(t_game_process *game_process, t_player_process *player_process,
-// 					  t_player_list *player_list, t_vm_field_memory *vm_field_memory) =
-// {
-// 		// op01(game_process, player_process, player_list, vm_field_memory),
-// 		// op02(game_process, player_process, player_list, vm_field_memory),
-// 		// op03(game_process, player_process, player_list, vm_field_memory),
-// 		// op04(game_process, player_process, player_list, vm_field_memory),
-// 		// op05(game_process, player_process, player_list, vm_field_memory),
-// 		// op06(game_process, player_process, player_list, vm_field_memory),
-// 		// op07(game_process, player_process, player_list, vm_field_memory),
-// 		// op08(game_process, player_process, player_list, vm_field_memory),
-// 		// op09(game_process, player_process, player_list, vm_field_memory),
-// 		// op10(game_process, player_process, player_list, vm_field_memory),
-// 		op11/*(game_process, player_process, player_list, vm_field_memory)*/,
-// 		op12/*(game_process, player_process, player_list, vm_field_memory)*/,
-// 		// op13(game_process, player_process, player_list, vm_field_memory),
-// 		// op14(game_process, player_process, player_list, vm_field_memory),
-// 		op15/*(game_process, player_process, player_list, vm_field_memory)*/,
-// 		op16/*(game_process, player_process, player_list, vm_field_memory)*/
-
-// };
 
 void virtual_machine(t_game_process *game_process,
 	t_player_list *player_list,  t_op *op_tab);
