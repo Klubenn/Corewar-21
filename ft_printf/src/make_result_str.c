@@ -20,6 +20,7 @@ int		set_fd(int fd)
 		return (loc_fd);
 	if (fd > 0)
 		loc_fd = fd;
+	return (0);
 }
 
 int		get_fd(void)
