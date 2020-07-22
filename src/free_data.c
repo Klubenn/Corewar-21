@@ -22,7 +22,7 @@ void	print_error_message(enum err_message num)
 			"File doesn't exist.\n",											//NOT_EXIST
 			"Multiple champion names.\n",										//MULTIPLE_NAME
 			"Multiple champion comments.\n",									//MULTIPLE_COMMENT
-
+			"Label not found.\n"												//LABEL_NOT_FOUND
 	};
 	ft_putstr_fd(ch[num], 2);
 }
@@ -43,6 +43,7 @@ void	free_instruction(t_instruction *instruction)
 			}
 			free(instruction->args_of_func);
 		}
+		free(instruction->str);
 		free(instruction);
 		instruction = tmp;
 	}
@@ -75,22 +76,31 @@ void	free_data(t_struct *data)
 	free(data);
 }
 
-void	error_management(int err, t_struct *data)
+void	error_management(int err, t_struct *data, int line_num)
 {
-	if (err)
-	{
-		if (data)
-		{
-			ft_putstr_fd("Error on line ", 2);
-			ft_putnbr_fd(data->line, 2);
-			ft_putstr_fd(": ", 2);
-		}
-		print_error_message(err);
-		if (data->str)
-			ft_putendl_fd(data->str, 2);
-	}
+	char	*str;
+	int 	line;
+	t_instruction *instruction;
+
 	if (data)
+	{
+		str = data->str;
+		line = data->line;
+		if (line_num)
+		{
+			instruction = data->instruction;
+			while (instruction->next && instruction->line != line_num)
+				instruction = instruction->next;
+			str = instruction->str;
+			line = line_num;
+		}
+		ft_printf("Error on line %d: %z", line, 2);
+		print_error_message(err);
+		ft_putstr_fd(str, 2);
 		free_data(data);
+	}
+	else
+		print_error_message(err);
 	exit(-1);
 }
 

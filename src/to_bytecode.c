@@ -93,6 +93,19 @@ int		argument_size(t_instruction *instruction)
 	return (size_total);
 }
 
+t_instruction *create_empty_instruction(t_struct *data)
+{
+	t_instruction *instruction;
+
+	instruction = data->instruction;
+	while (instruction->next)
+		instruction = instruction->next;
+	if (!(instruction->next = (t_instruction *)ft_memalloc(sizeof(t_instruction))))
+		return (NULL);
+	instruction->next->position = instruction->position + argument_size(instruction);
+	return (instruction->next);
+}
+
 void	instructions_position(t_struct *data)
 {
 	t_instruction *instruction;
@@ -118,12 +131,16 @@ void	check_labels(t_struct *data)
 	label_1 = data->label;
 	while (label_1)
 	{
+		if (!label_1->instruction)
+			label_1->instruction = create_empty_instruction(data);
 		name = label_1->label_name;
 		label_2 = label_1->next;
 		while (label_2)
 		{
+			if (!label_2->instruction)
+				label_2->instruction = label_1->instruction;
 			if (ft_strcmp(name, label_2->label_name) == 0)
-				error_management(DUPL_LABEL, data);
+				error_management(DUPL_LABEL, data, label_1->instruction->line);
 			label_2 = label_2->next;
 		}
 		label_1 = label_1->next;

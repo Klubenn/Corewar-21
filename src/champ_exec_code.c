@@ -81,29 +81,34 @@ int		corewar_atoi(char *arg, void *numptr, int size)
 
 void	f_reg(int fd, t_struct *data, t_instruction *instruction, t_args *argument)
 {
-	unsigned char reg_num;
+	char	reg_num;
+	int		error;
 
-	reg_num = (unsigned char)ft_atoi((argument->str) + 1);
-	if (reg_num > 0  && reg_num <= 16)
+	error = (unsigned char)corewar_atoi((argument->str) + 1, &reg_num, sizeof(char));
+	if (!error)
 		write(fd, &reg_num, 1);
-	else if (instruction)
-		error_management(WRONG_REG, data);
+	else
+		error_management(WRONG_REG, data, instruction->line);
 }
 
 void	f_dir(int fd, t_struct *data, t_instruction *instruction, t_args *argument)
 {
 	int		dir_num;
+	int 	position;
 
 	dir_num = (int)(-1 * instruction->position);
 	if (argument->type & T_LAB)
 	{
-		dir_num += bin_find_label(data, argument->str + 2);
+		position = bin_find_label(data, argument->str + 2);
+			if (position == -1)
+				error_management(LABEL_NOT_FOUND, data, instruction->line);
+		dir_num += position;
 		write_backwards(fd, &dir_num, argument->size);
 	}
 	else
 	{
 		if (corewar_atoi(argument->str + 1, &dir_num, argument->size))
-			error_management(WRONG_NUM, data);
+			error_management(WRONG_NUM, data, instruction->line);
 		write_backwards(fd, &dir_num, argument->size);
 	}
 }
@@ -111,17 +116,21 @@ void	f_dir(int fd, t_struct *data, t_instruction *instruction, t_args *argument)
 void	f_ind(int fd,t_struct *data, t_instruction *instruction, t_args *argument)
 {
 	short	ind_num;
+	int 	position;
 
 	ind_num = (short)(-1 * instruction->position);
 	if (argument->type & T_LAB)
 	{
-		ind_num += (short)bin_find_label(data, argument->str + 1);
+		position = (short)bin_find_label(data, argument->str + 1);
+		if (position == -1)
+			error_management(LABEL_NOT_FOUND, data, instruction->line);
+		ind_num += position;
 		write_backwards(fd, &ind_num, sizeof(short));
 	}
 	else
 	{
 		if (corewar_atoi(argument->str, &ind_num, IND_SIZE))
-			error_management(WRONG_NUM, data);
+			error_management(WRONG_NUM, data, instruction->line);
 		write_backwards(fd, &ind_num, sizeof(short));
 	}
 }
@@ -129,12 +138,16 @@ void	f_ind(int fd,t_struct *data, t_instruction *instruction, t_args *argument)
 void arguments_code(int fd, t_struct *data, t_instruction *instruction)
 {
 	int i;
-	t_f func[4] = {NULL, &f_reg, &f_dir, &f_ind};
 
 	i = 0;
 	while (i < instruction->num_of_args)
 	{
-		func[(instruction->args_of_func[i]->type)&(T_REG | T_DIR | T_IND)](fd, data, instruction, instruction->args_of_func[i]);
+		if (instruction->args_of_func[i]->type & T_REG)
+			f_reg(fd, data, instruction, instruction->args_of_func[i]);
+		else if (instruction->args_of_func[i]->type & T_DIR)
+			f_dir(fd, data, instruction, instruction->args_of_func[i]);
+		else if (instruction->args_of_func[i]->type & T_IND)
+			f_ind(fd, data, instruction, instruction->args_of_func[i]);
 		i++;
 	}
 }

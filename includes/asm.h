@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <limits.h>
 #include "../libft/libft.h"
+#include "header_pf.h"
 //#include <zconf.h>
 #include "op.h"
 
@@ -31,6 +32,7 @@ enum err_message
 	NOT_EXIST,
 	MULTIPLE_NAME,
 	MULTIPLE_COMMENT,
+	LABEL_NOT_FOUND,
 };
 
 
@@ -67,6 +69,8 @@ struct 				s_instruction
     int			    num_of_args;
 	t_args			**args_of_func;
 	t_instruction	*next;
+	int 			line;
+	char 			*str;
 };
 
 typedef struct		s_struct
@@ -83,15 +87,13 @@ typedef struct		s_struct
 	char 			*gnl_buf;
 }					t_struct;
 
-typedef void (*t_f)(int fd, t_struct *data, t_instruction *instruction, t_args *argument);
-
 void	print_file(char *new_file);
 void	bin_exec_champ(int fd, t_struct *data);
 void	write_backwards(int fd, void *source, int size);
 void	instructions_position(t_struct *data);
 void	check_labels(t_struct *data);
 void    to_bytecode(t_struct *data);
-void	error_management(int err, t_struct *data);
+void	error_management(int err, t_struct *data, int line_num);
 int		check_other_strings(char *str, t_struct *data);
 int		check_label(t_struct *data, char *str);
 int     create_instruction(t_op *op, char **params, t_struct *data);
@@ -107,7 +109,7 @@ int		check_ending(char *str);
 void	free_data(t_struct *data);
 int		gnl(int fd, char **line, char **gnl_buf);
 char	**split_corewar(char *str);
-void free_arr(char **arr);
+void	free_arr(char **arr);
 
 
 #endif //COREWAR_ASM_H

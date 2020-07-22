@@ -37,15 +37,6 @@ int		check_ending(char *str)
 	return (1);
 }
 
-char *remove_comment_from_string(char *str)
-{
-	char *tmp;
-
-	if (!(tmp = ft_strchr(str, COMMENT_CHAR)))
-		return (ft_strdup(str));
-	return (ft_strndup(str, tmp - str));
-}
-
 char *cut_string(char *str)
 {
 	int i;
@@ -120,7 +111,7 @@ int		continue_reading(int fd, char **string, t_struct *data)
 	char *tmp2;
 	tmp1 = ft_strdup("\n");
 	big = NULL;
-	while(get_next_line(fd, &small) > 0 && ++(data->line))
+	while(gnl(fd, &small, &data->gnl_buf) > 0 && ++(data->line))
 	{
 		data->str = small;
 		if ((tmp2 = ft_strchr(small, '"')))
@@ -193,7 +184,20 @@ void	process_name_and_comment(char *str, t_struct *data, int fd)
 	else
 		err = (TOP_FILE);
 	if (err)
-		error_management(err, data);
+		error_management(err, data, 0);
+}
+
+int		put_data_to_instruction(char *str, t_struct *data)
+{
+	t_instruction *instruction;
+
+	instruction = data->instruction;
+	while (instruction->next)
+		instruction = instruction->next;
+	if (!(instruction->str = ft_strdup(str)))
+		return (MALLOC_FAIL);
+	instruction->line = data->line;
+	return (0);
 }
 
 void		process_string(char *str, t_struct *data, int fd)
@@ -214,12 +218,15 @@ void		process_string(char *str, t_struct *data, int fd)
 			error = DOT_START;
 	}
 	else
+	{
 		error = check_other_strings(str_trim, data);
+		error = error ? error : put_data_to_instruction(str, data);
+	}
 	if (error)
 	{
 		free(str);
 		close (fd);
-		error_management(error, data);
+		error_management(error, data, 0);
 	}
 }
 
@@ -231,8 +238,8 @@ void	is_valid_file(char *file_name, t_struct *data)
 
 	flag = 1;
 	if ((fd = open(file_name, O_RDONLY)) == -1)
-		error_management(NO_FILE, data);
-	while (get_next_line(fd, &str) > 0 && ++(data->line))
+		error_management(NO_FILE, data, 0);
+	while (gnl(fd, &str, &data->gnl_buf) > 0 && ++(data->line))
 	{
 		data->str = str;
 		if (!data->name || !data->comment)
@@ -244,7 +251,9 @@ void	is_valid_file(char *file_name, t_struct *data)
 	}
 	close(fd);
 	if (flag)
-		error_management(END_INPUT, data);
+		error_management(END_INPUT, data, 0);
+	data->str = NULL;
+	data->line = 0;
 }
 
 t_struct *change_extension(char *file_name)
@@ -253,19 +262,19 @@ t_struct *change_extension(char *file_name)
 	t_struct *data;
 
 	if (!file_name)
-		error_management(NOT_EXIST, NULL);
+		error_management(NOT_EXIST, NULL, 0);
 	i = ft_strlen(file_name);
 	while (i >= 0)
 	{
 		if (file_name[i] == '.')
 		{
 			if (i == 0 || ft_strcmp(file_name + i, ".s"))
-				error_management(FILE_NAME, NULL);
+				error_management(FILE_NAME, NULL, 0);
 			else
 			{
 				if (!(data = (t_struct *)ft_memalloc(sizeof(t_struct))) ||
 				!(data->file_name = (char *)ft_memalloc((i + 5) * (sizeof(char)))))
-					error_management(MALLOC_FAIL, data);
+					error_management(MALLOC_FAIL, data, 0);
 				ft_strncpy(data->file_name, file_name, i);
 				ft_strncpy(data->file_name + i, ".cor", 4);
 				return (data);
@@ -283,20 +292,18 @@ int		main(int ac, char **av)
 
 	i = 1;
 	if (ac < 2)
-		error_management(USAGE, NULL);
+		error_management(USAGE, NULL, 0);
 //	while (i < ac)
 //	{
 		if (!(data = change_extension(av[i])))
-			error_management(FILE_NAME, NULL);
+			error_management(FILE_NAME, NULL, 0);
 		else
 		{
 			is_valid_file(av[i], data);
 			instructions_position(data);
 			check_labels(data);
 			to_bytecode(data);
-			ft_putstr("file ");
-			ft_putstr(data->file_name);
-			ft_putendl(" was successfully created");//как альтернатива
+			ft_printf("file %s was successfully created\n", data->file_name);
 			free_data(data);
 		}
 //		i++;

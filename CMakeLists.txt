@@ -9,6 +9,3 @@ set(INCLUDE_FILES includes/op.h includes/asm.h)
 add_executable(corewar ${SOURCE_FILES} ${INCLUDE_FILES})
 target_link_libraries(corewar /Users/gtristan/CLionProjects/corewar/libft/libft.a)
 target_link_libraries(corewar /Users/gtristan/CLionProjects/corewar/libft/ft_printf/libftprintf.a)
-
-# //	while (gnl(fd, &str, &(data->gnl_buf)) > 0 && ++(data->line))
-# //	while(gnl(fd, &small, &(data->gnl_buf)) > 0 && ++(data->line))
