@@ -59,6 +59,11 @@ typedef struct				s_list_pf
 	char					*zero;
 }							t_list_pf;
 
+char						*get_result_str(void);
+int							get_fd(void);
+int							set_fd(int fd);
+void						fd_z(va_list ap);
+char						*add_char_to_output_buffer(char c);
 int							ft_printf(const char *format, ...);
 void						float_f(t_list_pf *list, va_list ap);
 unsigned long				power(int base, int exp);

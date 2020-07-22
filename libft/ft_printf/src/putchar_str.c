@@ -12,6 +12,11 @@
 
 #include "../includes/header_pf.h"
 
+char	*get_result_str(void)
+{
+	return (add_char_to_output_buffer(0));
+}
+
 int		ft_putchar_pf(char c, int n)
 {
 	static int num = 0;
@@ -20,7 +25,7 @@ int		ft_putchar_pf(char c, int n)
 	{
 		while (n > 0)
 		{
-			write(1, &c, 1);
+			add_char_to_output_buffer(c);
 			n--;
 			num++;
 		}
@@ -68,7 +73,7 @@ int		ft_strlen_pf(char *str)
 int		last_letter(char c)
 {
 	if (c == 'd' || c == 'i' || c == 'o' || c == 'u' || c == 'x' || c == 'X' \
-	|| c == 'c' || c == 's' || c == 'p' || c == 'f' || c == '%')
+	|| c == 'c' || c == 's' || c == 'p' || c == 'f' || c == '%' || c == 'z')
 		return (1);
 	else if ((c >= '0' && c <= '9') || c == '.' || c == '#' || c == '-' \
 	|| c == '+' || c == ' ' || c == 'l' || c == 'h' || c == 'L' \

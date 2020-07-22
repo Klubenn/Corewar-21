@@ -43,10 +43,17 @@ void	separation(const char *format, va_list ap)
 
 int		ft_printf(const char *format, ...)
 {
-	va_list ap;
+	va_list		ap;
+	char		*res_str;
 
 	va_start(ap, format);
 	separation(format, ap);
 	va_end(ap);
+	res_str = get_result_str();
+	if (res_str)
+	{
+		write(get_fd(), res_str, ft_strlen(res_str));
+		free(res_str);
+	}
 	return (ft_putchar_pf('@', 0));
 }

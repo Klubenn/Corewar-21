@@ -20,7 +20,7 @@ INCL_LIB = ../
 SRC_DIR = src/
 SRC_C = analysis.c decimal.c float2.c float4.c ft_printf.c parsing.c \
   		printnum.c services_itoa.c create_string.c float.c float3.c free.c \
-		oct.c print_color.c putchar_str.c string_char.c
+		oct.c print_color.c putchar_str.c string_char.c make_result_str.c
 SRC = $(addprefix $(SRC_DIR),$(SRC_C))
 
 OBJ_DIR = obj/

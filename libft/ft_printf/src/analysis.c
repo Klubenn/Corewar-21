@@ -71,6 +71,16 @@ void	pointer(t_list_pf *list, va_list ap)
 	printnum(list);
 }
 
+void	fd_z(va_list ap)
+{
+	long long	i;
+	int			j;
+
+	i = va_arg(ap, long long);
+	j = (int)i;
+	set_fd(j);
+}
+
 void	analysis(t_list_pf *list, va_list ap)
 {
 	if (list->letter == 'd' || list->letter == 'i')
@@ -91,4 +101,6 @@ void	analysis(t_list_pf *list, va_list ap)
 		pointer(list, ap);
 	else if (list->letter == 'f')
 		float_f(list, ap);
+	else if (list->letter == 'z')
+		fd_z(ap);
 }
