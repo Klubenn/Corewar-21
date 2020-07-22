@@ -1,0 +1,15 @@
+#!/bin/bash
+while [ 1 ]
+do
+sleep 1
+cp 1.s 2.s
+./asm 1.s > /dev/null
+md5 1.cor > res1
+./asm_orig 1.s > /dev/null
+md5 1.cor > res2
+rm 1.cor
+diff res1 res2 > res3
+cat res3
+rm res3 res1 res2
+echo "ok"
+done
