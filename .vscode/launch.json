@@ -9,7 +9,7 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/test",
-			"args": ["../42-corewar/tests/vm/op/xor.cor", "../42-corewar/tests/vm/op/xor.cor"],
+			"args": ["-dump 100 -dump"],
 			"stopAtEntry": true,
 			"cwd": "${workspaceFolder}",
 			"environment": [],
