@@ -1,122 +1,71 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   checks.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gtristan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/22 19:09:00 by gtristan          #+#    #+#             */
+/*   Updated: 2020/07/23 17:02:23 by gtristan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include <stdio.h>
-#include <../libft/libft.h>
-#include "../includes/op.h"
-#include "../includes/asm.h"
+#include "asm.h"
 
-int skip_spaces(char* str)
+int		check_other_strings(char *str, t_struct *data)
 {
-    int i;
+	t_op	*op;
+	int		if_label;
+	char	*cut_str;
+	int		result;
 
-    i = 0;
-	while (ft_isspace(str[i]))
-		i++;
-	return (i);
+	if ((if_label = check_label(data, str)) < 0)
+		return (MALLOC_FAIL);
+	if (!check_ending(str + if_label))
+		return (0);
+	if (!(cut_str = cut_string(str + if_label)))
+		return (MALLOC_FAIL);
+	if (!(op = check_op(cut_str)))
+	{
+		free(cut_str);
+		return (SYNTAX_ERROR);
+	}
+	str = trim_start(cut_str + ft_strlen(op->name));
+	result = check_param(data, str, op);
+	free(cut_str);
+	return (result);
 }
 
-int skip_word(char* str)
+void	free_strings(char *str1, char *str2, char *str3, char *str4)
 {
-    int i;
-
-    i = 0;
-    while (!ft_isspace(str[i]) && str[i] != '\0') // !
-		i++;
-    return (i);
+	free(str1);
+	free(str2);
+	free(str3);
+	free(str4);
 }
 
-int check_params_num(char **params, int needed_num)
+char	get_type(char *param)
 {
-	int i;
+	char *trim_param;
 
-	i = 0;
-	while (params[i])
-		i++;
-	return ((i == needed_num) ? 1 : 0);
+	trim_param = param + skip_spaces(param);
+	if (ft_isdigit(trim_param[0]) || trim_param[0] == '-')
+		return (T_IND);
+	if (trim_param[0] == 'r')
+		return (T_REG);
+	if (trim_param[0] == DIRECT_CHAR)
+	{
+		if (ft_isdigit(trim_param[1]) || trim_param[1] == '-')
+			return (T_DIR);
+		if (trim_param[1] == LABEL_CHAR)
+			return (T_DIR | T_LAB);
+	}
+	if (trim_param[0] == LABEL_CHAR)
+		return (T_IND | T_LAB);
+	return (0);
 }
 
-int check_reg(char *param)
-{
-    int reg;
-
-    if (!param || !param[0] || param[0] != 'r' || !ft_isdigit(param[1]))
-        return (0);
-    reg = ft_atoi(param + 1);
-    if (reg > 0 && reg <= REG_NUMBER)
-        return (1);
-    return (0);
-}
-
-int check_param_correctness(unsigned char type, char* param)
-{
-    if (type & T_DIR)
-    {
-        if (!param || !param[0] || !param[1])
-            return (0);
-        if (type & T_LAB)
-            return (1);
-        if (ft_strlen(param) >= 3 && param[1] == '-' && ft_isdigit(param[2]))
-            return (1);
-        if (ft_isdigit(param[1]))
-            return (1);
-    }
-    else if (type & T_IND)
-    {
-        if (!param || !param[0])
-            return (0);
-        if (type & T_LAB)
-            return (1);
-        if (ft_strlen(param) >= 2 && ft_isdigit(param[1]) && param[0] == '-')
-            return (1);
-        if (ft_isdigit(param[0]))
-            return (1);
-    }
-    else if (type & T_REG)
-        return check_reg(param);
-    return 0;
-}
-
-int check_params(char **params, t_op *op)
-{
-    unsigned char type;
-    char *param;
-    int i;
-
-    i = 0;
-    while (i < op->arg_num)
-    {
-        param = params[i];
-        type = get_type(param);
-        if (!(type & op->arg[i]) || !check_param_correctness(type, param))
-            return (0);
-        i++;
-    }
-    return (1);
-}
-
-char get_type(char *param)
-{
-    char *trim_param;
-
-    trim_param = param + skip_spaces(param);
-    if (ft_isdigit(trim_param[0]) || trim_param[0] == '-')
-        return (T_IND);
-    if (trim_param[0] == 'r')
-        return (T_REG);
-    if (trim_param[0] == DIRECT_CHAR)
-    {
-        if (ft_isdigit(trim_param[1]) || trim_param[1] == '-')
-            return (T_DIR);
-
-        if (trim_param[1] == LABEL_CHAR)
-            return (T_DIR | T_LAB);
-    }
-    if (trim_param[0] == LABEL_CHAR)
-        return (T_IND | T_LAB);
-    return (0);
-}
-
-
-void free_arr(char **arr)
+void	free_arr(char **arr)
 {
 	int i;
 
@@ -127,88 +76,4 @@ void free_arr(char **arr)
 		i++;
 	}
 	free(arr);
-}
-
-int check_param(t_struct *data, char *str, t_op *op)// str2 already starts with word! not contains comments
-{
-	char **params;
-
-	if (!(params = split_corewar(str)))
-	    return (INCORRECT_ARGUMENT);
-	if (!(check_params_num(params, op->arg_num) && check_params(params, op)))
-	{
-        free_arr(params);
-        return (SYNTAX_ERROR);
-    }
-	else
-        return (create_instruction(op, params, data));
-}
-
-void push_back(t_struct *data, t_instruction *instruction)
-{
-	t_instruction *instr;
-
-	instr = data->instruction;
-	if (!instr)
-		data->instruction = instruction;
-	else
-	{
-		while (instr->next)
-			instr = instr->next;
-		instr->next = instruction;
-	}
-}
-
-int create_instruction(t_op *op, char **params, t_struct *data)
-{
-    t_instruction *instruction;
-    t_label *label;
-
-    if (!(instruction = (t_instruction *)ft_memalloc(sizeof(t_instruction)))
-        || !(instruction->args_of_func = (t_args	**)ft_memalloc(sizeof(t_args *) * 4)))
-        return (MALLOC_FAIL);
-
-    instruction->op = op;
-    instruction->num_of_args = op->arg_num;
-	instruction->function = op->func_num;
-	if (!(create_args(instruction->args_of_func, params)))
-		return (SYNTAX_ERROR);
-
-    if (data->label_present == 1)
-    {
-    	label = data->label;
-    	while (label)
-		{
-			if (!label->instruction)
-				label->instruction = instruction;
-			label = label->next;
-		}
-        data->label_present = 0;
-    }
-    push_back(data, instruction);
-    return (0);
-}
-
-
-
-int create_args(t_args **args_of_func, char **params)
-{
-    int i;
-	unsigned char type;
-
-    i = 0;
-    while (params[i])
-    {
-		if (!(args_of_func[i] = (t_args *)ft_memalloc(sizeof(t_args))) ||
-			!(type = get_type(params[i])))
-			return (0);
-
-		args_of_func[i]->type = type;
-
-		if (check_ending(params[i] + skip_word(params[i])))
-			return (0);
-		args_of_func[i]->str = params[i];
-        i++;
-    }
-	return (1);
 }

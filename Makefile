@@ -8,11 +8,29 @@ LIBFTPRINTF = ./libft/ft_printf/libftprintf.a
 LIBFTLIB = ./libft/libft.a
 
 INCL_DIR = ./includes/
-INCL_H = asm.h op.h
+INCL_H = asm.h \
+         op.h \
+         structs.h
 INCL = $(addprefix $(INCL_DIR),$(INCL_H))
 
 SRC_DIR = ./src/
-SRC_C = asm.c to_bytecode.c checks.c labels.c op.c free_data.c champ_exec_code.c gnl.c split_corewar.c
+SRC_C = asm.c \
+        bin_arguments.c \
+        champ_exec_code.c \
+        check_params.c \
+        checks.c \
+        create_instruction.c \
+        free_data.c \
+        gnl.c \
+        instruction_size.c \
+        labels_atoi.c \
+        labels_instructions.c \
+        op.c \
+        read_name_comment.c \
+        skips.c \
+        split_corewar.c \
+        to_bytecode.c
+
 SRC = $(addprefix $(SRC_DIR),$(SRC_C))
 
 FLAGS = -Wall -Wextra -Werror

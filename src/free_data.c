@@ -1,30 +1,43 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_data.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gtristan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/22 19:09:00 by gtristan          #+#    #+#             */
+/*   Updated: 2020/07/23 17:02:23 by gtristan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "asm.h"
 
-void	print_error_message(enum err_message num)
+void	print_error_message(enum e_err_message num)
 {
-	static char *ch[] = {
-			NULL,
-			"usage: ./asm file_name\n",											//USAGE
-			"Wrong file name. Should have an \".s\" extension.\n",				//FILE_NAME
-			"Syntax error - unexpected end of input. Missing end of line.\n",	//END_INPUT
-			"Can't open the file.\n",											//NO_FILE
-			"Name and comment should be at the top of file.\n",					//TOP_FILE
-			"Only a name or a comment can begin with a \'.\'\n",				//DOT_START
-			"Memory allocation failed.\n",										//MALLOC_FAIL
-			"Champion name is too long.\n",										//LONG_NAME
-			"Champion comment is too long.\n",									//LONG_COMM
-			"Name and comment should start with the quotes.\n",					//QUOTES_BEGIN
-			"Name and comment should end with the quotes.\n",					//QUOTES_END
-			"Syntax error.\n",													//SYNTAX_ERROR
-			"Wrong register number.\n",											//WRONG_REG
-			"Wrong number.\n",													//WRONG_NUM
-			"Error: duplicate labels.\n",										//DUPL_LABEL
-			"File doesn't exist.\n",											//NOT_EXIST
-			"Multiple champion names.\n",										//MULTIPLE_NAME
-			"Multiple champion comments.\n",									//MULTIPLE_COMMENT
-			"Label not found.\n",												//LABEL_NOT_FOUND
-			"Incorrect argument.\n"												//INCORRECT_ARGUMENT
+	static char *ch[] = {NULL,
+			"usage: ./asm file_name\n",
+			"Wrong file name. Should have an \".s\" extension.\n",
+			"Syntax error - unexpected end of input. Missing end of line.\n",
+			"Can't open the file.\n",
+			"Name and comment should be at the top of file.\n",
+			"Only a name or a comment can begin with a \'.\'\n",
+			"Memory allocation failed.\n",
+			"Champion name is too long.\n",
+			"Champion comment is too long.\n",
+			"Name and comment should start with the quotes.\n",
+			"Name and comment should end with the quotes.\n",
+			"Syntax error.\n",
+			"Wrong register number.\n",
+			"Wrong number.\n",
+			"Error: duplicate labels.\n",
+			"File doesn't exist.\n",
+			"Multiple champion names.\n",
+			"Multiple champion comments.\n",
+			"Label not found.\n",
+			"Incorrect argument.\n",
+			"Can't create file. Access to location denied.\n"
 	};
+
 	ft_putstr_fd(ch[num], 2);
 }
 
@@ -44,7 +57,6 @@ void	free_instruction(t_instruction *instruction)
 			}
 			free(instruction->args_of_func);
 		}
-		free(instruction->str);
 		free(instruction);
 		instruction = tmp;
 	}
@@ -74,13 +86,14 @@ void	free_data(t_struct *data)
 	free(data->name);
 	free(data->comment);
 	free(data->gnl_buf);
+	free(data->file_arr_start);
 	free(data);
 }
 
 void	error_management(int err, t_struct *data, int line_num)
 {
-	int 	line;
-	t_instruction *instruction;
+	int				line;
+	t_instruction	*instruction;
 
 	if (data)
 	{
@@ -100,4 +113,3 @@ void	error_management(int err, t_struct *data, int line_num)
 		print_error_message(err);
 	exit(-1);
 }
-
