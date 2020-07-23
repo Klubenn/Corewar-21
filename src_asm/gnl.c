@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/asm.h"
+#include "asm.h"
 
 static int	ft_buf_to_line(char *buff, size_t i, char **line, char **buf_list)
 {
