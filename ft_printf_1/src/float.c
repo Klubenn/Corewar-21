@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   float.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: couida <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 16:36:48 by couida            #+#    #+#             */
-/*   Updated: 2020/01/17 17:50:44 by gtristan         ###   ########.fr       */
+/*   Updated: 2020/07/24 15:56:44 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/header_pf.h"
+#include "header_pf.h"
 
 unsigned long	power(int base, int exp)
 {

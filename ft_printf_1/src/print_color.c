@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   print_color.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: couida <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 16:38:40 by couida            #+#    #+#             */
-/*   Updated: 2020/01/17 16:38:45 by couida           ###   ########.fr       */
+/*   Updated: 2020/07/24 15:56:44 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/header_pf.h"
+#include "header_pf.h"
 
 int		is_color(char *str, char *color)
 {

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   putchar_str.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: couida <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 16:39:11 by couida            #+#    #+#             */
-/*   Updated: 2020/01/17 16:39:15 by couida           ###   ########.fr       */
+/*   Updated: 2020/07/24 15:56:44 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/header_pf.h"
+#include "header_pf.h"
 
 char	*get_result_str(void)
 {

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   float3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: couida <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 16:37:15 by couida            #+#    #+#             */
-/*   Updated: 2020/01/17 16:37:20 by couida           ###   ########.fr       */
+/*   Updated: 2020/07/24 15:56:44 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/header_pf.h"
+#include "header_pf.h"
 
 int		change_num(char *str, int i)
 {

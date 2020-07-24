@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   create_string.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: couida <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 16:36:22 by couida            #+#    #+#             */
-/*   Updated: 2020/01/17 16:36:25 by couida           ###   ########.fr       */
+/*   Updated: 2020/07/24 15:56:44 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/header_pf.h"
+#include "header_pf.h"
 
 int		fill_struct3(char *ch, t_list_pf *list)
 {

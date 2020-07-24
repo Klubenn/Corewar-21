@@ -6,7 +6,7 @@
 /*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 19:13:16 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/23 23:55:17 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/24 15:10:51 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # include <errno.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include "../ft_printf/includes/ft_printf.h"
-# include "../libft/includes/libft.h"
+# include "header_pf.h"
+# include "libft.h"
 # include <fcntl.h>
 
 typedef struct					s_vm_field_memory
@@ -112,7 +112,7 @@ void							memory_deleter(t_player_list *player_list,
 t_vm_field_memory *vm_field_memory, t_game_process *game_process);
 void							memory_error_cleaner(t_player_process
 *player_process);
-int								ft_printf(char *format, ...);
+int								ft_printf(const char *format, ...);
 char							**memory_allocator_cmd_line_args(char **argv);
 bool							parse_v(t_player_list *player_list_1,
 t_player_list **player_list_2, t_game_process *game_process,

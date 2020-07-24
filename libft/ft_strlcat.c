@@ -3,29 +3,84 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gtapioca <gtapioca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/30 16:55:18 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/06/30 16:55:20 by vbrazhni         ###   ########.fr       */
+/*   Created: 2019/09/04 20:29:29 by gtapioca          #+#    #+#             */
+/*   Updated: 2019/09/18 23:26:12 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <string.h>
 
-size_t		ft_strlcat(char *dst, const char *src, size_t dstsize)
+static size_t	counter2(const char *src)
 {
-	size_t	dst_len;
-	size_t	result_len;
+	size_t i;
 
-	dst_len = ft_strlen(dst);
-	result_len = FT_MIN(dstsize, dst_len) + ft_strlen(src);
-	if (!(dstsize <= dst_len))
+	i = 0;
+	while (src[i])
+		++i;
+	++i;
+	return (i);
+}
+
+static size_t	counter1(char *dst)
+{
+	size_t i;
+
+	i = 0;
+	while (dst[i])
+		++i;
+	++i;
+	return (i);
+}
+
+static void		concatinator2(char *dst, const char *src, size_t i)
+{
+	size_t j;
+
+	j = 0;
+	while (src[j])
 	{
-		dst += dst_len;
-		dstsize -= dst_len;
-		while (*src && dstsize-- > 1)
-			*dst++ = *src++;
-		*dst = '\0';
+		dst[i] = src[j];
+		i++;
+		j++;
 	}
-	return (result_len);
+	dst[i] = '\0';
+}
+
+static void		concatinator1(char *dst, const char *src, size_t size, size_t i)
+{
+	size_t j;
+
+	j = 0;
+	while (i < size - 1)
+	{
+		dst[i] = src[j];
+		i++;
+		j++;
+	}
+	dst[i] = '\0';
+}
+
+size_t			ft_strlcat(char *dst, const char *src, size_t size)
+{
+	size_t i;
+	size_t j;
+	size_t c;
+	size_t l;
+
+	i = counter1(dst);
+	j = counter2(src);
+	if (size < i)
+		return (j - 1 + size);
+	c = i;
+	l = j;
+	--i;
+	if (size <= (c + l - 1))
+	{
+		concatinator1(dst, src, size, i);
+		return (c + l - 2);
+	}
+	concatinator2(dst, src, i);
+	return (c + l - 2);
 }

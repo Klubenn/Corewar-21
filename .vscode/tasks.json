@@ -9,7 +9,7 @@
 				"-g",
 				"${workspaceFolder}/src/*.c",
 				"${workspaceFolder}/libft/libft.a",
-				"${workspaceFolder}/ft_printf/libftprintf.a",
+				"${workspaceFolder}/ft_printf_1/libftprintf.a",
 				"-o",
 				"${workspaceFolder}/test"
 			],

@@ -6,16 +6,15 @@
 #    By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/17 13:58:43 by gtristan          #+#    #+#              #
-#    Updated: 2020/07/23 23:54:41 by gtapioca         ###   ########.fr        #
+#    Updated: 2020/07/24 15:12:12 by gtapioca         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libftprintf.a
-
-INCL = ./includes/
+INCL = ./../includes/
 INCL_H = header_pf.h
 INCLUDES = $(addprefix $(INCL),$(INCL_H))
-INCL_LIB = ../
+INCL_LIB = ./../includes/libft.h
 
 SRC_DIR = src/
 SRC_C = analysis.c decimal.c float2.c float4.c ft_printf.c parsing.c \
@@ -26,7 +25,7 @@ SRC = $(addprefix $(SRC_DIR),$(SRC_C))
 OBJ_DIR = obj/
 OBJ_O = $(SRC_C:%.c=%.o)
 OBJ = $(addprefix $(OBJ_DIR),$(OBJ_O))
-LIB_O = ../ft_strlen.o ../ft_atoi.o ../ft_strjoin.o ../ft_strncpy.o ../ft_strcpy.o
+LIB_O = ../libft/libft.a
 
 FLAGS =	-Wall -Werror -Wextra
 
@@ -35,7 +34,7 @@ all: $(OBJ_DIR) $(NAME) $(LIB_O) $(INCLUDES)
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
-$(NAME): $(SRC) $(OBJ) 
+$(NAME): $(SRC) $(OBJ)
 	ar rc $(NAME) $(OBJ) $(LIB_O)
 	ranlib $(NAME)
 

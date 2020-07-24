@@ -3,90 +3,111 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+        */
+/*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/02 19:09:23 by vbrazhni          #+#    #+#             */
-/*   Updated: 2020/07/04 16:26:02 by gtapioca         ###   ########.fr       */
+/*   Created: 2019/09/10 18:44:49 by gtapioca          #+#    #+#             */
+/*   Updated: 2020/07/24 14:38:58 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include <stdlib.h>
+#include "../includes/libft.h"
 
-static size_t	ft_count_words(char const *s, char c)
+static char	**deleter(char **ptr, int k)
 {
-	size_t words;
+	int g;
+	int i;
 
-	words = 0;
+	g = k;
+	i = 0;
+	while (k > 0)
+	{
+		ptr--;
+		free(*ptr);
+		k--;
+	}
+	free(ptr);
+	ptr = NULL;
+	return (ptr);
+}
+
+static char	**word_creator(char const *s, char **ptr, int i, int k)
+{
+	int j;
+
+	j = 0;
+	*ptr = (char *)malloc(sizeof(char) * (i + 1));
+	if (!*ptr)
+	{
+		ptr = deleter(ptr, k);
+		return (ptr);
+	}
+	while (j < i && *s != '\0')
+	{
+		(*ptr)[j] = *s;
+		s++;
+		j++;
+	}
+	(*ptr)[j] = '\0';
+	ptr++;
+	return (ptr);
+}
+
+static char	**word_array_creator(char const *s, char c, char **ptr)
+{
+	int i;
+	int k;
+
+	i = 0;
+	k = 0;
 	while (*s)
 	{
 		while (*s == c)
 			s++;
-		if (*s)
+		while (s[i] != c && s[i] != '\0')
+			i++;
+		if (i)
 		{
-			words++;
-			while (*s && *s != c)
+			k++;
+			ptr = word_creator(s, ptr, i, k);
+			if (!ptr)
+				return (0);
+			while (*s != c && *s != '\0')
 				s++;
+			i = 0;
 		}
 	}
-	return (words);
+	return (ptr);
 }
 
-static char		*ft_get_word(char *word, char c)
+static int	word_counter(char const *s, char c)
 {
-	char *start;
+	int size;
+	int f;
 
-	start = word;
-	while (*word && *word != c)
-		word++;
-	*word = '\0';
-	return (ft_strdup(start));
-}
-
-static void		ft_free_words(char **words, size_t i)
-{
-	while (i--)
-		ft_strdel(&(words[i]));
-	free(*words);
-}
-
-static char		**ft_get_words(char *s, char c, size_t words_count)
-{
-	char	**words;
-	char	*word;
-	size_t	i;
-
-	i = 0;
-	if ((words = (char **)ft_memalloc(sizeof(char *) * (words_count + 1))))
+	f = 0;
+	size = 0;
+	while (s[f])
 	{
-		while (i < words_count)
-		{
-			while (*s == c)
-				s++;
-			if (*s)
-			{
-				if (!(word = ft_get_word(s, c)))
-				{
-					ft_free_words(words, i);
-					return (NULL);
-				}
-				words[i++] = word;
-				s += (ft_strlen(word) + 1);
-			}
-		}
-		words[i] = NULL;
+		if ((s[f] == c && s[f - 1] != c) || (s[f] != c && s[f + 1] == '\0'))
+			size++;
+		f++;
 	}
-	return (words);
+	return (size);
 }
 
-char			**ft_strsplit(char const *s, char c)
+char		**ft_strsplit(char const *s, char c)
 {
-	char	**words;
-	char	*line;
+	char **ptr;
+	char **ptr2;
 
-	if (!s || !(line = ft_strdup((char *)s)))
-		return (NULL);
-	words = ft_get_words(line, c, ft_count_words(line, c));
-	free(line);
-	return (words);
+	if (!s)
+		return (0);
+	ptr = (char **)malloc(sizeof(char *) * (word_counter(s, c) + 1));
+	if (!ptr)
+		return (0);
+	ptr2 = ptr;
+	ptr = word_array_creator(s, c, ptr);
+	*ptr = NULL;
+	return (ptr2);
 }

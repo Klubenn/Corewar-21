@@ -3,29 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gtapioca <gtapioca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/30 20:33:15 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/06/30 20:33:17 by vbrazhni         ###   ########.fr       */
+/*   Created: 2019/09/04 20:29:29 by gtapioca          #+#    #+#             */
+/*   Updated: 2019/09/18 22:21:09 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <string.h>
 
-int		ft_strncmp(const char *s1, const char *s2, size_t n)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	unsigned char	*ptr1;
-	unsigned char	*ptr2;
 	size_t			i;
+	unsigned char	*l;
+	unsigned char	*k;
 
-	ptr1 = (unsigned char *)s1;
-	ptr2 = (unsigned char *)s2;
+	l = (unsigned char *)s1;
+	k = (unsigned char *)s2;
 	i = 0;
-	while ((ptr1[i] || ptr2[i]) && i < n)
-	{
-		if (ptr1[i] != ptr2[i])
-			return (ptr1[i] - ptr2[i]);
-		i++;
-	}
-	return (0);
+	if (n == 0)
+		return (0);
+	while (l[i] == k[i] && l[i] && k[i] && i < (n - 1))
+		++i;
+	return (l[i] - k[i]);
 }

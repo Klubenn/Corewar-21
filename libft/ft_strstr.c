@@ -3,34 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gtapioca <gtapioca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/30 20:11:41 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/06/30 20:11:49 by vbrazhni         ###   ########.fr       */
+/*   Created: 2019/09/04 20:29:29 by gtapioca          #+#    #+#             */
+/*   Updated: 2019/09/18 22:37:24 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-char	*ft_strstr(const char *haystack, const char *needle)
+static char	*locator(const char *haystack, const char *needle, int i)
 {
-	char	*h;
-	size_t	needle_len;
-	size_t	i;
-	size_t	j;
+	int		j;
+	char	*l;
 
-	h = (char *)haystack;
-	if (!(needle_len = ft_strlen(needle)))
-		return (h);
-	i = 0;
-	while (h[i])
+	j = 0;
+	while (haystack[j] == needle[j] && haystack[j] && needle[j])
+		j++;
+	if (i == j + 1)
 	{
-		j = 0;
-		while (needle[j] && needle[j] == h[i + j])
-			j++;
-		if (j == needle_len)
-			return (&h[i]);
-		i++;
+		l = (char *)haystack;
+		return (l);
 	}
-	return (NULL);
+	return (0);
+}
+
+static char	*finder(const char *haystack, const char *needle)
+{
+	int		i;
+	int		j;
+	char	*l;
+
+	j = 0;
+	i = 0;
+	while (needle[i] != 0)
+		++i;
+	++i;
+	while (*haystack)
+	{
+		if (*haystack == *needle)
+			if ((l = locator(haystack, needle, i)))
+				return (l);
+		haystack++;
+	}
+	return (0);
+}
+
+char		*ft_strstr(const char *haystack, const char *needle)
+{
+	if (!(*needle))
+		return ((char *)haystack);
+	if (!(*haystack))
+		return (0);
+	return (finder(haystack, needle));
 }
