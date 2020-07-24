@@ -1,150 +1,64 @@
-#******************************************************************************#
+# **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2018/07/05 13:39:23 by vbrazhni          #+#    #+#              #
-#    Updated: 2018/08/22 16:48:32 by vbrazhni         ###   ########.fr        #
+#    Created: 2019/09/10 09:18:49 by gtristan          #+#    #+#              #
+#    Updated: 2020/04/06 15:02:34 by gtapioca         ###   ########.fr        #
 #                                                                              #
-#******************************************************************************#
+# **************************************************************************** #
+
+INCLUDES = ./
+INCL_H = libft.h
+INCL = $(addprefix $(INCLUDES),$(INCL_H))
+
+SOURCE = ft_atoi.c ft_bzero.c ft_isalnum.c ft_isalpha.c ft_isascii.c \
+	ft_isdigit.c ft_isprint.c ft_itoa.c ft_lstadd.c ft_lstdel.c \
+	ft_lstdelone.c ft_lstiter.c ft_lstmap.c ft_lstnew.c ft_memalloc.c \
+	ft_memccpy.c ft_memchr.c ft_memcmp.c ft_memcpy.c ft_memdel.c \
+	ft_memmove.c ft_memset.c ft_putchar.c ft_putchar_fd.c ft_putendl.c \
+	ft_putendl_fd.c ft_putnbr.c ft_putnbr_fd.c ft_putstr.c ft_putstr_fd.c \
+	ft_strcat.c ft_strchr.c ft_strclr.c ft_strcmp.c ft_strcpy.c \
+	ft_strdel.c ft_strdup.c ft_strequ.c ft_striter.c ft_striteri.c \
+	ft_strjoin.c ft_strlcat.c ft_strlen.c ft_strlencmp.c ft_strmap.c \
+	ft_strmapi.c ft_strncat.c ft_strncmp.c ft_strncpy.c ft_strnequ.c \
+	ft_strnew.c ft_strnstr.c ft_strrchr.c ft_strsplit.c ft_strstr.c \
+	ft_strsub.c ft_strtrim.c ft_tolower.c ft_toupper.c ft_strndup.c\
+	ft_isspace.c ft_countwords.c ft_math.c ft_sort.c ft_strsort.c \
+	ft_strnrdup.c get_next_line.c ft_atoi_base.c ft_new_two.c
+
+DEST = $(SOURCE:%.c=%.o)
+
+PRINTF_DIR = ft_printf/
+PRINTF = lftprintf
 
 NAME = libft.a
-CC = gcc
-FLAGS = -Wall -Werror -Wextra -O3 -c
-INCLUDES = -I$(HEADERS_DIRECTORY)
-HEADERS_LIST = \
-	libft.h\
-	get_next_line.h
-HEADERS_DIRECTORY = ./includes/
-HEADERS = $(addprefix $(HEADERS_DIRECTORY), $(HEADERS_LIST))
-SOURCES_DIRECTORY = ./sources/
-SOURCES_LIST = \
-	ft_memset.c\
-	ft_bzero.c\
-	ft_memcpy.c\
-	ft_memccpy.c\
-	ft_memmove.c\
-	ft_memchr.c\
-	ft_memcmp.c\
-	ft_strlen.c\
-	ft_strdup.c\
-	ft_strcpy.c\
-	ft_strncpy.c\
-	ft_strcat.c\
-	ft_strncat.c\
-	ft_strlcat.c\
-	ft_strchr.c\
-	ft_strrchr.c\
-	ft_strstr.c\
-	ft_strnstr.c\
-	ft_strcmp.c\
-	ft_strncmp.c\
-	ft_atoi.c\
-	ft_isalpha.c\
-	ft_isdigit.c\
-	ft_isalnum.c\
-	ft_isascii.c\
-	ft_isprint.c\
-	ft_toupper.c\
-	ft_tolower.c\
-	ft_memalloc.c\
-	ft_memdel.c\
-	ft_strnew.c\
-	ft_strdel.c\
-	ft_strclr.c\
-	ft_striter.c\
-	ft_striteri.c\
-	ft_strmap.c\
-	ft_strmapi.c\
-	ft_strequ.c\
-	ft_strnequ.c\
-	ft_strsub.c\
-	ft_strjoin.c\
-	ft_strtrim.c\
-	ft_strsplit.c\
-	ft_itoa.c\
-	ft_putchar.c\
-	ft_putstr.c\
-	ft_putendl.c\
-	ft_putnbr.c\
-	ft_putchar_fd.c\
-	ft_putstr_fd.c\
-	ft_putendl_fd.c\
-	ft_putnbr_fd.c\
-	ft_lstnew.c\
-	ft_lstdelone.c\
-	ft_lstdel.c\
-	ft_lstadd.c\
-	ft_lstiter.c\
-	ft_lstmap.c\
-	ft_isupper.c\
-	ft_islower.c\
-	ft_isspace.c\
-	ft_isblank.c\
-	ft_strnlen.c\
-	ft_strndup.c\
-	ft_lstaddback.c\
-	ft_strlwr.c\
-	ft_strupr.c\
-	ft_strrev.c\
-	ft_strchrs.c\
-	ft_strsubchr.c\
-	get_next_line.c\
-	ft_percent.c\
-	ft_arrindex.c\
-	ft_isdigit_base.c\
-	ft_isprefix.c\
-	ft_isnum.c\
-	ft_signedlen.c\
-	ft_unsignedlen.c\
-	ft_isint.c\
-	ft_strsplit_free.c\
-	ft_strsplit_len.c\
-	ft_wcslen.c\
-	ft_pow_int.c\
-	ft_atoi32.c
-SOURCES = $(addprefix $(SOURCES_DIRECTORY), $(SOURCES_LIST))
-OBJECTS_DIRECTORY = objects/
-OBJECTS_LIST = $(patsubst %.c, %.o, $(SOURCES_LIST))
-OBJECTS	= $(addprefix $(OBJECTS_DIRECTORY), $(OBJECTS_LIST))
+NAME_PRINTF = libftprintf.a
 
-# COLORS
+FLAGS = -Wall -Wextra -Werror
 
-GREEN = \033[0;32m
-RED = \033[0;31m
-RESET = \033[0m
+all: $(NAME) $(PRINTF_DIR)$(PRINTF)
 
-# MAKEFLAGS += -j
+$(NAME): $(SOURCE) $(DEST)
+	ar rc $(NAME) $(DEST)
+	ranlib $(NAME)
 
-.PHONY: all clean fclean re
+%.o: %.c $(INCL)
+	gcc $(FLAGS) -I $(INCLUDES)  -o $@ -c $<
 
-all: $(NAME)
-
-$(NAME): $(OBJECTS_DIRECTORY) $(OBJECTS)
-	@ar rc $(NAME) $(OBJECTS)
-	@ranlib $(NAME)
-	@echo "\n$(NAME): $(GREEN)object files were created$(RESET)"
-	@echo "$(NAME): $(GREEN)$(NAME) was created$(RESET)"
-
-$(OBJECTS_DIRECTORY):
-	@mkdir -p $(OBJECTS_DIRECTORY)
-	@echo "$(NAME): $(GREEN)$(OBJECTS_DIRECTORY) was created$(RESET)"
-
-$(OBJECTS_DIRECTORY)%.o : $(SOURCES_DIRECTORY)%.c $(HEADERS)
-	@$(CC) $(FLAGS) $(INCLUDES) $< -o $@
-	@echo "$(GREEN).$(RESET)\c"
+$(PRINTF_DIR)$(PRINTF):
+	make -C $(PRINTF_DIR)
 
 clean:
-	@rm -rf $(OBJECTS_DIRECTORY)
-	@echo "$(NAME): $(RED)$(OBJECTS_DIRECTORY) was deleted$(RESET)"
-	@echo "$(NAME): $(RED)object files were deleted$(RESET)"
+	rm -f $(DEST)
+	make clean -C $(PRINTF_DIR)
 
 fclean: clean
-	@rm -f $(NAME)
-	@echo "$(NAME): $(RED)$(NAME) was deleted$(RESET)"
+	rm -f $(NAME)
+	make fclean -C $(PRINTF_DIR)
 
-re:
-	@$(MAKE) fclean
-	@$(MAKE) all
+re: fclean all
+
+.PHONY: all clean flcean re

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gtristan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/01 15:35:30 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/07/01 15:35:32 by vbrazhni         ###   ########.fr       */
+/*   Created: 2019/09/07 19:09:00 by gtristan          #+#    #+#             */
+/*   Updated: 2020/03/27 14:57:10 by student          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,29 @@
 
 int		ft_atoi(const char *str)
 {
-	unsigned long	result;
-	unsigned long	border;
-	size_t			i;
-	int				sign;
+	size_t				i;
+	unsigned long long	number;
+	int					minus_number;
 
-	result = 0;
-	border = (unsigned long)(FT_LONG_MAX / 10);
 	i = 0;
-	while (ft_isspace(str[i]))
+	minus_number = 1;
+	number = 0;
+	while (str[i] && (str[i] == ' ' || (str[i] > 8 && str[i] < 14)))
 		i++;
-	sign = (str[i] == '-') ? -1 : 1;
-	if (str[i] == '-' || str[i] == '+')
-		i++;
-	while (ft_isdigit(str[i]))
+	if (str[i] == '+' || str[i] == '-')
 	{
-		if ((result > border || (result == border && (str[i] - '0') > 7))
-															&& sign == 1)
-			return (-1);
-		else if ((result > border || (result == border && (str[i] - '0') > 8))
-																&& sign == -1)
-			return (0);
-		result = result * 10 + (str[i++] - '0');
+		if (str[i] == '-')
+			minus_number = -1;
+		i++;
 	}
-	return ((int)(result * sign));
+	while (str[i] >= '0' && str[i] <= '9')
+		number = number * 10 + str[i++] - '0';
+	if (number > 9223372036854775807 && minus_number == -1)
+		return (0);
+	if (number > 9223372036854775807 && minus_number == 1)
+		return (-1);
+	if (minus_number == -1)
+		return ((int)(number * -1));
+	else
+		return ((int)number);
 }

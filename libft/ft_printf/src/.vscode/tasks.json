@@ -1,0 +1,42 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "C/C++: gcc build active file",
+			"command": "/usr/bin/gcc",
+			"args": [
+				"-g",
+				"${workspaceFolder}/main.c",
+				"${workspaceFolder}/analysis.c",
+				"${workspaceFolder}/create_string.c",
+				"${workspaceFolder}/decimal.c",
+				"${workspaceFolder}/float.c",
+				"${workspaceFolder}/float2.c",
+				"${workspaceFolder}/float3.c",
+				"${workspaceFolder}/float4.c",
+				"${workspaceFolder}/free.c",
+				"${workspaceFolder}/ft_printf.c",
+				"${workspaceFolder}/libfunctions.c",
+				"${workspaceFolder}/make_result_str.c",
+				"${workspaceFolder}/oct.c",
+				"${workspaceFolder}/parsing.c",
+				"${workspaceFolder}/print_color.c",
+				"${workspaceFolder}/printnum.c",
+				"${workspaceFolder}/putchar_str.c",
+				"${workspaceFolder}/services_itoa.c",
+				"${workspaceFolder}/string_char.c",
+				"${workspaceFolder}/../../libft/libft.a",
+				"-o",
+				"a.out"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build"
+		}
+	]
+}

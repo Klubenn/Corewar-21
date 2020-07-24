@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gtristan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/02 15:42:13 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/07/02 15:42:14 by vbrazhni         ###   ########.fr       */
+/*   Created: 2019/09/11 10:21:48 by gtristan          #+#    #+#             */
+/*   Updated: 2019/09/11 14:57:45 by gtristan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,26 @@
 
 char	*ft_strmap(char const *s, char (*f)(char))
 {
-	char	*result;
 	size_t	i;
+	size_t	j;
+	char	*snew;
+	char	*sold;
 
-	result = NULL;
-	if (s && f && (result = ft_strnew(ft_strlen(s))))
+	i = 0;
+	j = 0;
+	if (s == NULL)
+		return (NULL);
+	while (s[i])
+		i++;
+	sold = (char *)s;
+	snew = (char *)malloc(sizeof(char) * (i + 1));
+	if (!snew || (i + 1 == 0))
+		return (NULL);
+	while (j < i)
 	{
-		i = 0;
-		while (s[i])
-		{
-			result[i] = f(s[i]);
-			i++;
-		}
-		result[i] = '\0';
+		snew[j] = f(sold[j]);
+		j++;
 	}
-	return (result);
+	snew[j] = '\0';
+	return (snew);
 }

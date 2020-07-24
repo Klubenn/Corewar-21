@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gtristan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/02 15:48:29 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/07/02 15:48:30 by vbrazhni         ###   ########.fr       */
+/*   Created: 2019/09/04 16:16:57 by gtristan          #+#    #+#             */
+/*   Updated: 2019/09/24 15:07:36 by gtristan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,26 @@
 
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	char	*result;
-	size_t	i;
+	size_t			i;
+	unsigned int	j;
+	char			*snew;
+	char			*sold;
 
-	result = NULL;
-	if (s && f && (result = ft_strnew(ft_strlen(s))))
+	if (s == NULL)
+		return (NULL);
+	sold = (char *)s;
+	i = 0;
+	j = 0;
+	while (s[i])
+		i++;
+	snew = (char *)malloc(sizeof(char) * (i + 1));
+	if (!snew || (i + 1 == 0))
+		return (NULL);
+	while (j < i)
 	{
-		i = 0;
-		while (s[i])
-		{
-			result[i] = f(i, s[i]);
-			i++;
-		}
-		result[i] = '\0';
+		snew[j] = f(j, sold[j]);
+		j++;
 	}
-	return (result);
+	snew[j] = '\0';
+	return (snew);
 }

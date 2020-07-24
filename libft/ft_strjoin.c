@@ -3,32 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gtristan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/02 16:40:36 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/07/02 16:40:37 by vbrazhni         ###   ########.fr       */
+/*   Created: 2019/09/11 12:10:43 by gtristan          #+#    #+#             */
+/*   Updated: 2019/09/19 08:58:29 by gtristan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char		*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*result;
-	char	*start;
+	size_t	i;
+	size_t	j;
+	char	*snew;
 
-	if (!s1 && !s2)
+	i = 0;
+	j = 0;
+	if (!s1 || !s2)
 		return (NULL);
-	result = ft_strnew((s1 ? ft_strlen(s1) : 0) + (s2 ? ft_strlen(s2) : 0));
-	if ((start = result))
-	{
-		if (s1)
-			while (*s1)
-				*result++ = *s1++;
-		if (s2)
-			while (*s2)
-				*result++ = *s2++;
-		*result = '\0';
-	}
-	return (start);
+	j = ft_strlen(s1);
+	i = j + ft_strlen(s2) + 1;
+	snew = (char *)malloc(sizeof(char) * i);
+	if (!snew)
+		return (NULL);
+	ft_strcpy(snew, s1);
+	ft_strcpy((snew + j), s2);
+	return (snew);
 }

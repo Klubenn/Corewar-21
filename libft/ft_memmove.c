@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gtristan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/30 14:02:16 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/06/30 14:02:17 by vbrazhni         ###   ########.fr       */
+/*   Created: 2019/09/05 11:00:28 by gtristan          #+#    #+#             */
+/*   Updated: 2019/09/11 14:55:35 by gtristan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,25 @@
 
 void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	unsigned char *d;
-	unsigned char *s;
+	char	*tmpdst;
+	char	*tmpsrc;
+	int		i;
 
-	d = (unsigned char *)dst;
-	s = (unsigned char *)src;
-	if (d < s)
-		while (len--)
-			*d++ = *s++;
+	i = -1;
+	if (dst == NULL && src == NULL)
+		return (NULL);
+	tmpsrc = (char *)src;
+	tmpdst = (char *)dst;
+	if (tmpsrc >= tmpdst)
+	{
+		while (++i < (int)len)
+			tmpdst[i] = tmpsrc[i];
+	}
 	else
 	{
-		d += len;
-		s += len;
-		while (len--)
-			*--d = *--s;
+		i = len;
+		while (--i >= 0)
+			tmpdst[i] = tmpsrc[i];
 	}
-	return (dst);
+	return (tmpdst);
 }

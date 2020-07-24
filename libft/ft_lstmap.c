@@ -3,45 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gtristan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/04 13:44:19 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/07/04 13:44:20 by vbrazhni         ###   ########.fr       */
+/*   Created: 2019/09/13 13:18:03 by gtristan          #+#    #+#             */
+/*   Updated: 2019/09/24 15:07:16 by gtristan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 
-static void	ft_del(void *content, size_t content_size)
+t_list	*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 {
-	(void)content_size;
-	free(content);
-}
+	t_list	*a;
+	t_list	*c;
 
-t_list		*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
-{
-	t_list *elem;
-	t_list *prev;
-	t_list *head;
-
-	prev = NULL;
-	head = NULL;
-	if (f)
-		while (lst)
+	if (lst == NULL)
+		return (NULL);
+	a = f(lst);
+	c = a;
+	while (lst->next)
+	{
+		lst = lst->next;
+		if (!(a->next = f(lst)))
 		{
-			if (!(elem = f(lst)))
+			a = c;
+			while (c)
 			{
-				if (head)
-					ft_lstdel(&head, &ft_del);
-				return (NULL);
+				c = a->next;
+				free(a->content);
+				free(a);
+				a = c;
 			}
-			if (prev)
-				prev->next = elem;
-			else
-				head = elem;
-			lst = lst->next;
-			prev = elem;
+			return (NULL);
 		}
-	return (head);
+		a = a->next;
+	}
+	return (c);
 }
