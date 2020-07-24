@@ -6,7 +6,7 @@
 /*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/17 16:39:11 by couida            #+#    #+#             */
-/*   Updated: 2020/07/24 15:56:44 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/24 17:27:51 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*add_new_part_to_res_str(char *str, int len, int how_much)
 		res[i] = str[i];
 		i++;
 	}
-	if (str)
+	if (str && len)
 		free(str);
 	return (res);
 }
@@ -60,5 +60,7 @@ char	*add_char_to_output_buffer(char c)
 		len++;
 		res_str[len] = '\0';
 	}
+	else
+		len = 0;
 	return (res_str);
 }
