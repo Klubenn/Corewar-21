@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   asm.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gtristan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 19:09:00 by gtristan          #+#    #+#             */
-/*   Updated: 2020/07/23 17:02:23 by gtristan         ###   ########.fr       */
+/*   Updated: 2020/07/24 23:09:17 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <limits.h>
-# include "libft.h"
-# include "header_pf.h"
+# include "../libft/libft.h"
+# include "../libft/ft_printf/header_pf.h"
 # include "op.h"
 # include "structs.h"
 

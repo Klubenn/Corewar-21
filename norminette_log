@@ -1,0 +1,672 @@
+Norme: ./ Makefile 
+Warning: Not a valid file
+Norme: ./ asm 
+Warning: Not a valid file
+Norme: ./ asm.dSYM/Contents/Info.plist 
+Warning: Not a valid file
+Norme: ./ asm.dSYM/Contents/Resources/DWARF/asm 
+Warning: Not a valid file
+Norme: ./ authorfile 
+Warning: Not a valid file
+Norme: ./ champs/Gagant-init.cor 
+Warning: Not a valid file
+Norme: ./ champs/Gagant-init.s 
+Warning: Not a valid file
+Norme: ./ champs/Gagnant.cor 
+Warning: Not a valid file
+Norme: ./ champs/Gagnant.s 
+Warning: Not a valid file
+Norme: ./ champs/Gagnant_1.cor 
+Warning: Not a valid file
+Norme: ./ champs/Gagnant_2.cor 
+Warning: Not a valid file
+Norme: ./ champs/README.md 
+Warning: Not a valid file
+Norme: ./ champs/aff_f8.cor 
+Warning: Not a valid file
+Norme: ./ champs/aff_f8.s 
+Warning: Not a valid file
+Norme: ./ champs/ex.cor 
+Warning: Not a valid file
+Norme: ./ champs/ex.s 
+Warning: Not a valid file
+Norme: ./ champs/ex1.cor 
+Warning: Not a valid file
+Norme: ./ champs/ex_1.cor 
+Warning: Not a valid file
+Norme: ./ champs/ex_2.cor 
+Warning: Not a valid file
+Norme: ./ champs/jjjj.cor 
+Warning: Not a valid file
+Norme: ./ champs/jjjj.s 
+Warning: Not a valid file
+Norme: ./ champs/jumper.cor 
+Warning: Not a valid file
+Norme: ./ champs/jumper.s 
+Warning: Not a valid file
+Norme: ./ champs/magic_number.cor 
+Warning: Not a valid file
+Norme: ./ champs/mortel.cor 
+Warning: Not a valid file
+Norme: ./ champs/mortel.s 
+Warning: Not a valid file
+Norme: ./ corewar 
+Warning: Not a valid file
+Norme: ./ libft/Makefile 
+Warning: Not a valid file
+Norme: ./ libft/author 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf/.DS_Store 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf/.vscode/launch.json 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf/.vscode/tasks.json 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf/Makefile 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf/a.out.dSYM/Contents/Info.plist 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf/a.out.dSYM/Contents/Resources/DWARF/a.out 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf/author 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf/libftprintf.a 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf/src/.vscode/launch.json 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf/src/.vscode/tasks.json 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf/src/a.out 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf/src/a.out.dSYM/Contents/Info.plist 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf/src/a.out.dSYM/Contents/Resources/DWARF/a.out 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/Makefile 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/author 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/libftprintf.a 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/obj/analysis.o 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/obj/create_string.o 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/obj/decimal.o 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/obj/float.o 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/obj/float2.o 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/obj/float3.o 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/obj/float4.o 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/obj/free.o 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/obj/ft_printf.o 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/obj/make_result_str.o 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/obj/oct.o 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/obj/parsing.o 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/obj/print_color.o 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/obj/printnum.o 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/obj/putchar_str.o 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/obj/services_itoa.o 
+Warning: Not a valid file
+Norme: ./ libft/ft_printf_gtristan_old/obj/string_char.o 
+Warning: Not a valid file
+Norme: ./ libft/libft.a 
+Warning: Not a valid file
+Norme: ./ norminette_log 
+Warning: Not a valid file
+Norme: ./ other/.DS_Store 
+Warning: Not a valid file
+Norme: ./ other/corewar.en.pdf 
+Warning: Not a valid file
+Norme: ./ other/correction_list.pdf 
+Warning: Not a valid file
+Norme: ./ other/test.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/comment_len_2049.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/direct_param_no_value.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/four_arg_malloc_free_pointer_error.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/header_double_comments.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/header_double_names.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/header_max_comment.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/header_max_name.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/header_nl.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/header_nl_unclosed.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/header_null_name.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/label_contain_badchar.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/label_error_1.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/label_error_2.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/label_error_3.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/label_invalidname.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/label_noending.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/label_space.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/label_without_double_dot_at_the_end.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/name_len_129.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/op_double_operation_on_single_line.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/op_extra.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/op_extreme.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/op_no_code.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/param_badtypes.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/param_commas.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/param_direct_no_sp.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/param_direct_no_value.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/param_double_commas.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/param_extra2.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/param_mt_3.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/param_mt_r99.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/param_nonexistent_label.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/param_plus_minus.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/param_specialchars.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/zother_1.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/zother_2.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/zother_3.s 
+Warning: Not a valid file
+Norme: ./ other/tests/error/zother_4.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/42.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/Asombra.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/Car.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/Douceur_power.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/Explosive_Kitty.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/Gagnant.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/Kappa.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/Kittystrophic.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/Machine-gun.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/MarineKing.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/Misaka_Mikoto.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/Octobre_Rouge_V4.2.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/Rainbow_dash.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/Survivor.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/THUNDER.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/Varimathras.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/Wall.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/_honeybadger.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/aff_no_OCP.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/barriere.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/bee_gees.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/big_feet.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/bigzork.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/casimir.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/champ.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/comment_len_2048.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/corelol.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/darksasuke.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/doge.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/dubo.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/empty_namecomment.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/end_comment.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/ex.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/ex1.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/flipped_name_comment.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/fluttershy.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/gateau.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/gedeon.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/hash_and_tab_at_EOF.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/hash_at_header.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/helltrain.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/jinx.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/jumper.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/justin_bee.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/littlepuppy.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/live.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/loose.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/mandragore.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/maxidef.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/meowluigi.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/mise_a_jour_windows95.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/mortel.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/name_len_128.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/neg_indirect_error.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/nl_at_header.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/nl_at_header_flipped.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/no_space_between_op_and_param.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/overwatch.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/run_Kitty_RUN.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/salamahenagalabadoun.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/sam_2.0.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/skynet.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/slider2.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/sq_at_header.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/tab_at_end_of_file.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/terminator.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/toto.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/turtle.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/ultima.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/ultimate-surrender.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/weirdest_error_ever.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/youforkmytralala.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid/zork.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/42.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/Asombra.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/Car.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/Douceur_power.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/Explosive_Kitty.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/Gagnant.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/Kappa.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/Kittystrophic.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/Machine-gun.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/MarineKing.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/Misaka_Mikoto.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/Octobre_Rouge_V4.2.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/Rainbow_dash.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/Survivor.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/THUNDER.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/Varimathras.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/Wall.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/_honeybadger.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/aff_no_OCP.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/barriere.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/bee_gees.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/big_feet.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/bigzork.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/casimir.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/champ.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/comment_len_2048.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/corelol.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/darksasuke.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/doge.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/dubo.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/empty_namecomment.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/end_comment.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/ex.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/ex1.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/flipped_name_comment.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/fluttershy.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/gateau.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/gedeon.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/hash_and_tab_at_EOF.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/hash_at_header.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/helltrain.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/jinx.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/jumper.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/justin_bee.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/littlepuppy.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/live.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/loose.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/mandragore.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/maxidef.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/meowluigi.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/mise_a_jour_windows95.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/mortel.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/name_len_128.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/neg_indirect_error.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/nl_at_header.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/nl_at_header_flipped.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/no_space_between_op_and_param.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/overwatch.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/run_Kitty_RUN.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/salamahenagalabadoun.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/sam_2.0.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/skynet.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/slider2.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/sq_at_header.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/tab_at_end_of_file.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/terminator.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/toto.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/turtle.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/ultima.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/ultimate-surrender.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/weirdest_error_ever.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/youforkmytralala.s 
+Warning: Not a valid file
+Norme: ./ other/tests/valid2/zork.s 
+Warning: Not a valid file
+Norme: ./ src_vm/.DS_Store 
+Warning: Not a valid file
+Norme: ./ test 
+Warning: Not a valid file
+Norme: includes_asm/op.h
+Norme: libft/ft_countwords.c
+Norme: includes_vm/op.h
+Norme: includes_asm/structs.h
+Norme: libft/ft_isalnum.c
+Norme: libft/ft_isdigit.c
+Norme: libft/ft_lstadd.c
+Norme: libft/ft_atoi.c
+Norme: libft/ft_atoi_base.c
+Norme: libft/ft_isprint.c
+Norme: libft/ft_memccpy.c
+Norme: libft/ft_isspace.c
+Norme: libft/ft_lstdel.c
+Norme: libft/ft_lstmap.c
+Norme: libft/ft_lstnew.c
+Norme: libft/ft_math.c
+Norme: libft/ft_memchr.c
+Norme: libft/ft_memdel.c
+Norme: libft/ft_memset.c
+Norme: includes_asm/asm.h
+Norme: libft/ft_memmove.c
+Norme: libft/ft_bzero.c
+Norme: includes_vm/libft.h
+Norme: libft/ft_itoa.c
+Norme: libft/ft_isascii.c
+Norme: libft/ft_memalloc.c
+Norme: libft/ft_lstiter.c
+Norme: libft/ft_printf/src/float.c
+Norme: libft/ft_new_two.c
+Norme: libft/ft_memcpy.c
+Norme: libft/ft_printf/header_pf.h
+Norme: libft/ft_printf/src/float3.c
+Norme: libft/ft_printf/src/free.c
+Norme: libft/ft_printf/src/analysis.c
+Norme: libft/ft_printf/src/print_color.c
+Norme: libft/ft_printf/src/putchar_str.c
+Norme: includes_vm/corewar.h
+Norme: libft/ft_isalpha.c
+Norme: libft/ft_printf/src/ft_printf.c
+Norme: libft/ft_lstdelone.c
+Norme: libft/ft_memcmp.c
+Norme: libft/ft_printf_gtristan_old/src/decimal.c
+Norme: libft/ft_printf/src/oct.c
+Norme: libft/ft_printf/src/decimal.c
+Norme: libft/ft_printf/src/float2.c
+Norme: libft/ft_printf/src/float4.c
+Norme: libft/ft_printf/src/make_result_str.c
+Norme: libft/ft_printf/src/parsing.c
+Norme: libft/ft_printf/src/services_itoa.c
+Norme: libft/ft_printf/src/create_string.c
+Norme: libft/ft_printf_gtristan_old/src/float2.c
+Norme: libft/ft_printf_gtristan_old/includes/header_pf.h
+Norme: libft/ft_printf_gtristan_old/src/free.c
+Norme: libft/ft_printf_gtristan_old/src/print_color.c
+Norme: libft/ft_putendl_fd.c
+Norme: libft/ft_strchr.c
+Norme: libft/ft_printf/src/printnum.c
+Norme: libft/ft_strclr.c
+Norme: libft/ft_strequ.c
+Norme: libft/ft_printf_gtristan_old/src/analysis.c
+Norme: libft/ft_strlen.c
+Norme: libft/ft_printf_gtristan_old/src/create_string.c
+Norme: libft/ft_toupper.c
+Norme: libft/ft_printf_gtristan_old/src/float3.c
+Norme: libft/ft_printf_gtristan_old/src/oct.c
+Norme: libft/ft_putchar_fd.c
+Norme: libft/ft_printf_gtristan_old/src/ft_printf.c
+Norme: libft/ft_strcat.c
+Norme: libft/ft_printf_gtristan_old/src/make_result_str.c
+Norme: libft/ft_striteri.c
+Norme: libft/ft_putchar.c
+Norme: libft/ft_strlcat.c
+Norme: libft/ft_sort.c
+Norme: libft/ft_striter.c
+Norme: libft/ft_strncat.c
+Norme: libft/ft_printf_gtristan_old/src/float.c
+Norme: libft/ft_printf/src/libfunctions.c
+Norme: libft/ft_strnequ.c
+Norme: libft/ft_strjoin.c
+Norme: libft/ft_strmapi.c
+Norme: libft/ft_printf_gtristan_old/src/services_itoa.c
+Norme: libft/ft_putstr.c
+Norme: libft/ft_printf_gtristan_old/src/parsing.c
+Norme: libft/ft_strnew.c
+Norme: libft/ft_printf_gtristan_old/src/string_char.c
+Norme: libft/ft_putendl.c
+Norme: libft/ft_printf_gtristan_old/src/printnum.c
+Norme: libft/ft_putstr_fd.c
+Norme: libft/ft_strcmp.c
+Norme: libft/ft_putnbr.c
+Norme: libft/ft_strndup.c
+Norme: libft/ft_strcpy.c
+Norme: libft/ft_strnstr.c
+Norme: libft/ft_strdel.c
+Norme: libft/ft_strdup.c
+Norme: libft/ft_strnrdup.c
+Norme: libft/ft_strsort.c
+Norme: libft/ft_printf/src/string_char.c
+Norme: libft/libft.h
+Norme: libft/ft_strrchr.c
+Norme: libft/ft_strlencmp.c
+Norme: libft/ft_strmap.c
+Norme: libft/ft_strstr.c
+Norme: libft/ft_strncpy.c
+Norme: libft/ft_tolower.c
+Norme: libft/ft_strncmp.c
+Norme: src_asm/op.c
+Norme: libft/ft_strsub.c
+Norme: libft/get_next_line.c
+Norme: src_asm/labels_instructions.c
+Norme: libft/ft_printf_gtristan_old/src/float4.c
+Norme: libft/ft_strsplit.c
+Norme: src_asm/champ_exec_code.c
+Norme: src_asm/split_corewar.c
+Norme: src_asm/skips.c
+Norme: libft/ft_strtrim.c
+Norme: src_vm/op16.c
+Norme: src_asm/labels_atoi.c
+Norme: src_vm/check_players_position.c
+Norme: libft/ft_printf_gtristan_old/src/putchar_str.c
+Norme: libft/ft_putnbr_fd.c
+Norme: src_vm/player_list_deleter.c
+Norme: src_vm/op13.c
+Norme: src_asm/asm.c
+Norme: src_vm/check_players.c
+Norme: src_asm/bin_arguments.c
+Norme: src_asm/read_name_comment.c
+Norme: src_asm/create_instruction.c
+Norme: src_asm/check_params.c
+Norme: src_vm/parse_v_n_d_dump.c
+Norme: src_vm/main.c
+Norme: src_asm/to_bytecode.c
+Norme: src_asm/instruction_size.c
+Norme: src_vm/op1.c
+Norme: src_vm/op4_op5_helper.c
+Norme: src_vm/players_stack_creator.c
+Norme: src_vm/memory_allocator_for_cmd_line_arguments.c
+Norme: src_vm/print_usage_and_check_atoi_honest.c
+Norme: src_asm/checks.c
+Norme: src_vm/memory_deleter.c
+Norme: src_vm/virtual_machine_game_mechanic.c
+Norme: src_vm/processes_deleter.c
+Norme: src_asm/free_data.c
+Norme: src_vm/winner_definer.c
+Norme: src_vm/virtual_machine_operations_executing.c
+Norme: src_vm/process_args_and_put_value.c
+Norme: src_asm/gnl.c
+Norme: src_vm/take_value_from_field.c
+Norme: src_vm/alives_checker.c
+Norme: src_vm/move_programming_counter.c
+Norme: src_vm/op6_op7_op8_op9.c
+Norme: src_vm/operation_completer.c
+Norme: src_vm/op10.c
+Norme: src_vm/validation_for_args_type.c
+Norme: src_vm/put_in_stack_of_players.c
+Norme: src_vm/vm_field_memory_allocator.c
+Norme: src_vm/parse_arguments.c
+Norme: src_vm/player_stack_creator_2.c
+Norme: src_vm/op11_op12_op15.c
+Norme: src_vm/op14.c
+Norme: src_vm/print_logs.c
+Norme: src_vm/processes_creator.c
+Norme: src_vm/reader_and_setter_players_parameters.c
+Norme: src_vm/op2_op5.c

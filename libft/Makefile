@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gtapioca <gtapioca@student.21-school.ru    +#+  +:+       +#+         #
+#    By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/10 09:18:49 by gtristan          #+#    #+#              #
-#    Updated: 2020/04/06 15:02:34 by gtapioca         ###   ########.fr        #
+#    Updated: 2020/07/24 23:05:50 by gtapioca         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,8 @@ clean:
 	rm -f $(DEST)
 	make clean -C $(PRINTF_DIR)
 
-fclean: clean
+fclean:
+	rm -f $(DEST)
 	rm -f $(NAME)
 	make fclean -C $(PRINTF_DIR)
 

@@ -1,35 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strsub.c                                        :+:      :+:    :+:   */
+/*   op4_op5_helper.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/11 11:59:44 by gtristan          #+#    #+#             */
-/*   Updated: 2020/07/24 22:54:18 by gtapioca         ###   ########.fr       */
+/*   Created: 2020/07/23 20:34:33 by gtapioca          #+#    #+#             */
+/*   Updated: 2020/07/24 22:29:24 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes_vm/corewar.h"
 
-char	*ft_strsub(char const *s, unsigned int start, size_t len)
+void	op4_op5_helper(int32_t *arg_value, t_player_process *player_process,
+	t_vm_field_memory *vm_field_memory)
 {
-	char	*snew;
-	char	*sold;
-	size_t	i;
-
-	i = 0;
-	if (!s)
-		return (NULL);
-	sold = (char *)s;
-	snew = (char *)malloc(sizeof(char) * (len + 1));
-	if (!snew || (len + 1 == 0))
-		return (NULL);
-	while (i < len && sold[start + i])
-	{
-		snew[i] = sold[start + i];
-		i++;
-	}
-	snew[i] = '\0';
-	return (snew);
+	if (player_process->arg_position >= 0)
+		arg_value[2] = (u_int8_t)(vm_field_memory->
+			field[(player_process->arg_position) % MEM_SIZE]);
+	else
+		arg_value[2] = 0;
+	player_process->reg[2] = arg_value[2];
 }
