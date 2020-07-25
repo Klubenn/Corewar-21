@@ -6,7 +6,7 @@
 /*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 19:13:16 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/24 23:10:00 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/25 18:03:46 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include "op.h"
 # include <stdbool.h>
 # include <errno.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include "../libft/ft_printf/header_pf.h"
 # include "libft.h"

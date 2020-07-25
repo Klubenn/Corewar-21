@@ -6,7 +6,7 @@
 /*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 16:33:03 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/24 22:29:24 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/25 16:03:59 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	check_position_help(t_player_list *player_list_2, int len)
 	if (len > MAX_PLAYERS)
 	{
 		if (errno == 0)
-			fprintf(stderr, "Too many champions\n");
+			ft_printf("%s%z", "Too many champions\n", 2);
 		else
 			perror("Error");
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 17:01:22 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/24 22:29:24 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/25 16:04:16 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,17 @@ int	check_code_size(t_player *player, u_int8_t *code_size_point,
 {
 	if ((*((unsigned int *)(code_size_point))) > CHAMP_MAX_SIZE)
 	{
-		fprintf(stderr, "Error: File %s has \
-too large a code (%d bytes > %d bytes)\n",
-			*argv, (*((unsigned int *)(code_size_point))), CHAMP_MAX_SIZE);
+		ft_printf("Error: File %s has \
+too large a code (%d bytes > %d bytes)\n%z",
+			*argv, (*((unsigned int *)(code_size_point))),
+			CHAMP_MAX_SIZE, 2);
 		free(code_size_point);
 		return (1);
 	}
 	else if ((u_int8_t)count != *(code_size_point))
 	{
-		fprintf(stderr, "Error: File %s has a code \
-size that differ from what its header says\n", *argv);
+		ft_printf("Error: File %s has a code \
+size that differ from what its header says\n%z", *argv, 2);
 		free(code_size_point);
 		return (1);
 	}
@@ -50,7 +51,7 @@ int	check_separating_nulls(char *str)
 		| str[14 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0
 		| str[15 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0)
 	{
-		fprintf(stderr, "Error : mistake in the separating nulls\n");
+		ft_printf("Error : mistake in the separating nulls\n%z", 2);
 		return (1);
 	}
 	return (0);
@@ -84,7 +85,7 @@ int	check_magic_header(char *str, char **argv, t_player *player)
 	if ((unsigned char)str[0] != 0x00 | (unsigned char)str[1] != 0xea
 		| (unsigned char)str[2] != 0x83 | (unsigned char)str[3] != 0xf3)
 	{
-		fprintf(stderr, "Error: File %s has an invalid header\n", *argv);
+		ft_printf("Error: File %s has an invalid header\n%z", *argv, 2);
 		return (1);
 	}
 	helper[0] = str[3];

@@ -6,7 +6,7 @@
 /*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 16:53:18 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/24 22:29:24 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/25 19:39:48 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,15 @@ int	put_in_stack_of_players_helper(t_player_list **player_list,
 	else
 	{
 		while (player_list_loc->next != 0)
+		{
+			if (pos == player_list_loc->position & pos != 0)
+				break ;
 			player_list_loc = player_list_loc->next;
+		}
 		if (pos == player_list_loc->position && pos != 0)
 		{
+			free(player->code);
+			free(player);
 			print_usage();
 			return (1);
 		}
@@ -56,7 +62,7 @@ int	check_arguments_errors(int fd, char *player_name, t_player **player)
 	if (fd < 0)
 	{
 		if (errno == 0)
-			fprintf(stderr, "Can't read source file %s\n", player_name);
+			ft_printf("Can't read source file %s\n%z", player_name, 2);
 		else
 			perror("Error");
 		return (1);
@@ -84,7 +90,7 @@ int	put_in_stack_of_players(int pos, char *player_name,
 	if (ft_strstr(player_name, ".cor") == NULL)
 	{
 		if (errno == 0)
-			fprintf(stderr, "Wrong file format %s\n", player_name);
+			ft_printf("Wrong file format %s\n%z", player_name, 2);
 		else
 			perror("Error");
 		return (1);

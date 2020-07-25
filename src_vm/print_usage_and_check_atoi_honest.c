@@ -6,7 +6,7 @@
 /*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 17:15:03 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/24 22:29:24 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/25 16:04:26 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	print_usage(void)
 {
 	if (errno == 0)
 	{
-		fprintf(stderr, "Usage: ./corewar [-d N -dump N -v N] [-a] \
+		ft_printf("Usage: ./corewar [-d N -dump N -v N] [-a] \
 <champion1.cor> <...>\n\
 -a   : Prints output from \"aff\" (Default is to hide it)\n\
 \\#### TEXT OUTPUT MODE ###########################\
@@ -29,7 +29,7 @@ void	print_usage(void)
 	- 2 : Show cycles\n\
 	- 4 : Show operations (Params are NOT litteral ...)\n\
 	- 8 : Show deaths\n\
-	- 16 : Show PC movements (Except for jumps)\n");
+	- 16 : Show PC movements (Except for jumps)\n%z", 2);
 	}
 	else
 		perror("Error");
