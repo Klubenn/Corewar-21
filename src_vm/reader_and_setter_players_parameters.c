@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reader_and_setter_players_parameters.c             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vladimir <vladimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 17:08:58 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/24 22:29:24 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/26 18:12:32 by vladimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 void	read_code(char *str, t_player *player, int count)
 {
 	int i;
-	int j;
 
 	i = 0;
-	j = 0;
 	str = str + 2192;
 	player->code = (unsigned char *)ft_memalloc(count);
 	while ((u_int32_t)i < player->player_header.prog_size)

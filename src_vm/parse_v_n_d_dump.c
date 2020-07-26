@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_v_n_d_dump.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vladimir <vladimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 16:30:09 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/24 22:29:24 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/26 18:12:09 by vladimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ bool	parse_v(t_player_list *player_list_1,
 	char **begin_buff_argv)
 {
 	if (*(game_process->argv + 1) != 0 && game_process->count[2] == 0)
-		game_process->flag_v = (uint8_t)(ft_atoi(*(game_process->argv + 1)));
+		game_process->flag_v = (u_int8_t)(ft_atoi(*(game_process->argv + 1)));
 	else
 	{
 		game_process->error_flag = true;

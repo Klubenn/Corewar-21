@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_players.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vladimir <vladimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 17:01:22 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/25 16:04:16 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/26 18:11:57 by vladimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,13 @@ size that differ from what its header says\n%z", *argv, 2);
 int	check_separating_nulls(char *str)
 {
 	if (str[4 + PROG_NAME_LENGTH] != 0
-		| str[5 + PROG_NAME_LENGTH] != 0
-		| str[6 + PROG_NAME_LENGTH] != 0
-		| str[7 + PROG_NAME_LENGTH] != 0
-		| str[12 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0
-		| str[13 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0
-		| str[14 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0
-		| str[15 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0)
+		|| str[5 + PROG_NAME_LENGTH] != 0
+		|| str[6 + PROG_NAME_LENGTH] != 0
+		|| str[7 + PROG_NAME_LENGTH] != 0
+		|| str[12 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0
+		|| str[13 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0
+		|| str[14 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0
+		|| str[15 + PROG_NAME_LENGTH + COMMENT_LENGTH] != 0)
 	{
 		ft_printf("Error : mistake in the separating nulls\n%z", 2);
 		return (1);
@@ -60,11 +60,9 @@ int	check_separating_nulls(char *str)
 int	check_nulls_and_code_size(int count, char *str,
 	t_player *player, char **argv)
 {
-	int				i;
 	int				j;
 	unsigned char	*code_size_point;
 
-	i = 139;
 	j = 0;
 	if (check_separating_nulls(str))
 		return (1);
@@ -82,8 +80,8 @@ int	check_magic_header(char *str, char **argv, t_player *player)
 {
 	char helper[4];
 
-	if ((unsigned char)str[0] != 0x00 | (unsigned char)str[1] != 0xea
-		| (unsigned char)str[2] != 0x83 | (unsigned char)str[3] != 0xf3)
+	if ((unsigned char)str[0] != 0x00 || (unsigned char)str[1] != 0xea
+		|| (unsigned char)str[2] != 0x83 || (unsigned char)str[3] != 0xf3)
 	{
 		ft_printf("Error: File %s has an invalid header\n%z", *argv, 2);
 		return (1);

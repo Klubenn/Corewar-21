@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vladimir <vladimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 14:20:09 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/24 18:29:38 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/26 18:12:47 by vladimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ void	game_process_initializer(t_game_process *game_process,
 int		main(int argc, char **argv)
 {
 	t_game_process	*game_process;
-	t_player_list	*player_list_1;
 	t_player_list	*player_list;
 	char			**split_argv;
 
@@ -84,7 +83,6 @@ int		main(int argc, char **argv)
 	}
 	game_process_initializer(game_process, split_argv);
 	parse_arguments(game_process, &player_list);
-	player_list_1 = player_list;
 	print_intro(player_list);
 	virtual_machine(game_process, player_list, g_op_tab);
 	if (argc > 0)

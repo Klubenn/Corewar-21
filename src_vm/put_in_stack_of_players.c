@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   put_in_stack_of_players.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vladimir <vladimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 16:53:18 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/25 19:39:48 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/26 18:12:21 by vladimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	put_in_stack_of_players_helper(t_player_list **player_list,
 	{
 		while (player_list_loc->next != 0)
 		{
-			if (pos == player_list_loc->position & pos != 0)
+			if (pos == player_list_loc->position && pos != 0)
 				break ;
 			player_list_loc = player_list_loc->next;
 		}

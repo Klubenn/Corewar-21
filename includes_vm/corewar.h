@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   corewar.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vladimir <vladimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 19:13:16 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/25 18:03:46 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/26 18:10:12 by vladimir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COREWAR_H
 # define COREWAR_H
 # include <unistd.h>
+# include <sys/types.h>
 # include "op.h"
 # include <stdbool.h>
 # include <errno.h>
