@@ -6,7 +6,7 @@
 #    By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/17 13:58:43 by gtristan          #+#    #+#              #
-#    Updated: 2020/07/24 15:12:12 by gtapioca         ###   ########.fr        #
+#    Updated: 2020/07/27 16:07:57 by gtristan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ $(NAME): $(SRC) $(OBJ)
 	ranlib $(NAME)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(INCL)$(INCL_H)
-	gcc $(FLAGS) -I $(INCL) -o $@ -c $<
+	gcc $(FLAGS) -I $(INCL) -I../ -o $@ -c $<
 
 clean:
 	rm -rf $(OBJ)

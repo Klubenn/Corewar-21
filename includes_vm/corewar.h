@@ -6,7 +6,7 @@
 /*   By: vladimir <vladimir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/26 19:13:16 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/26 18:10:12 by vladimir         ###   ########.fr       */
+/*   Updated: 2020/07/27 15:50:45 by gtristan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdbool.h>
 # include <errno.h>
 # include <stdlib.h>
-# include "../libft/ft_printf/header_pf.h"
+# include "header_pf.h"
 # include "libft.h"
 # include <fcntl.h>
 

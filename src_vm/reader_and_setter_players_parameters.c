@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reader_and_setter_players_parameters.c             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vladimir <vladimir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 17:08:58 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/26 18:12:32 by vladimir         ###   ########.fr       */
+/*   Updated: 2020/07/27 16:12:11 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,12 @@ void	set_player_name(char *str, t_player *player)
 	player->player_header.prog_name[PROG_NAME_LENGTH] = '\0';
 }
 
+int		empty_folder(void)
+{
+	ft_printf("Wrong file format\n%z", 2);
+	return (1);
+}
+
 int		players_reader_parse_champions(int fd, t_player *player, char **argv)
 {
 	char	str[BUFFER_SIZE];
@@ -59,7 +65,11 @@ int		players_reader_parse_champions(int fd, t_player *player, char **argv)
 
 	count = 0;
 	while ((c = read(fd, str, BUFFER_SIZE)))
+	{
+		if (c < 0)
+			return (empty_folder());
 		count = count + c;
+	}
 	count = count - PROG_NAME_LENGTH - COMMENT_LENGTH - 16;
 	lseek(fd, 0, SEEK_SET);
 	read(fd, str, BUFFER_SIZE);

@@ -6,7 +6,7 @@
 /*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 16:16:57 by gtristan          #+#    #+#             */
-/*   Updated: 2020/07/24 15:11:08 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/27 16:06:58 by gtristan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <stdarg.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include "../libft.h"
+# include "libft.h"
 # define RED "\x1b[31m"
 # define GREEN "\x1b[32m"
 # define YELLOW "\x1b[33m"

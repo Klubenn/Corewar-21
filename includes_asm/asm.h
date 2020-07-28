@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   asm.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gtristan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 19:09:00 by gtristan          #+#    #+#             */
-/*   Updated: 2020/07/24 23:09:17 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/23 17:02:23 by gtristan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <limits.h>
-# include "../libft/libft.h"
-# include "../libft/ft_printf/header_pf.h"
+# include "libft.h"
+# include "header_pf.h"
 # include "op.h"
 # include "structs.h"
 
@@ -27,6 +27,7 @@ enum	e_err_message
 	FILE_NAME,
 	END_INPUT,
 	NO_FILE,
+	NO_READ,
 	TOP_FILE,
 	DOT_START,
 	MALLOC_FAIL,
@@ -38,7 +39,6 @@ enum	e_err_message
 	WRONG_REG,
 	WRONG_NUM,
 	DUPL_LABEL,
-	NOT_EXIST,
 	MULTIPLE_NAME,
 	MULTIPLE_COMMENT,
 	LABEL_NOT_FOUND,

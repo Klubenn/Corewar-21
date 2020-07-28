@@ -6,7 +6,7 @@
 /*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 17:36:48 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/24 22:29:24 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/27 19:20:14 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ void				create_process_helper(t_player_process **player_process,
 		game_process, player_list);
 	(*player_process)->operation_code = vm_field_memory->field
 		[(*player_process)->pc];
+	if ((1 > (*player_process)->operation_code ||
+		(*player_process)->operation_code > 16))
+		return ;
 	(*player_process)->cycles_to_wait = (vm_field_memory->op_tab)
 		[(*player_process)->operation_code].cycles_before_complete;
 }

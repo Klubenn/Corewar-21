@@ -19,7 +19,7 @@ int			bin_find_label(t_struct *data, char *label_from_instruc)
 	label = data->label;
 	while (label)
 	{
-		if (strcmp(label->label_name, label_from_instruc) == 0)
+		if (ft_strcmp(label->label_name, label_from_instruc) == 0)
 			return (label->instruction->position);
 		label = label->next;
 	}

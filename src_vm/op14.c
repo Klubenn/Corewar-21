@@ -6,7 +6,7 @@
 /*   By: gtapioca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 21:28:36 by gtapioca          #+#    #+#             */
-/*   Updated: 2020/07/24 22:29:24 by gtapioca         ###   ########.fr       */
+/*   Updated: 2020/07/27 19:29:55 by gtapioca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	op14(t_game_process *game_process, t_player_process *player_process,
 		put_value_to_register(&(player_process->
 			registers[REG_SIZE * (arg_value[2] - 1)]),
 			arg_value[3]);
-		if (arg_value[0] == 0)
+		if (arg_value[3] == 0)
 			player_process->carry = true;
 		else
 			player_process->carry = false;

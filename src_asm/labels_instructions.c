@@ -21,7 +21,8 @@ int						put_data_to_instruc(t_struct *data, int error)
 		instruction = data->instruction;
 		while (instruction->next)
 			instruction = instruction->next;
-		instruction->line = data->line;
+		if (!instruction->line)
+			instruction->line = data->line;
 	}
 	return (error);
 }

@@ -86,13 +86,13 @@ $(NAME_ASM): $(INCL_ASM) $(SRC_ASM) $(OBJ_ASM)
 	gcc $(FLAGS) $(OBJ_ASM) -I$(INCL_DIR_ASM) -I$(LIBFT_DIR) -I$(PRINTF_DIR) -L$(PRINTF_DIR) -$(PRINTF) -L$(LIBFT_DIR) -$(LIBFT) -o $(NAME_ASM)
 
 $(OBJ_DIR_ASM)%.o: $(SRC_DIR_ASM)%.c $(INCL_ASM)
-	gcc $(FLAGS) -I $(INCL_DIR_ASM) -o $@ -c $<
+	gcc $(FLAGS) -I $(INCL_DIR_ASM) -I$(LIBFT_DIR) -I$(PRINTF_DIR) -o $@ -c $<
 
 $(NAME_VM): $(INCL_VM) $(SRCS_VM) $(OBJ_VM)
 	gcc $(FLAGS) $(OBJ_VM) -I$(INCL_DIR_VM) -I$(LIBFT_DIR) -I$(PRINTF_DIR) -L$(PRINTF_DIR) -$(PRINTF) -L$(LIBFT_DIR) -$(LIBFT) -o $(NAME_VM)
 
 $(OBJ_DIR_VM)%.o: $(SRCS_C_VM)%.c $(INCL_VM)
-	gcc $(FLAGS) -I $(INCL_DIR_VM) -o $@ -c $<
+	gcc $(FLAGS) -I $(INCL_DIR_VM) -I$(LIBFT_DIR) -I$(PRINTF_DIR) -o $@ -c $<
 
 clean:
 	make clean -C $(LIBFT_DIR)
